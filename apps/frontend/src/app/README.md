@@ -1,0 +1,124 @@
+# 📁 src/components/
+
+Componentes React compartilhados entre features. Esta pasta contém três categorias com responsabilidades e regras de edição completamente distintas. Entender essa separação é obrigatório antes de criar ou modificar qualquer componente aqui.
+
+***
+
+## Estrutura
+
+```
+components/
+├── ui/                      # ⚠️ Gerado pelo shadcn/ui — não editar diretamente
+│   ├── button.tsx
+│   ├── input.tsx
+│   ├── dialog.tsx
+│   ├── table.tsx
+│   └── ...
+├── layout/
+│   ├── AdminLayout.tsx
+│   └── PublicLayout.tsx
+└── shared/
+    ├── ProtectedRoute.tsx
+    ├── RoleGuard.tsx
+    ├── LoadingSpinner.tsx
+    └── ErrorBoundary.tsx
+```
+
+***
+
+## `ui/`
+
+Componentes base gerados e gerenciados pelo **shadcn/ui**.
+
+**Regra absoluta: nunca edite arquivos dentro desta pasta.**
+
+shadcn/ui não é uma dependência npm — os componentes são copiados diretamente para o projeto via CLI. Qualquer edição manual será sobrescrita na próxima vez que o componente for atualizado ou reinstalado.
+
+**Como adicionar um novo componente shadcn:**
+
+```bash
+pnpm ui:add <nome-do-componente>
+```
+
+**Como customizar um componente `ui/`:**
+
+Nunca edite o arquivo em `ui/`. Crie um wrapper em `shared/` ou dentro da feature:
+
+```tsx
+// ✅ components/shared/DangerButton.tsx
+import { Button, type ButtonProps } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
+
+export const DangerButton = ({ className, ...props }: ButtonProps) => (
+  <Button variant="destructive" className={cn('font-semibold', className)} {...props} />
+)
+```
+
+**Como aplicar o tema visual:**
+
+Cores, bordas e tipografia são configuradas em `tailwind.config.ts` via CSS variables — não editando os componentes diretamente.
+
+***
+
+## `layout/`
+
+Componentes de estrutura de página que definem o esqueleto visual compartilhado entre múltiplas rotas.
+
+### `AdminLayout.tsx`
+
+Estrutura compartilhada entre o painel do administrador (`/admin/*`) e o painel da secretária (`/secretary/*`). Renderiza sidebar de navegação com links filtrados por role, topbar com nome do usuário logado e botão de logout, e área de conteúdo principal via `<Outlet />` (React Router).
+
+A sidebar lê o role via `useAuthStore` e exibe apenas os links pertinentes ao perfil autenticado — isso é UX, não segurança.
+
+### `PublicLayout.tsx`
+
+Estrutura minimalista para as rotas públicas (`/` e `/login`). Sem sidebar, sem topbar autenticada. Apenas centralização e container responsivo para o chatbot.
+
+***
+
+## `shared/`
+
+Componentes com lógica própria utilizados em múltiplas features ou em `app/router.tsx`. Diferente de `ui/`, estes **podem e devem** ser editados conforme o projeto evolui.
+
+### `ProtectedRoute.tsx`
+
+Verifica a existência de token JWT válido no `auth.store`. Se não autenticado, redireciona para `/login` preservando a rota de origem via `state`. Não recebe props — lê o estado diretamente do Zustand.
+
+```
+token presente  → renderiza <Outlet />
+token ausente   → <Navigate to="/login" state={{ from: location }} replace />
+```
+
+### `RoleGuard.tsx`
+
+Verifica se o role do usuário corresponde ao role exigido pela rota. Deve sempre ser filho de `ProtectedRoute` — nunca usado isoladamente.
+
+```
+role correto    → renderiza <Outlet />
+role incorreto  → renderiza <ForbiddenPage /> (sem redirecionar)
+```
+
+### `LoadingSpinner.tsx`
+
+Spinner padronizado com prop `size` (`sm | md | lg`) e `fullPage` (boolean) para centralização em tela cheia. Usado como fallback de `Suspense` e em estados `isLoading` do TanStack Query.
+
+### `ErrorBoundary.tsx`
+
+Class component que captura erros de renderização não tratados. Exibe tela de erro amigável com botão de retry em vez de quebrar a UI. Envolve a árvore principal em `provider.tsx`.
+
+***
+
+## Regras de contribuição
+
+**Onde criar um novo componente:**
+
+| Situação | Destino |
+|---|---|
+| Componente base de UI sem lógica (botão, input, badge) | `ui/` via `pnpm ui:add` |
+| Estrutura de página compartilhada entre rotas | `layout/` |
+| Componente com lógica usado em 2+ features | `shared/` |
+| Componente usado exclusivamente em uma feature | `features/<dominio>/components/` |
+
+- Nunca importe de `features/` dentro de `components/` — a dependência é sempre `features/ → components/`, nunca o contrário
+- Componentes em `shared/` devem ser genéricos o suficiente para não conhecer detalhes de nenhuma feature específica
+- Todo componente exportado deve ter sua interface de props nomeada e exportada

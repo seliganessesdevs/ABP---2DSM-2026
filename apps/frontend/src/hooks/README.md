@@ -114,3 +114,7 @@ return (
 - Hooks nesta pasta **não usam** TanStack Query, Axios ou Prisma
 - Se o hook crescer e começar a ter conhecimento de domínio, mova-o para a feature correspondente
 - Todo hook deve ter sua assinatura de tipos documentada com um bloco de exemplo de uso
+
+***
+
+> _Próximo documento: [`../utils/README.md`](../utils/README.md)_

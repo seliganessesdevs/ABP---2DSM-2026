@@ -111,3 +111,7 @@ cn('p-4 text-sm', isLarge && 'p-8 text-lg')
 - Nunca importe `axios` diretamente nas features — sempre use `@/lib/axios`
 - Nunca importe `queryClient` para invalidar queries manualmente fora de hooks — use `useQueryClient()` do TanStack Query dentro dos hooks
 - Se uma nova biblioteca precisar de inicialização global, crie um arquivo dedicado aqui
+
+***
+
+> _Próximo documento: [`../hooks/README.md`](../hooks/README.md)_

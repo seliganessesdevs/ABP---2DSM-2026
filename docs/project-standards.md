@@ -20,6 +20,7 @@
 
 ---
 
+
 ## 🌿 Branches <a id="branches"></a>
 
 ### Estratégia: GitHub Flow simplificado
@@ -32,38 +33,39 @@
 | `fix/*`         | Correção de bug identificado em revisão ou teste         |
 | `docs/*`        | Atualização exclusiva de documentação                    |
 | `chore/*`       | Configuração de ferramentas, CI, dependências            |
+| `refactor/*`    | Reestruturação de código sem mudança de comportamento    |
 
 ### Nomenclatura de branches
 
-```
-<tipo>/RF<numero>-<descricao-curta-em-kebab-case>
 
-# Exemplos
+**Exemplos:**
+
+```bash
 feature/RF01-chatbot-navigation
 feature/RF04-admin-node-crud
 fix/RF09-jwt-expiration-handling
 docs/project-standards
 chore/setup-docker-compose
+refactor/extract-hash-utils
 ```
 
 > **Regra:** Sempre vincule a branch ao RF correspondente quando houver.
 > Para tarefas sem RF direto, use a descrição curta sem código.
-
----
-
+Seção ## ✍️ Commits
+text
 ## ✍️ Commits <a id="commits"></a>
 
-### Padrão: Conventional Commits
+### Padrão: Conventional Commits em português sem acentos
 
 Todo commit deve seguir o formato:
 
-```
-<tipo>(<escopo>): <descrição curta no imperativo>
+<tipo>(<escopo>): <descricao curta no imperativo>
+[corpo opcional — explica o porque, nao o que]
+[rodape opcional — referencia a task: Closes #42]
+text
 
-[corpo opcional — explica o porquê, não o quê]
-
-[rodapé opcional — referência à issue/task: Closes #42]
-```
+> ⚠️ Não use acentos, cedilha ou caracteres especiais na mensagem de commit.
+> Risco real de corrompimento de encoding em diferentes terminais e ferramentas de CI.
 
 ### Tipos permitidos
 
@@ -80,24 +82,18 @@ Todo commit deve seguir o formato:
 
 ### Escopos recomendados
 
-```
 chatbot | auth | admin | secretary | nodes | documents | logs | questions | db | docker | ci
-```
+
 
 ### Exemplos corretos
 
 ```bash
-feat(chatbot): add hierarchical menu navigation with RF01 nodes
-
-fix(auth): correct JWT expiration not being validated on refresh
-
-refactor(admin): extract NodeEditor into reusable form component
-
-test(chatbot): add unit tests for useChatNavigation hook
-
-docs(api-layer): document POST /questions endpoint with examples
-
-chore(docker): add healthcheck to postgres container
+feat(chatbot): adiciona navegacao hierarquica pelo menu de nos
+fix(auth): corrige validacao de expiracao do JWT no refresh
+refactor(admin): extrai NodeEditor para componente de formulario reutilizavel
+test(chatbot): adiciona testes unitarios do hook useChatNavigation
+docs(api-layer): documenta endpoint POST /questions com exemplos
+chore(docker): adiciona healthcheck ao container do postgres
 ```
 
 ### Exemplos incorretos
@@ -107,13 +103,16 @@ chore(docker): add healthcheck to postgres container
 atualiza chatbot
 
 # ❌ Verbo no passado
-feat(auth): added login form
+feat(auth): adicionou formulario de login
 
 # ❌ Genérico demais
 fix: corrigindo bugs
 
 # ❌ Sem escopo quando aplicável
 feat: criar painel do admin
+
+# ❌ Com acento (risco de encoding)
+feat(chatbot): adiciona navegação por nós
 ```
 
 ---
@@ -235,14 +234,15 @@ Use um wrapper genérico para todas as respostas:
 // types/api.types.ts
 export interface ApiResponse<T> {
   data: T
-  message: string
   success: boolean
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  total: number
-  page: number
-  limit: number
+  meta: {
+    total: number
+    page: number
+    limit: number
+  }
 }
 ```
 
@@ -438,4 +438,4 @@ export const env = envSchema.parse(process.env)
 
 ---
 
-> _Próximo documento: [`application-overview.md`](./application-overview.md) — modelo de dados, fluxos e arquitetura da aplicação._
+> _Próximo documento: [`application-overview.md`](./application-overview.md)_

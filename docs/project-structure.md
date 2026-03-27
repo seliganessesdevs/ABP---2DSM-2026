@@ -1,4 +1,3 @@
-
 ## 🗂️ Visão Geral do Monorepo
 
 ```
@@ -78,11 +77,11 @@ apps/frontend/
 │   │   │
 │   │   ├── auth/                   # Domínio: autenticação (RF09, RNF08)
 │   │   │   ├── api/
-│   │   │   │   └── auth.api.ts     # POST /auth/login, refresh token
+│   │   │   │   └── auth.api.ts     # POST /auth/login
 │   │   │   ├── components/
 │   │   │   │   └── LoginForm.tsx
 │   │   │   ├── hooks/
-│   │   │   │   └── useAuth.ts      # Estado de autenticação, login, logout
+│   │   │   │   └── useLogin.ts     # Mutation de login e redirecionamento por role
 │   │   │   ├── stores/
 │   │   │   │   └── auth.store.ts   # Zustand: token JWT, user, role
 │   │   │   └── types/
@@ -97,8 +96,8 @@ apps/frontend/
 │   │   │   ├── components/
 │   │   │   │   ├── NodeEditor.tsx  # Formulário de criação/edição de nó
 │   │   │   │   ├── NodeTree.tsx    # Visualização hierárquica da árvore
-│   │   │   │   ├── DocumentUpload.tsx
-│   │   │   │   ├── UserTable.tsx
+│   │   │   │   ├── DocumentList.tsx
+│   │   │   │   ├── UserList.tsx
 │   │   │   │   └── LogTable.tsx
 │   │   │   └── hooks/
 │   │   │       ├── useNodes.ts
@@ -109,8 +108,8 @@ apps/frontend/
 │   │       ├── api/
 │   │       │   └── questions.api.ts  # GET /questions, PATCH /questions/:id/status
 │   │       ├── components/
-│   │       │   ├── QuestionList.tsx
-│   │       │   └── QuestionStatusBadge.tsx
+│   │       │   ├── QuestionsTable.tsx
+│   │       │   └── StatusBadge.tsx
 │   │       └── hooks/
 │   │           └── useQuestions.ts
 │   │
@@ -133,7 +132,6 @@ apps/frontend/
 │
 ├── index.html
 ├── vite.config.ts
-├── tailwind.config.ts
 ├── tsconfig.json
 ├── tsconfig.app.json
 ├── eslint.config.ts
@@ -173,7 +171,7 @@ apps/backend/
 │   │   │
 │   │   ├── auth/                   # Autenticação (RF09, RNF08)
 │   │   │   ├── auth.controller.ts  # POST /auth/login
-│   │   │   ├── auth.service.ts     # Lógica: verificar senha bcrypt, gerar JWT
+│   │   │   ├── auth.service.ts     # Lógica: verificar senha com Argon2id, gerar JWT
 │   │   │   ├── auth.routes.ts      # Definição das rotas do módulo
 │   │   │   └── auth.types.ts       # LoginDTO, TokenPayload
 │   │   │
@@ -220,7 +218,7 @@ apps/backend/
 │   │   └── AppError.ts             # Classe de erro customizada com statusCode e message
 │   │
 │   └── utils/
-│       ├── hash.utils.ts           # bcrypt: hashPassword, comparePassword
+│       ├── hash.utils.ts           # Argon2id: hashPassword, comparePassword
 │       ├── jwt.utils.ts            # generateToken, verifyToken
 │       └── pagination.utils.ts     # Helper para paginação de listagens
 │
@@ -237,34 +235,32 @@ apps/backend/
 ```
 docs/
 ├── assets/                         # Imagens e diagramas para a documentação
-│   ├── fatecbot-logo.png
-│   ├── er-diagram.png              # Diagrama Entidade-Relacionamento
-│   ├── use-case-diagram.png        # Diagrama de Casos de Uso (RNF04)
-│   ├── class-diagram.png           # Diagrama de Classes (RNF04)
-│   ├── sequence-diagram.png        # Diagrama de Sequência (RNF04)
-│   └── component-diagram.png       # Diagrama de Componentes (RNF04)
+│   └── README.md                   # Inventário e convenções dos assets de documentação
 │
+├── first-steps.md                  # Ponto de entrada para quem vai contribuir com código
 ├── application-overview.md         # Visão geral: modelo de dados, fluxos, perfis
 ├── project-structure.md            # ← Este arquivo
 ├── project-standards.md            # Convenções: commits, nomenclatura, linting
 ├── api-layer.md                    # Endpoints, exemplos de request/response
 ├── state-management.md             # Zustand vs React Query: quando usar cada um
 ├── testing.md                      # Estratégia de testes e exemplos por camada
+├── troubleshooting.md              # Problemas comuns durante setup e desenvolvimento
+├── mvp-scope.md                    # Escopo do MVP e critérios de corte
+├── seed-data.md                    # Credenciais e dados iniciais do banco
+├── env-matrix.md                   # Variáveis de ambiente por app e ambiente
 │
 ├── sprint1/
 │   ├── README.md                   # Objetivos, entregáveis e resultados da Sprint 1
 │   └── tasks.md                    # Tarefas detalhadas por integrante
 ├── sprint2/
 │   ├── README.md
-│   └── tasks.md
+│   └── tasks.md                    # ⚠️ a criar
 ├── sprint3/
 │   ├── README.md
-│   └── tasks.md
+│   └── tasks.md                    # ⚠️ a criar
 │
-└── adr/                            # Architecture Decision Records
-    ├── 001-escolha-do-orm.md       # Por que Prisma e não TypeORM/Drizzle
-    ├── 002-estrutura-monorepo.md   # Por que monorepo com pnpm workspaces
-    └── 003-rbac-no-backend.md      # Por que RBAC deve ser aplicado só no backend
+└── adr/
+    └── README.md                   # ADR-001 a ADR-003 centralizados em um único documento
 ```
 
 ---
@@ -281,7 +277,7 @@ não espalhado entre pastas `components/`, `hooks/` e `services/` separadas.
 # ❌ Organização por tipo (evitar)
 src/
 ├── components/  ChatWindow.tsx, NodeEditor.tsx, LoginForm.tsx
-├── hooks/       useChatNavigation.ts, useAuth.ts, useNodes.ts
+├── hooks/       useChatNavigation.ts, useLogin.ts, useNodes.ts
 └── services/    chatbot.service.ts, auth.service.ts
 
 # ✅ Organização por feature (adotado)
@@ -299,10 +295,10 @@ Use alias de caminho (`@/features/auth`) para imports entre features.
 
 ```ts
 // ❌ Proibido — acoplamento frágil entre features
-import { useAuth } from '../../auth/hooks/useAuth'
+import { useLogin } from "../../auth/hooks/useLogin";
 
 // ✅ Correto — via alias configurado no tsconfig/vite
-import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useLogin } from "@/features/auth/hooks/useLogin";
 ```
 
 ### Componentes `ui/` são intocáveis
@@ -312,4 +308,4 @@ Crie wrappers em `components/shared/` ou dentro da feature correspondente quando
 
 ---
 
-> _Próximo documento: [`project-standards.md`](./project-standards.md) — convenções de commit, nomenclatura e configuração de linting._
+> _Próximo documento: [`project-standards.md`](./project-standards.md)_

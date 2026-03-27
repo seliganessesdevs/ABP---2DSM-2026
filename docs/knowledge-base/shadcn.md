@@ -368,3 +368,7 @@ export const CampoFormulario = ({ label, erro, id, ...props }: CampoFormularioPr
 ```
 
 **Leia o código gerado em `components/ui/`** — parece intimidador no começo, mas com o tempo você entende como o componente funciona por dentro e fica mais fácil de resolver problemas.
+
+***
+
+> _Próximo documento: [`pnpm.md`](./pnpm.md)_

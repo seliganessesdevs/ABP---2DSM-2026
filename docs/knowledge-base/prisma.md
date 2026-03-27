@@ -393,3 +393,7 @@ const nodes = await prisma.node.findMany({
 ```
 
 **Sempre rode `prisma generate` depois de alterar o schema** — sem isso o TypeScript não vai enxergar os novos campos e você vai ter erros de tipo que parecem bugs mas são só o cliente desatualizado.
+
+***
+
+> _Próximo documento: [`axios.md`](./axios.md)_

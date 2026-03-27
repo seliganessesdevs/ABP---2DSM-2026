@@ -193,3 +193,7 @@ Isso importa quando o cliente não sabe se a requisição chegou (timeout) e dec
 **Seja consistente no formato da resposta** — defina um padrão e siga em todos os endpoints. O frontend vai agradecer.
 
 **Não exponha detalhes internos na URL** — `/api/v1/questions` é bom. `/api/v1/postgres/public/questions` expõe sua infraestrutura.
+
+***
+
+> _Próximo documento: [`express.md`](./express.md)_

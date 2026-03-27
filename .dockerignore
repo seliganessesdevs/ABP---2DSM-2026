@@ -1,0 +1,30 @@
+# Dependências e caches
+node_modules
+**/node_modules
+.pnpm
+.pnpm-store
+.pnpm-debug.log
+.pnpm-local
+
+# Builds e artefatos
+dist
+build
+coverage
+*.tsbuildinfo
+
+# VCS, IDE e OS
+.git
+.gitignore
+.vscode
+.idea
+.DS_Store
+Thumbs.db
+
+# Env / segredos / logs
+.env
+*.env.local
+*.log
+
+# Outros
+npm-debug.log*
+yarn.lock

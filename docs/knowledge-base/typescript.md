@@ -303,3 +303,7 @@ interface AdminUser extends User {
 ```
 
 **Ative o `strict` no `tsconfig.json`** — ele habilita as verificações mais importantes, incluindo `strictNullChecks`, que força você a tratar `null` e `undefined` explicitamente.
+
+***
+
+> _Próximo documento: [`zod.md`](./zod.md)_

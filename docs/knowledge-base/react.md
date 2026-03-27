@@ -1,4 +1,4 @@
-# React 19 — Guia para Iniciantes
+# React 18 — Guia para Iniciantes
 
 React é uma biblioteca JavaScript para construir interfaces. A ideia central é simples: você descreve **como a UI deve parecer** para um dado estado, e o React se encarrega de atualizar o DOM quando esse estado muda. Entender isso elimina 90% da confusão inicial.
 
@@ -432,3 +432,7 @@ const handleClick = () => {
 // ✅ ESLint vai avisar — configure no projeto
 // 'no-console': ['warn', { allow: ['warn', 'error'] }]
 ```
+
+***
+
+> _Próximo documento: [`typescript.md`](./typescript.md)_

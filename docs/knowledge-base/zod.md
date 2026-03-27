@@ -159,3 +159,7 @@ z.string().transform(Number)  // converte "2" para 2 antes de passar adiante
 **Valide `params` e `query` também, não só o body** — um UUID malformado em `req.params.id` passado direto para o Prisma gera um erro genérico difícil de entender.
 
 **Use `z.infer` sempre** — define o schema uma vez e deixa o Zod gerar o tipo. Manter schema e interface TypeScript separados é a receita para ficarem fora de sincronia.
+
+***
+
+> _Próximo documento: [`REST-HTTP.md`](./REST-HTTP.md)_

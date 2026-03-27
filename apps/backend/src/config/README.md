@@ -65,3 +65,7 @@ O `PrismaClient` mantém um pool de conexões com o banco. Cada `new PrismaClien
 - **Não** adicione lógica de negócio aqui — esta pasta é só infraestrutura
 - Toda nova variável de ambiente **deve** ser adicionada ao schema do `env.ts` e ao `.env.example`
 - Nunca importe `process.env` diretamente em outros módulos — sempre passe por `env.ts`
+
+***
+
+> _Próximo documento: [`../middlewares/README.md`](../middlewares/README.md)_

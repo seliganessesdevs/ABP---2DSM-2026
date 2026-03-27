@@ -26,48 +26,68 @@
 
 ## 📐 Convenções <a id="convenções"></a>
 
-### Formato padrão de resposta
+### Envelope padrão de sucesso
 
-Toda resposta da API segue o envelope:
+O envelope mínimo de sucesso do projeto é:
 
 ```json
 {
   "success": true,
-  "message": "Descrição da operação",
-  "data": { }
+  "data": {}
 }
 ```
 
-Em caso de erro:
+Campos adicionais podem existir quando fizerem sentido, mas o frontend deve poder
+confiar sempre em `success` + `data`.
+
+### Envelope padrão de erro
+
+Em erro, o formato canônico é:
 
 ```json
 {
   "success": false,
   "message": "Descrição do erro",
-  "error": "VALIDATION_ERROR | UNAUTHORIZED | FORBIDDEN | NOT_FOUND | INTERNAL_ERROR"
+  "errors": [
+    {
+      "field": "email",
+      "message": "E-mail inválido"
+    }
+  ]
 }
 ```
 
+O campo `errors` é opcional e aparece quando a API precisa detalhar falhas por campo.
+
 ### Paginação
 
-Endpoints de listagem aceitam query params:
+Endpoints de listagem aceitam, quando aplicável:
 
-```
+```text
 ?page=1&limit=20
 ```
 
-E retornam:
+E retornam metadados em `meta`:
 
 ```json
 {
   "success": true,
-  "message": "OK",
-  "data": [ ],
-  "total": 87,
-  "page": 1,
-  "limit": 20
+  "data": [],
+  "meta": {
+    "total": 87,
+    "page": 1,
+    "limit": 20
+  }
 }
 ```
+
+### Filtros e query params
+
+Os query params previstos neste documento são:
+
+- `GET /questions`: `status`, `page`, `limit`
+- `GET /logs`: `satisfaction`, `from`, `to`, `page`, `limit`
+- Endpoints sem query params documentados aqui não devem aceitar filtros implícitos sem atualização deste contrato
 
 ---
 
@@ -99,7 +119,6 @@ Content-Type: application/json
 ```json
 {
   "success": true,
-  "message": "Login realizado com sucesso",
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
     "user": {
@@ -117,8 +136,7 @@ Content-Type: application/json
 ```json
 {
   "success": false,
-  "message": "E-mail ou senha inválidos",
-  "error": "UNAUTHORIZED"
+  "message": "E-mail ou senha inválidos"
 }
 ```
 
@@ -138,7 +156,6 @@ Retorna o nó raiz da árvore de navegação (pergunta inicial do chatbot).
 ```json
 {
   "success": true,
-  "message": "OK",
   "data": {
     "id": "node-root-uuid",
     "title": "Bem-vindo ao autoatendimento da Secretaria Acadêmica da Fatec Jacareí.",
@@ -174,7 +191,6 @@ Retorna um nó específico com seus filhos diretos (próximas opções) e chunks
 ```json
 {
   "success": true,
-  "message": "OK",
   "data": {
     "id": "node-dsm-uuid",
     "title": "Desenvolvimento de Software Multiplataforma",
@@ -197,7 +213,6 @@ Retorna um nó específico com seus filhos diretos (próximas opções) e chunks
 ```json
 {
   "success": true,
-  "message": "OK",
   "data": {
     "id": "node-dsm-aacc-uuid",
     "title": "Atividades Complementares (AACC)",
@@ -245,8 +260,7 @@ Retorna um nó específico com seus filhos diretos (próximas opções) e chunks
 ```json
 {
   "success": false,
-  "message": "Nó não encontrado",
-  "error": "NOT_FOUND"
+  "message": "Nó não encontrado"
 }
 ```
 
@@ -280,7 +294,6 @@ Registra o log de atendimento e a avaliação de satisfação ao encerrar uma se
 ```json
 {
   "success": true,
-  "message": "Sessão registrada com sucesso",
   "data": {
     "sessionLogId": "session-uuid-1"
   }
@@ -313,7 +326,6 @@ Envia uma pergunta do aluno à Secretaria Acadêmica.
 ```json
 {
   "success": true,
-  "message": "Pergunta enviada com sucesso. A secretaria responderá no e-mail informado.",
   "data": {
     "id": "question-uuid-1",
     "status": "OPEN",
@@ -328,8 +340,7 @@ Envia uma pergunta do aluno à Secretaria Acadêmica.
 {
   "success": false,
   "message": "Dados inválidos",
-  "error": "VALIDATION_ERROR",
-  "details": [
+  "errors": [
     { "field": "email", "message": "E-mail inválido" }
   ]
 }
@@ -364,7 +375,6 @@ Authorization: Bearer <token>
 ```json
 {
   "success": true,
-  "message": "OK",
   "data": [
     {
       "id": "question-uuid-1",
@@ -375,9 +385,11 @@ Authorization: Bearer <token>
       "updatedAt": "2026-03-27T20:18:00.000Z"
     }
   ],
-  "total": 1,
-  "page": 1,
-  "limit": 20
+  "meta": {
+    "total": 1,
+    "page": 1,
+    "limit": 20
+  }
 }
 ```
 
@@ -389,6 +401,9 @@ Atualiza o status de uma pergunta.
 
 - **Acesso:** 🔒 Protegido
 - **Role exigida:** `SECRETARY` ou `ADMIN`
+
+> A única transição válida para `Question` é `OPEN → ANSWERED`.
+> O endpoint não deve aceitar retorno para `OPEN` nem novos status sem atualização do contrato.
 
 **Request**
 
@@ -409,7 +424,6 @@ Content-Type: application/json
 ```json
 {
   "success": true,
-  "message": "Status atualizado com sucesso",
   "data": {
     "id": "question-uuid-1",
     "status": "ANSWERED",
@@ -446,7 +460,6 @@ Cria um novo nó na árvore de navegação.
 ```json
 {
   "success": true,
-  "message": "Nó criado com sucesso",
   "data": {
     "id": "node-novo-uuid",
     "title": "Novo tópico",
@@ -479,7 +492,6 @@ Atualiza parcialmente um nó existente.
 ```json
 {
   "success": true,
-  "message": "Nó atualizado com sucesso",
   "data": { "id": "node-novo-uuid", "content": "Conteúdo atualizado..." }
 }
 ```
@@ -495,7 +507,6 @@ Remove um nó. Se o nó possuir filhos, a operação é bloqueada.
 ```json
 {
   "success": true,
-  "message": "Nó removido com sucesso",
   "data": null
 }
 ```
@@ -505,8 +516,7 @@ Remove um nó. Se o nó possuir filhos, a operação é bloqueada.
 ```json
 {
   "success": false,
-  "message": "Não é possível remover um nó que possui filhos ativos. Remova os filhos primeiro.",
-  "error": "CONFLICT"
+  "message": "Não é possível remover um nó que possui filhos ativos. Remova os filhos primeiro."
 }
 ```
 
@@ -525,7 +535,6 @@ Lista todos os documentos oficiais cadastrados.
 ```json
 {
   "success": true,
-  "message": "OK",
   "data": [
     {
       "id": "doc-uuid-1",
@@ -536,9 +545,11 @@ Lista todos os documentos oficiais cadastrados.
       "_count": { "chunks": 42 }
     }
   ],
-  "total": 4,
-  "page": 1,
-  "limit": 20
+  "meta": {
+    "total": 4,
+    "page": 1,
+    "limit": 20
+  }
 }
 ```
 
@@ -568,7 +579,6 @@ Cadastra um novo documento e seus chunks indexados.
 ```json
 {
   "success": true,
-  "message": "Documento cadastrado com sucesso",
   "data": {
     "id": "doc-uuid-2",
     "name": "Manual de Estágio",
@@ -592,7 +602,6 @@ Lista os usuários com perfil `SECRETARY`.
 ```json
 {
   "success": true,
-  "message": "OK",
   "data": [
     {
       "id": "user-uuid-1",
@@ -602,9 +611,11 @@ Lista os usuários com perfil `SECRETARY`.
       "createdAt": "2026-02-01T00:00:00.000Z"
     }
   ],
-  "total": 1,
-  "page": 1,
-  "limit": 20
+  "meta": {
+    "total": 1,
+    "page": 1,
+    "limit": 20
+  }
 }
 ```
 
@@ -628,7 +639,6 @@ Cria um novo usuário da secretaria.
 ```json
 {
   "success": true,
-  "message": "Usuário criado com sucesso",
   "data": {
     "id": "user-uuid-2",
     "name": "Ana Paula",
@@ -647,8 +657,7 @@ Remove um usuário. Um administrador não pode remover a si próprio.
 ```json
 {
   "success": false,
-  "message": "Um administrador não pode remover sua própria conta.",
-  "error": "FORBIDDEN"
+  "message": "Um administrador não pode remover sua própria conta."
 }
 ```
 
@@ -684,7 +693,6 @@ Authorization: Bearer <token>
 ```json
 {
   "success": true,
-  "message": "OK",
   "data": [
     {
       "id": "session-uuid-1",
@@ -703,9 +711,11 @@ Authorization: Bearer <token>
       }
     }
   ],
-  "total": 1,
-  "page": 1,
-  "limit": 20
+  "meta": {
+    "total": 1,
+    "page": 1,
+    "limit": 20
+  }
 }
 ```
 
@@ -727,4 +737,4 @@ Authorization: Bearer <token>
 
 ---
 
-> _Próximo documento: [`testing.md`](./testing.md) — estratégia de testes, pirâmide de qualidade e exemplos por camada._
+> _Próximo documento: [`testing.md`](./testing.md)_

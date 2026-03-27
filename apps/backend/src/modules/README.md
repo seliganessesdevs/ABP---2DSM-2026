@@ -2,7 +2,7 @@
 
 O coração da aplicação. Cada módulo representa um **domínio de negócio** — um conjunto de funcionalidades relacionadas. Toda lógica de negócio, validação de entrada e acesso ao banco vive aqui.
 
-***
+---
 
 ## Estrutura
 
@@ -27,7 +27,7 @@ Cada módulo segue a mesma estrutura interna:
 └── <modulo>.types.ts       # Tipos, interfaces e DTOs do módulo
 ```
 
-***
+---
 
 ## Responsabilidade de Cada Camada
 
@@ -36,9 +36,19 @@ Cada módulo segue a mesma estrutura interna:
 Define os endpoints do módulo, aplica os middlewares corretos e conecta cada rota ao controller. Não contém lógica — apenas configuração.
 
 ```ts
-router.post('/', validate(createQuestionSchema), controller.create)
-router.get('/', authMiddleware, authorize('ADMIN', 'SECRETARY'), controller.list)
-router.patch('/:id', authMiddleware, authorize('ADMIN', 'SECRETARY'), controller.update)
+router.post("/", validate(createQuestionSchema), controller.create);
+router.get(
+  "/",
+  authMiddleware,
+  authorize("ADMIN", "SECRETARY"),
+  controller.list,
+);
+router.patch(
+  "/:id",
+  authMiddleware,
+  authorize("ADMIN", "SECRETARY"),
+  controller.update,
+);
 ```
 
 ### `controller.ts`
@@ -49,12 +59,12 @@ Recebe a requisição, extrai os dados do `req`, chama o service e devolve a res
 // O controller sabe sobre HTTP. O service não sabe.
 const list = async (req, res, next) => {
   try {
-    const result = await this.service.list(req.query)
-    res.status(200).json({ success: true, data: result })
+    const result = await this.service.list(req.query);
+    res.status(200).json({ success: true, data: result });
   } catch (error) {
-    next(error)
+    next(error);
   }
-}
+};
 ```
 
 ### `service.ts`
@@ -65,39 +75,41 @@ Toda a lógica de negócio vive aqui. Valida regras, fala com o Prisma, lança `
 
 Tipos TypeScript e DTOs do módulo. Gerados com `z.infer` a partir dos schemas Zod quando possível — sem duplicação.
 
-***
+---
 
 ## Os Módulos
 
 ### `auth/`
 
-Responsável pelo login. Recebe email e senha, valida com bcrypt, retorna o JWT. Não tem rotas autenticadas — é o ponto de entrada de toda autenticação.
+Responsável pelo login. Recebe email e senha, valida com Argon2id, retorna o JWT. Não tem rotas autenticadas — é o ponto de entrada de toda autenticação.
 
 **Endpoint:** `POST /auth/login`
 
-***
+---
 
 ### `chatbot/`
 
 Navega na árvore de `ChatNode` e registra sessões. É o módulo mais acessado — todas as interações do aluno passam aqui. Rotas públicas — sem autenticação.
 
 **Endpoints:**
+
 - `GET /nodes/root` — retorna o nó raiz para iniciar a navegação
 - `GET /nodes/:id` — retorna um nó com filhos e chunks
 - `POST /sessions/rating` — registra log de sessão e satisfação
 
-***
+---
 
 ### `questions/`
 
 Gerencia as perguntas enviadas pelos alunos à secretaria. Criação é pública — qualquer aluno pode enviar. Listagem e atualização exigem autenticação.
 
 **Endpoints:**
+
 - `POST /questions` — público — aluno envia pergunta
 - `GET /questions` — ADMIN ou SECRETARY
 - `PATCH /questions/:id` — ADMIN ou SECRETARY
 
-***
+---
 
 ### `nodes/`
 
@@ -105,7 +117,7 @@ CRUD completo dos nós de navegação do chatbot. Exclusivo para administradores
 
 **Endpoints:** `GET`, `POST`, `PATCH`, `DELETE` em `/nodes` — todos ADMIN.
 
-***
+---
 
 ### `documents/`
 
@@ -113,7 +125,7 @@ Gerencia os documentos oficiais (regulamentos, manuais) e seus chunks indexados.
 
 **Endpoints:** `GET`, `POST` em `/documents` — todos ADMIN.
 
-***
+---
 
 ### `users/`
 
@@ -121,7 +133,7 @@ Gerencia os usuários da secretaria (ADMIN e SECRETARY). O admin cria, lista e r
 
 **Endpoints:** `GET`, `POST`, `DELETE` em `/users` — todos ADMIN.
 
-***
+---
 
 ### `logs/`
 
@@ -129,7 +141,7 @@ Somente leitura. Expõe os registros de sessão gerados pelo módulo `chatbot` p
 
 **Endpoint:** `GET /logs` — ADMIN.
 
-***
+---
 
 ## Regras de contribuição
 
@@ -138,3 +150,7 @@ Somente leitura. Expõe os registros de sessão gerados pelo módulo `chatbot` p
 - Todo novo módulo deve ser registrado em `src/routes/index.ts` com seu prefixo
 - Schemas Zod ficam no `routes.ts` ou em arquivo separado `<modulo>.schema.ts` se forem grandes
 - Erros de negócio sempre lançam `AppError` — nunca `res.status()` direto no service
+
+***
+
+> _Próximo documento: [`./auth/README.md`](./auth/README.md)_

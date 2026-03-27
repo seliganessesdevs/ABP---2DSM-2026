@@ -1,124 +1,119 @@
-# 📁 src/components/
+# 🧭 src/app — Núcleo da Aplicação
 
-Componentes React compartilhados entre features. Esta pasta contém três categorias com responsabilidades e regras de edição completamente distintas. Entender essa separação é obrigatório antes de criar ou modificar qualquer componente aqui.
-
-***
-
-## Estrutura
-
-```
-components/
-├── ui/                      # ⚠️ Gerado pelo shadcn/ui — não editar diretamente
-│   ├── button.tsx
-│   ├── input.tsx
-│   ├── dialog.tsx
-│   ├── table.tsx
-│   └── ...
-├── layout/
-│   ├── AdminLayout.tsx
-│   └── PublicLayout.tsx
-└── shared/
-    ├── ProtectedRoute.tsx
-    ├── RoleGuard.tsx
-    ├── LoadingSpinner.tsx
-    └── ErrorBoundary.tsx
-```
+> Ponto de entrada do frontend. Esta pasta concentra a composição global da
+> aplicação: providers, roteamento e páginas. A lógica de negócio continua
+> nas features; aqui nós apenas montamos a casca da SPA.
 
 ***
 
-## `ui/`
+## 📑 Índice
 
-Componentes base gerados e gerenciados pelo **shadcn/ui**.
+- [Responsabilidade](#responsabilidade)
+- [Estrutura de Arquivos](#estrutura-de-arquivos)
+- [router.tsx](#router)
+- [provider.tsx](#provider)
+- [routes/](#routes)
+- [Regras de Contribuição](#regras)
 
-**Regra absoluta: nunca edite arquivos dentro desta pasta.**
+***
 
-shadcn/ui não é uma dependência npm — os componentes são copiados diretamente para o projeto via CLI. Qualquer edição manual será sobrescrita na próxima vez que o componente for atualizado ou reinstalado.
+## 🎯 Responsabilidade <a id="responsabilidade"></a>
 
-**Como adicionar um novo componente shadcn:**
+A pasta `app/` é o **único lugar** onde:
 
-```bash
-pnpm ui:add <nome-do-componente>
+- as rotas são declaradas com React Router
+- os providers globais são compostos
+- as páginas conectam layout + features
+
+| Arquivo / Pasta | Responsabilidade |
+| --------------- | ---------------- |
+| `router.tsx` | Declara todas as rotas da SPA |
+| `provider.tsx` | Compõe Query Client, Router e demais providers globais |
+| `routes/` | Componentes de página, um por rota |
+
+***
+
+## 📁 Estrutura de Arquivos <a id="estrutura-de-arquivos"></a>
+
+```
+app/
+├── router.tsx           # Definição central das rotas
+├── provider.tsx         # Composição dos providers globais
+└── routes/
+    ├── index.tsx        # Rota pública do chatbot
+    ├── admin/           # Páginas do painel administrativo
+    │   ├── dashboard.tsx
+    │   ├── documents.tsx
+    │   ├── logs.tsx
+    │   ├── nodes.tsx
+    │   └── users.tsx
+    └── secretary/       # Páginas do painel da secretária
+        ├── dashboard.tsx
+        └── questions.tsx
 ```
 
-**Como customizar um componente `ui/`:**
+> Se uma rota ainda não existir no código, trate esta estrutura como alvo de implementação e não como garantia de que tudo já foi criado.
 
-Nunca edite o arquivo em `ui/`. Crie um wrapper em `shared/` ou dentro da feature:
+***
+
+## 🗺️ `router.tsx` <a id="router"></a>
+
+Define **todas** as rotas da aplicação em um único lugar. As regras de acesso
+devem ser declaradas aqui, com `ProtectedRoute` e `RoleGuard`, sem espalhar
+autorização pelos componentes de página.
 
 ```tsx
-// ✅ components/shared/DangerButton.tsx
-import { Button, type ButtonProps } from '@/components/ui/button'
-import { cn } from '@/lib/utils'
-
-export const DangerButton = ({ className, ...props }: ButtonProps) => (
-  <Button variant="destructive" className={cn('font-semibold', className)} {...props} />
-)
+<Route element={<ProtectedRoute />}>
+  <Route element={<RoleGuard role="ADMIN" />}>
+    <Route path="/admin" element={<AdminDashboardPage />} />
+  </Route>
+</Route>
 ```
 
-**Como aplicar o tema visual:**
-
-Cores, bordas e tipografia são configuradas em `tailwind.config.ts` via CSS variables — não editando os componentes diretamente.
+As páginas em `routes/` apenas recebem esse contexto e compõem a UI.
 
 ***
 
-## `layout/`
+## 🔌 `provider.tsx` <a id="provider"></a>
 
-Componentes de estrutura de página que definem o esqueleto visual compartilhado entre múltiplas rotas.
+Compõe os providers globais que precisam existir uma única vez no topo da app.
+O checklist inicial canônico do frontend está em [`../../README.md`](../../README.md),
+mas o mínimo esperado aqui é:
 
-### `AdminLayout.tsx`
+- `QueryClientProvider`
+- o roteador da aplicação
+- qualquer provider global adicional aprovado pelo time
 
-Estrutura compartilhada entre o painel do administrador (`/admin/*`) e o painel da secretária (`/secretary/*`). Renderiza sidebar de navegação com links filtrados por role, topbar com nome do usuário logado e botão de logout, e área de conteúdo principal via `<Outlet />` (React Router).
-
-A sidebar lê o role via `useAuthStore` e exibe apenas os links pertinentes ao perfil autenticado — isso é UX, não segurança.
-
-### `PublicLayout.tsx`
-
-Estrutura minimalista para as rotas públicas (`/` e `/login`). Sem sidebar, sem topbar autenticada. Apenas centralização e container responsivo para o chatbot.
+> Evite inventar providers nesta camada sem necessidade real. Se o estado vem da API, a regra canônica continua sendo usar TanStack Query em vez de contexto global.
 
 ***
 
-## `shared/`
+## 📄 `routes/` <a id="routes"></a>
 
-Componentes com lógica própria utilizados em múltiplas features ou em `app/router.tsx`. Diferente de `ui/`, estes **podem e devem** ser editados conforme o projeto evolui.
+Cada arquivo em `routes/` representa uma página. Esses componentes não devem
+conter regra de negócio, chamadas HTTP diretas nem estado global de domínio.
+O papel deles é montar layout + feature.
 
-### `ProtectedRoute.tsx`
-
-Verifica a existência de token JWT válido no `auth.store`. Se não autenticado, redireciona para `/login` preservando a rota de origem via `state`. Não recebe props — lê o estado diretamente do Zustand.
-
+```tsx
+export default function AdminNodesPage() {
+  return (
+    <AdminLayout>
+      <NodeManager />
+    </AdminLayout>
+  )
+}
 ```
-token presente  → renderiza <Outlet />
-token ausente   → <Navigate to="/login" state={{ from: location }} replace />
-```
-
-### `RoleGuard.tsx`
-
-Verifica se o role do usuário corresponde ao role exigido pela rota. Deve sempre ser filho de `ProtectedRoute` — nunca usado isoladamente.
-
-```
-role correto    → renderiza <Outlet />
-role incorreto  → renderiza <ForbiddenPage /> (sem redirecionar)
-```
-
-### `LoadingSpinner.tsx`
-
-Spinner padronizado com prop `size` (`sm | md | lg`) e `fullPage` (boolean) para centralização em tela cheia. Usado como fallback de `Suspense` e em estados `isLoading` do TanStack Query.
-
-### `ErrorBoundary.tsx`
-
-Class component que captura erros de renderização não tratados. Exibe tela de erro amigável com botão de retry em vez de quebrar a UI. Envolve a árvore principal em `provider.tsx`.
 
 ***
 
-## Regras de contribuição
+## 📐 Regras de Contribuição <a id="regras"></a>
 
-**Onde criar um novo componente:**
+- Toda rota nova entra em `router.tsx`
+- Toda composição global entra em `provider.tsx`
+- Componentes de página importam de `features/` e `components/`, não de chamadas HTTP diretas
+- Guards de autenticação e role devem ser declarados no roteador
+- Se a estrutura de páginas mudar, atualize este README e o [`apps/frontend/README.md`](../../README.md)
 
-| Situação | Destino |
-|---|---|
-| Componente base de UI sem lógica (botão, input, badge) | `ui/` via `pnpm ui:add` |
-| Estrutura de página compartilhada entre rotas | `layout/` |
-| Componente com lógica usado em 2+ features | `shared/` |
-| Componente usado exclusivamente em uma feature | `features/<dominio>/components/` |
+***
 
-- Nunca importe de `features/` dentro de `components/` — a dependência é sempre `features/ → components/`, nunca o contrário
-- Componentes em `shared/` devem ser genéricos o suficiente para não conhecer detalhes de nenhuma feature específica
-- Todo componente exportado deve ter sua interface de props nomeada e exportada
+> _Próximo documento: [`routes/admin/README.md`](./routes/admin/README.md)_

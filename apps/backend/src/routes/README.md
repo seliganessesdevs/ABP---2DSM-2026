@@ -67,3 +67,7 @@ app.use('/api/v1/nodes',     nodeRoutes)
 - Todo novo módulo **deve** ser registrado aqui com seu prefixo
 - Os prefixos devem ser **substantivos no plural** e em inglês — `/questions`, `/users`, `/nodes`
 - Nenhuma rota é definida diretamente aqui — apenas montagem de roteadores externos
+
+***
+
+> _Próximo documento: [`../errors/README.md`](../errors/README.md)_

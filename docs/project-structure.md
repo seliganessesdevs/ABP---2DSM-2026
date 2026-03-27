@@ -1,4 +1,3 @@
-
 ## 🗂️ Visão Geral do Monorepo
 
 ```
@@ -173,7 +172,7 @@ apps/backend/
 │   │   │
 │   │   ├── auth/                   # Autenticação (RF09, RNF08)
 │   │   │   ├── auth.controller.ts  # POST /auth/login
-│   │   │   ├── auth.service.ts     # Lógica: verificar senha bcrypt, gerar JWT
+│   │   │   ├── auth.service.ts     # Lógica: verificar senha com Argon2id, gerar JWT
 │   │   │   ├── auth.routes.ts      # Definição das rotas do módulo
 │   │   │   └── auth.types.ts       # LoginDTO, TokenPayload
 │   │   │
@@ -220,7 +219,7 @@ apps/backend/
 │   │   └── AppError.ts             # Classe de erro customizada com statusCode e message
 │   │
 │   └── utils/
-│       ├── hash.utils.ts           # bcrypt: hashPassword, comparePassword
+│       ├── hash.utils.ts           # Argon2id: hashPassword, comparePassword
 │       ├── jwt.utils.ts            # generateToken, verifyToken
 │       └── pagination.utils.ts     # Helper para paginação de listagens
 │
@@ -299,10 +298,10 @@ Use alias de caminho (`@/features/auth`) para imports entre features.
 
 ```ts
 // ❌ Proibido — acoplamento frágil entre features
-import { useAuth } from '../../auth/hooks/useAuth'
+import { useAuth } from "../../auth/hooks/useAuth";
 
 // ✅ Correto — via alias configurado no tsconfig/vite
-import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useAuth } from "@/features/auth/hooks/useAuth";
 ```
 
 ### Componentes `ui/` são intocáveis

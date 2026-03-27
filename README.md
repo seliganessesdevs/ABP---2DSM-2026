@@ -78,51 +78,51 @@ Essa abordagem garante rastreabilidade, confiabilidade da informação e reduç�
 
 ### 🧩 Funcionais
 
-| Código    | Descrição                                                                                     |
-|-----------|-----------------------------------------------------------------------------------------------|
-| **RF01**  | **Navegação conversacional** — menus e submenus hierárquicos em modelo chatbot               |
-| **RF02**  | **Repositório de conhecimento** — nós de navegação, Q&A, documentos, chunks e metadados      |
-| **RF03**  | **Perfis de usuário** — Aluno (público), Secretária Acadêmica e Administrador (autenticados) |
-| **RF04**  | **Gestão de conteúdo (Admin)** — CRUD de nós, documentos, usuários e logs                   |
-| **RF05**  | **Encaminhamento de pergunta** — envio de dúvida com e-mail institucional para resposta      |
-| **RF06**  | **Gestão de perguntas (Secretária)** — listagem e atualização de status das perguntas        |
-| **RF07**  | **Avaliação de satisfação** — registro de "Gostei" / "Não gostei" ao fim do atendimento     |
-| **RF08**  | **Registro de logs** — fluxo de navegação, perguntas enviadas, satisfação, data e hora       |
-| **RF09**  | **Autenticação** — login/senha para Secretária e Administrador; Aluno permanece público      |
-| **RF10**  | **Autorização por papel (RBAC)** — controle de acesso granular por role no backend           |
-| **RF11**  | **Proteção de rotas** — middleware de autenticação com validação de JWT obrigatória          |
+| Código   | Descrição                                                                                    |
+| -------- | -------------------------------------------------------------------------------------------- |
+| **RF01** | **Navegação conversacional** — menus e submenus hierárquicos em modelo chatbot               |
+| **RF02** | **Repositório de conhecimento** — nós de navegação, Q&A, documentos, chunks e metadados      |
+| **RF03** | **Perfis de usuário** — Aluno (público), Secretária Acadêmica e Administrador (autenticados) |
+| **RF04** | **Gestão de conteúdo (Admin)** — CRUD de nós, documentos, usuários e logs                    |
+| **RF05** | **Encaminhamento de pergunta** — envio de dúvida com e-mail institucional para resposta      |
+| **RF06** | **Gestão de perguntas (Secretária)** — listagem e atualização de status das perguntas        |
+| **RF07** | **Avaliação de satisfação** — registro de "Gostei" / "Não gostei" ao fim do atendimento      |
+| **RF08** | **Registro de logs** — fluxo de navegação, perguntas enviadas, satisfação, data e hora       |
+| **RF09** | **Autenticação** — login/senha para Secretária e Administrador; Aluno permanece público      |
+| **RF10** | **Autorização por papel (RBAC)** — controle de acesso granular por role no backend           |
+| **RF11** | **Proteção de rotas** — middleware de autenticação com validação de JWT obrigatória          |
 
 ### ⚙️ Não Funcionais
 
-| Código    | Descrição                                                                                      |
-|-----------|------------------------------------------------------------------------------------------------|
-| **RNF01** | Interface simples, clara e responsiva (mobile e desktop)                                       |
-| **RNF02** | Tempo de resposta adequado ao uso interativo                                                   |
-| **RNF03** | Documentação técnica: visão geral, modelo de dados, arquitetura, execução, rotas da API       |
-| **RNF04** | Modelagem UML: Casos de Uso, Classes, Sequência e Componentes                                 |
-| **RNF05** | Containerização com Docker (3 containers: PostgreSQL, Backend, Frontend)                      |
-| **RNF06** | Orquestração via Docker Compose com inicialização em comando único                            |
-| **RNF07** | README principal + READMEs específicos por pasta principal                                    |
-| **RNF08** | Autenticação JWT com `id`, `role` e `exp` via `Authorization: Bearer`                        |
-| **RNF09** | Senhas com bcrypt, segredos em variáveis de ambiente, sem exposição de dados sensíveis na API |
+| Código    | Descrição                                                                                                                         |
+| --------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| **RNF01** | Interface simples, clara e responsiva (mobile e desktop)                                                                          |
+| **RNF02** | Tempo de resposta adequado ao uso interativo                                                                                      |
+| **RNF03** | Documentação técnica: visão geral, modelo de dados, arquitetura, execução, rotas da API                                           |
+| **RNF04** | Modelagem UML: Casos de Uso, Classes, Sequência e Componentes                                                                     |
+| **RNF05** | Containerização com Docker (3 containers: PostgreSQL, Backend, Frontend)                                                          |
+| **RNF06** | Orquestração via Docker Compose com inicialização em comando único                                                                |
+| **RNF07** | README principal + READMEs específicos por pasta principal                                                                        |
+| **RNF08** | Autenticação JWT com `id`, `role` e `exp` via `Authorization: Bearer`                                                             |
+| **RNF09** | Senhas com Argon2id (memory-hard com 64 MiB por hash), segredos em variáveis de ambiente, sem exposição de dados sensíveis na API |
 
 ---
 
 ## 📖 User Stories <a id="user-stories"></a>
 
-| Requisito | User Story |
-|-----------|------------|
-| **RF01** | Como **aluno**, quero navegar por menus e submenus do chatbot, para encontrar a informação que preciso sem contato direto com a secretaria. |
-| **RF02** | Como **administrador**, quero manter um repositório de conhecimento estruturado, para que as respostas do bot sejam rastreáveis até documentos oficiais. |
-| **RF03** | Como **visitante**, quero usar o chatbot sem me cadastrar, para tirar dúvidas de forma ágil e sem fricção. |
-| **RF04** | Como **administrador**, quero criar, editar e excluir nós de navegação e documentos, para manter o conteúdo do bot sempre atualizado. |
-| **RF05** | Como **aluno**, quero poder enviar uma dúvida diretamente à secretaria ao final do atendimento, para receber suporte em casos não cobertos pelo bot. |
-| **RF06** | Como **secretária acadêmica**, quero visualizar e atualizar o status das perguntas recebidas, para gerenciar os atendimentos pendentes com eficiência. |
-| **RF07** | Como **aluno**, quero avaliar se o atendimento foi satisfatório, para contribuir com a melhoria contínua do sistema. |
-| **RF08** | Como **administrador**, quero visualizar logs completos de atendimento com data e hora, para auditoria e análise de uso. |
-| **RF09** | Como **secretária acadêmica**, quero fazer login com e-mail e senha, para acessar o painel de gestão de perguntas com segurança. |
-| **RF10** | Como **sistema**, devo garantir que cada role acesse apenas as funcionalidades permitidas, para evitar acessos não autorizados. |
-| **RF11** | Como **desenvolvedor**, quero que todas as rotas administrativas estejam protegidas por middleware JWT, para garantir que nenhuma rota sensível fique exposta. |
+| Requisito | User Story                                                                                                                                                     |
+| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **RF01**  | Como **aluno**, quero navegar por menus e submenus do chatbot, para encontrar a informação que preciso sem contato direto com a secretaria.                    |
+| **RF02**  | Como **administrador**, quero manter um repositório de conhecimento estruturado, para que as respostas do bot sejam rastreáveis até documentos oficiais.       |
+| **RF03**  | Como **visitante**, quero usar o chatbot sem me cadastrar, para tirar dúvidas de forma ágil e sem fricção.                                                     |
+| **RF04**  | Como **administrador**, quero criar, editar e excluir nós de navegação e documentos, para manter o conteúdo do bot sempre atualizado.                          |
+| **RF05**  | Como **aluno**, quero poder enviar uma dúvida diretamente à secretaria ao final do atendimento, para receber suporte em casos não cobertos pelo bot.           |
+| **RF06**  | Como **secretária acadêmica**, quero visualizar e atualizar o status das perguntas recebidas, para gerenciar os atendimentos pendentes com eficiência.         |
+| **RF07**  | Como **aluno**, quero avaliar se o atendimento foi satisfatório, para contribuir com a melhoria contínua do sistema.                                           |
+| **RF08**  | Como **administrador**, quero visualizar logs completos de atendimento com data e hora, para auditoria e análise de uso.                                       |
+| **RF09**  | Como **secretária acadêmica**, quero fazer login com e-mail e senha, para acessar o painel de gestão de perguntas com segurança.                               |
+| **RF10**  | Como **sistema**, devo garantir que cada role acesse apenas as funcionalidades permitidas, para evitar acessos não autorizados.                                |
+| **RF11**  | Como **desenvolvedor**, quero que todas as rotas administrativas estejam protegidas por middleware JWT, para garantir que nenhuma rota sensível fique exposta. |
 
 ---
 
@@ -130,11 +130,11 @@ Essa abordagem garante rastreabilidade, confiabilidade da informação e reduç�
 
 ### Sprints
 
-| Sprint | Objetivos                                          | Documentação                          | Período | Status          |
-|--------|----------------------------------------------------|---------------------------------------|---------|-----------------|
-| 1      | Estrutura base, autenticação, navegação do chatbot | [Sprint 1 Docs](./docs/sprint1/README.md) | A definir | 🔵 Planejado |
-| 2      | Painel Admin (CRUD nós + documentos), RBAC         | [Sprint 2 Docs](./docs/sprint2/README.md) | A definir | 🔵 Planejado |
-| 3      | Painel Secretária, logs, satisfação, ajustes finais| [Sprint 3 Docs](./docs/sprint3/README.md) | A definir | 🔵 Planejado |
+| Sprint | Objetivos                                           | Documentação                              | Período   | Status       |
+| ------ | --------------------------------------------------- | ----------------------------------------- | --------- | ------------ |
+| 1      | Estrutura base, autenticação, navegação do chatbot  | [Sprint 1 Docs](./docs/sprint1/README.md) | A definir | 🔵 Planejado |
+| 2      | Painel Admin (CRUD nós + documentos), RBAC          | [Sprint 2 Docs](./docs/sprint2/README.md) | A definir | 🔵 Planejado |
+| 3      | Painel Secretária, logs, satisfação, ajustes finais | [Sprint 3 Docs](./docs/sprint3/README.md) | A definir | 🔵 Planejado |
 
 > 📝 Tasks detalhadas por sprint:
 > [Sprint 1 Tasks](./docs/sprint1/tasks.md) · [Sprint 2 Tasks](./docs/sprint2/tasks.md) · [Sprint 3 Tasks](./docs/sprint3/tasks.md)
@@ -196,22 +196,22 @@ Um item está **concluído** quando:
                         | **Backend**        | Node.js 20 + TypeScript + Express   | Obrigatório (RP02)                         |
                         | **ORM**            | Prisma                              | DDL/DML explícitos com type-safety         |
                         | **Banco de Dados** | PostgreSQL                          | Obrigatório (RP03)                         |
-                        | **Autenticação**   | JWT + bcrypt                        | Obrigatório (RP06, RNF08, RNF09)           |
+                        | **Autenticação**   | JWT + Argon2id                      | Obrigatório (RP06, RNF08, RNF09); Argon2id é memory-hard (64 MiB/hash), vencedor da Password Hashing Competition (2015) e superior ao bcrypt contra GPU/ASIC |
                         | **Containers**     | Docker + Docker Compose             | Obrigatório (RP04, RNF05, RNF06)           |
                         | **Testes**         | Vitest + Testing Library            | Cobertura unitária e de componentes        |
                         | **Linting**        | ESLint + Prettier                   | Padronização de código                     |
 
-                        
+
 
 ## ⚡ Primeiros Passos <a id="primeiros-passos"></a>
 
 ### Pré-requisitos
 
-| Software          | Versão mínima | Link                                  |
-|-------------------|:-------------:|---------------------------------------|
-| Docker            | 24.x          | https://www.docker.com/               |
-| Docker Compose    | 2.x           | https://docs.docker.com/compose/      |
-| Git               | qualquer      | https://git-scm.com/                  |
+| Software       | Versão mínima | Link                             |
+| -------------- | :-----------: | -------------------------------- |
+| Docker         |     24.x      | https://www.docker.com/          |
+| Docker Compose |      2.x      | https://docs.docker.com/compose/ |
+| Git            |   qualquer    | https://git-scm.com/             |
 
 ### Instalação e execução
 
@@ -230,11 +230,11 @@ docker compose up --build
 
 A aplicação estará disponível em:
 
-| Serviço     | URL                        |
-|-------------|----------------------------|
-| Frontend    | http://localhost:5173       |
-| Backend API | http://localhost:3333       |
-| PostgreSQL  | localhost:5432              |
+| Serviço     | URL                   |
+| ----------- | --------------------- |
+| Frontend    | http://localhost:5173 |
+| Backend API | http://localhost:3333 |
+| PostgreSQL  | localhost:5432        |
 
 ### Execução sem Docker (desenvolvimento local)
 
@@ -316,15 +316,15 @@ fatecbot/
 
 ## 📚 Documentação Técnica <a id="docs"></a>
 
-| Documento                                                              | Conteúdo                                        |
-|------------------------------------------------------------------------|-------------------------------------------------|
-| [`docs/application-overview.md`](./docs/application-overview.md)      | Modelo de dados, fluxos, perfis e data model    |
-| [`docs/project-structure.md`](./docs/project-structure.md)            | Estrutura de pastas comentada                   |
-| [`docs/project-standards.md`](./docs/project-standards.md)            | Convenções de commit, nomenclatura e linting    |
-| [`docs/api-layer.md`](./docs/api-layer.md)                            | Endpoints, exemplos de request/response         |
-| [`docs/testing.md`](./docs/testing.md)                                | Estratégia de testes e exemplos por camada      |
-| [`apps/frontend/README.md`](./apps/frontend/README.md)                | README específico do frontend                   |
-| [`apps/backend/README.md`](./apps/backend/README.md)                  | README específico do backend                    |
+| Documento                                                        | Conteúdo                                     |
+| ---------------------------------------------------------------- | -------------------------------------------- |
+| [`docs/application-overview.md`](./docs/application-overview.md) | Modelo de dados, fluxos, perfis e data model |
+| [`docs/project-structure.md`](./docs/project-structure.md)       | Estrutura de pastas comentada                |
+| [`docs/project-standards.md`](./docs/project-standards.md)       | Convenções de commit, nomenclatura e linting |
+| [`docs/api-layer.md`](./docs/api-layer.md)                       | Endpoints, exemplos de request/response      |
+| [`docs/testing.md`](./docs/testing.md)                           | Estratégia de testes e exemplos por camada   |
+| [`apps/frontend/README.md`](./apps/frontend/README.md)           | README específico do frontend                |
+| [`apps/backend/README.md`](./apps/backend/README.md)             | README específico do backend                 |
 
 ---
 
@@ -376,7 +376,6 @@ fatecbot/
     </tr>
   </table>
 </div>
-
 
 **Focal Point:** Prof. André Olimpio
 

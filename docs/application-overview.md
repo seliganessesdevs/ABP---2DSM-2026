@@ -22,11 +22,11 @@
 O sistema implementa controle de acesso baseado em papéis (**RBAC — RF10**).
 Existem três perfis com escopos distintos:
 
-| Perfil                   | Autenticação | Papel JWT     | O que pode fazer                                                                 |
-|--------------------------|:------------:|:-------------:|----------------------------------------------------------------------------------|
-| **Aluno / Visitante**    | ❌ Pública   | —             | Navegar no chatbot, enviar pergunta à secretaria, avaliar satisfação             |
-| **Secretária Acadêmica** | ✅ JWT        | `SECRETARY`   | Listar perguntas recebidas, atualizar status (aberta / respondida)               |
-| **Administrador**        | ✅ JWT        | `ADMIN`       | CRUD de nós, documentos e usuários da secretaria; visualizar logs de atendimento |
+| Perfil                   | Autenticação |  Papel JWT  | O que pode fazer                                                                 |
+| ------------------------ | :----------: | :---------: | -------------------------------------------------------------------------------- |
+| **Aluno / Visitante**    |  ❌ Pública  |      —      | Navegar no chatbot, enviar pergunta à secretaria, avaliar satisfação             |
+| **Secretária Acadêmica** |    ✅ JWT    | `SECRETARY` | Listar perguntas recebidas, atualizar status (aberta / respondida)               |
+| **Administrador**        |    ✅ JWT    |   `ADMIN`   | CRUD de nós, documentos e usuários da secretaria; visualizar logs de atendimento |
 
 > ⚠️ O controle de acesso **deve ser aplicado no backend** via middleware.
 > Proteção apenas no frontend (esconder botões) **não é suficiente** e viola o RF10/RF11.
@@ -61,11 +61,11 @@ orquestrados via `docker-compose.yml` com inicialização em comando único.
 
 ### Responsabilidades de cada container
 
-| Container    | Imagem base          | Porta | Função                                               |
-|--------------|----------------------|:-----:|------------------------------------------------------|
-| `frontend`   | `node:20-alpine`     | 5173  | Serve a SPA React em modo dev (ou Nginx em prod)     |
-| `backend`    | `node:20-alpine`     | 3333  | API REST com Express + Prisma; valida JWT; aplica RBAC|
-| `postgres`   | `postgres:16-alpine` | 5432  | Banco de dados relacional; dados persistidos em volume|
+| Container  | Imagem base          | Porta | Função                                                 |
+| ---------- | -------------------- | :---: | ------------------------------------------------------ |
+| `frontend` | `node:20-alpine`     | 5173  | Serve a SPA React em modo dev (ou Nginx em prod)       |
+| `backend`  | `node:20-alpine`     | 3333  | API REST com Express + Prisma; valida JWT; aplica RBAC |
+| `postgres` | `postgres:16-alpine` | 5432  | Banco de dados relacional; dados persistidos em volume |
 
 ### Comunicação
 
@@ -126,53 +126,58 @@ orquestrados via `docker-compose.yml` com inicialização em comando único.
 ### Descrição das entidades
 
 #### `User`
+
 Representa os usuários autenticados do sistema (Secretária e Administrador).
 O perfil Aluno não possui registro — acesso é público.
 
-| Campo          | Tipo      | Descrição                                    |
-|----------------|-----------|----------------------------------------------|
-| `id`           | UUID      | Identificador único gerado automaticamente   |
-| `name`         | String    | Nome completo do usuário                     |
-| `email`        | String    | E-mail institucional (único no sistema)      |
-| `passwordHash` | String    | Senha com hash bcrypt — **nunca em plaintext**|
-| `role`         | Enum      | `ADMIN` ou `SECRETARY`                       |
+| Campo          | Tipo   | Descrição                                                                          |
+| -------------- | ------ | ---------------------------------------------------------------------------------- |
+| `id`           | UUID   | Identificador único gerado automaticamente                                         |
+| `name`         | String | Nome completo do usuário                                                           |
+| `email`        | String | E-mail institucional (único no sistema)                                            |
+| `passwordHash` | String | Senha com hash Argon2id (memory-hard com 64 MiB por hash) — **nunca em plaintext** |
+| `role`         | Enum   | `ADMIN` ou `SECRETARY`                                                             |
 
 #### `ChatNode`
+
 Representa cada nó da árvore de navegação do chatbot (menus, submenus e respostas).
 
-| Campo      | Tipo   | Descrição                                                    |
-|------------|--------|--------------------------------------------------------------|
-| `nodeType` | Enum   | `MENU` (tem filhos/opções) ou `ANSWER` (é folha da árvore)  |
-| `parentId` | UUID?  | Referência ao nó pai. `null` indica nó raiz                  |
-| `order`    | Int    | Ordenação dos filhos dentro do mesmo pai                     |
-| `content`  | String | Texto exibido ao usuário. Em nós `MENU`: pergunta/título     |
+| Campo      | Tipo   | Descrição                                                  |
+| ---------- | ------ | ---------------------------------------------------------- |
+| `nodeType` | Enum   | `MENU` (tem filhos/opções) ou `ANSWER` (é folha da árvore) |
+| `parentId` | UUID?  | Referência ao nó pai. `null` indica nó raiz                |
+| `order`    | Int    | Ordenação dos filhos dentro do mesmo pai                   |
+| `content`  | String | Texto exibido ao usuário. Em nós `MENU`: pergunta/título   |
 
 #### `DocumentChunk`
+
 Fragmentos indexados de documentos oficiais, exibidos como evidência ao final do atendimento.
 
-| Campo       | Tipo   | Descrição                                              |
-|-------------|--------|--------------------------------------------------------|
-| `content`   | String | Trecho do documento (máx. ~500 tokens)                 |
-| `page`      | Int?   | Página do documento original de onde o trecho foi extraído |
-| `section`   | String?| Seção ou âncora do documento (ex: "Seção I, p. 25")   |
+| Campo     | Tipo    | Descrição                                                  |
+| --------- | ------- | ---------------------------------------------------------- |
+| `content` | String  | Trecho do documento (máx. ~500 tokens)                     |
+| `page`    | Int?    | Página do documento original de onde o trecho foi extraído |
+| `section` | String? | Seção ou âncora do documento (ex: "Seção I, p. 25")        |
 
 #### `SessionLog`
+
 Registra cada sessão de atendimento completa (RF08).
 
-| Campo            | Tipo   | Descrição                                              |
-|------------------|--------|--------------------------------------------------------|
-| `navigationPath` | JSON   | Array de IDs de nós visitados em ordem cronológica    |
-| `satisfaction`   | Enum?  | `LIKED`, `DISLIKED` ou `null` (não avaliado)           |
+| Campo            | Tipo  | Descrição                                          |
+| ---------------- | ----- | -------------------------------------------------- |
+| `navigationPath` | JSON  | Array de IDs de nós visitados em ordem cronológica |
+| `satisfaction`   | Enum? | `LIKED`, `DISLIKED` ou `null` (não avaliado)       |
 
 #### `Question`
+
 Pergunta enviada pelo aluno à Secretaria Acadêmica (RF05/RF06).
 
-| Campo          | Tipo   | Descrição                                              |
-|----------------|--------|--------------------------------------------------------|
-| `text`         | String | Texto da dúvida enviada pelo aluno                    |
-| `email`        | String | E-mail institucional informado para resposta           |
-| `status`       | Enum   | `OPEN` (em aberto) ou `ANSWERED` (respondida)          |
-| `sessionLogId` | UUID?  | Log da sessão em que a pergunta foi originada          |
+| Campo          | Tipo   | Descrição                                     |
+| -------------- | ------ | --------------------------------------------- |
+| `text`         | String | Texto da dúvida enviada pelo aluno            |
+| `email`        | String | E-mail institucional informado para resposta  |
+| `status`       | Enum   | `OPEN` (em aberto) ou `ANSWERED` (respondida) |
+| `sessionLogId` | UUID?  | Log da sessão em que a pergunta foi originada |
 
 ---
 
@@ -241,7 +246,7 @@ Aplicável aos perfis **Secretária Acadêmica** e **Administrador** (RF09, RNF0
          ▼
 [POST /api/v1/auth/login]
   → Backend busca User por e-mail
-  → Compara senha com bcrypt.compare()
+  → Compara senha com argon2.verify() usando Argon2id (PHC 2015, superior ao bcrypt contra GPU/ASIC)
   → Se inválido: 401 Unauthorized
          │
          ▼

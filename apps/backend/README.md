@@ -36,15 +36,15 @@
 Este serviço é o **único ponto de acesso ao banco de dados**.
 O frontend nunca se conecta diretamente ao PostgreSQL.
 
-| Responsabilidade                     | Tecnologia           |
-|--------------------------------------|----------------------|
-| Exposição de endpoints HTTP REST     | Express              |
-| Validação de schema dos requests     | Zod                  |
-| Autenticação com JWT                 | jsonwebtoken + bcrypt|
-| Controle de acesso por papel (RBAC)  | Middleware customizado|
-| Comunicação com o banco de dados     | Prisma Client        |
-| Persistência dos dados               | PostgreSQL 16        |
-| Execução containerizada              | Docker               |
+| Responsabilidade                    | Tecnologia                                                                                  |
+| ----------------------------------- | ------------------------------------------------------------------------------------------- |
+| Exposição de endpoints HTTP REST    | Express                                                                                     |
+| Validação de schema dos requests    | Zod                                                                                         |
+| Autenticação com JWT                | jsonwebtoken + Argon2id (memory-hard, 64 MiB/hash; PHC 2015; melhor resistência a GPU/ASIC) |
+| Controle de acesso por papel (RBAC) | Middleware customizado                                                                      |
+| Comunicação com o banco de dados    | Prisma Client                                                                               |
+| Persistência dos dados              | PostgreSQL 16                                                                               |
+| Execução containerizada             | Docker                                                                                      |
 
 ---
 
@@ -87,7 +87,7 @@ backend/
 │   │   └── AppError.ts      # Classe de erro customizada (statusCode + message)
 │   │
 │   └── utils/
-│       ├── hash.utils.ts    # bcrypt: hashPassword, comparePassword
+│       ├── hash.utils.ts    # Argon2id: hashPassword, comparePassword
 │       ├── jwt.utils.ts     # generateToken, verifyToken
 │       └── pagination.utils.ts
 │
@@ -150,21 +150,21 @@ curl http://localhost:3333/api/v1/health
 
 ## 📜 Scripts Disponíveis <a id="scripts-disponíveis"></a>
 
-| Script              | Comando                    | Descrição                                         |
-|---------------------|----------------------------|---------------------------------------------------|
-| Desenvolvimento     | `pnpm dev`                 | Inicia com hot reload via `ts-node-dev`           |
-| Build               | `pnpm build`               | Compila TypeScript para `dist/`                   |
-| Produção            | `pnpm start`               | Executa o build compilado                         |
-| Testes              | `pnpm test`                | Executa todos os testes com Vitest                |
-| Testes (watch)      | `pnpm test:watch`          | Modo watch — reexecuta ao salvar                  |
-| Cobertura           | `pnpm test:coverage`       | Gera relatório HTML em `coverage/`                |
-| Lint                | `pnpm lint`                | ESLint em todo o projeto                          |
-| Lint (fix)          | `pnpm lint:fix`            | Corrige automaticamente o que for possível        |
-| Typecheck           | `pnpm typecheck`           | Valida TypeScript sem compilar (`tsc --noEmit`)   |
-| Migrations          | `pnpm db:migrate`          | Executa migrations pendentes com Prisma           |
-| Seed                | `pnpm db:seed`             | Popula o banco com dados iniciais do chatbot      |
-| Prisma Studio       | `pnpm db:studio`           | Abre UI visual do banco em `http://localhost:5555`|
-| Reset do banco      | `pnpm db:reset`            | ⚠️ Apaga tudo e reaplica seed (só em dev)         |
+| Script          | Comando              | Descrição                                          |
+| --------------- | -------------------- | -------------------------------------------------- |
+| Desenvolvimento | `pnpm dev`           | Inicia com hot reload via `ts-node-dev`            |
+| Build           | `pnpm build`         | Compila TypeScript para `dist/`                    |
+| Produção        | `pnpm start`         | Executa o build compilado                          |
+| Testes          | `pnpm test`          | Executa todos os testes com Vitest                 |
+| Testes (watch)  | `pnpm test:watch`    | Modo watch — reexecuta ao salvar                   |
+| Cobertura       | `pnpm test:coverage` | Gera relatório HTML em `coverage/`                 |
+| Lint            | `pnpm lint`          | ESLint em todo o projeto                           |
+| Lint (fix)      | `pnpm lint:fix`      | Corrige automaticamente o que for possível         |
+| Typecheck       | `pnpm typecheck`     | Valida TypeScript sem compilar (`tsc --noEmit`)    |
+| Migrations      | `pnpm db:migrate`    | Executa migrations pendentes com Prisma            |
+| Seed            | `pnpm db:seed`       | Popula o banco com dados iniciais do chatbot       |
+| Prisma Studio   | `pnpm db:studio`     | Abre UI visual do banco em `http://localhost:5555` |
+| Reset do banco  | `pnpm db:reset`      | ⚠️ Apaga tudo e reaplica seed (só em dev)          |
 
 ---
 
@@ -200,26 +200,26 @@ Documentação completa com exemplos de request/response em [`docs/api-layer.md`
 
 ### Resumo rápido
 
-| Método   | Rota                          | Acesso       | Descrição                              |
-|----------|-------------------------------|:------------:|----------------------------------------|
-| `POST`   | `/auth/login`                 | Público      | Autentica e retorna JWT                |
-| `GET`    | `/nodes/root`                 | Público      | Retorna nó raiz do chatbot             |
-| `GET`    | `/nodes/:id`                  | Público      | Retorna nó com filhos e chunks         |
-| `POST`   | `/sessions/rating`            | Público      | Registra log de sessão e satisfação    |
-| `POST`   | `/questions`                  | Público      | Envia pergunta à secretaria            |
-| `GET`    | `/questions`                  | 🔒 SEC/ADMIN | Lista perguntas recebidas              |
-| `PATCH`  | `/questions/:id`              | 🔒 SEC/ADMIN | Atualiza status da pergunta            |
-| `GET`    | `/nodes`                      | 🔒 ADMIN     | Lista todos os nós                     |
-| `POST`   | `/nodes`                      | 🔒 ADMIN     | Cria novo nó de navegação              |
-| `PATCH`  | `/nodes/:id`                  | 🔒 ADMIN     | Atualiza nó existente                  |
-| `DELETE` | `/nodes/:id`                  | 🔒 ADMIN     | Remove nó (bloqueado se tiver filhos)  |
-| `GET`    | `/documents`                  | 🔒 ADMIN     | Lista documentos oficiais              |
-| `POST`   | `/documents`                  | 🔒 ADMIN     | Cadastra documento com chunks          |
-| `GET`    | `/users`                      | 🔒 ADMIN     | Lista usuários da secretaria           |
-| `POST`   | `/users`                      | 🔒 ADMIN     | Cria usuário da secretaria             |
-| `DELETE` | `/users/:id`                  | 🔒 ADMIN     | Remove usuário                         |
-| `GET`    | `/logs`                       | 🔒 ADMIN     | Lista logs de atendimento              |
-| `GET`    | `/health`                     | Público      | Health check da API                    |
+| Método   | Rota               |    Acesso    | Descrição                             |
+| -------- | ------------------ | :----------: | ------------------------------------- |
+| `POST`   | `/auth/login`      |   Público    | Autentica e retorna JWT               |
+| `GET`    | `/nodes/root`      |   Público    | Retorna nó raiz do chatbot            |
+| `GET`    | `/nodes/:id`       |   Público    | Retorna nó com filhos e chunks        |
+| `POST`   | `/sessions/rating` |   Público    | Registra log de sessão e satisfação   |
+| `POST`   | `/questions`       |   Público    | Envia pergunta à secretaria           |
+| `GET`    | `/questions`       | 🔒 SEC/ADMIN | Lista perguntas recebidas             |
+| `PATCH`  | `/questions/:id`   | 🔒 SEC/ADMIN | Atualiza status da pergunta           |
+| `GET`    | `/nodes`           |   🔒 ADMIN   | Lista todos os nós                    |
+| `POST`   | `/nodes`           |   🔒 ADMIN   | Cria novo nó de navegação             |
+| `PATCH`  | `/nodes/:id`       |   🔒 ADMIN   | Atualiza nó existente                 |
+| `DELETE` | `/nodes/:id`       |   🔒 ADMIN   | Remove nó (bloqueado se tiver filhos) |
+| `GET`    | `/documents`       |   🔒 ADMIN   | Lista documentos oficiais             |
+| `POST`   | `/documents`       |   🔒 ADMIN   | Cadastra documento com chunks         |
+| `GET`    | `/users`           |   🔒 ADMIN   | Lista usuários da secretaria          |
+| `POST`   | `/users`           |   🔒 ADMIN   | Cria usuário da secretaria            |
+| `DELETE` | `/users/:id`       |   🔒 ADMIN   | Remove usuário                        |
+| `GET`    | `/logs`            |   🔒 ADMIN   | Lista logs de atendimento             |
+| `GET`    | `/health`          |   Público    | Health check da API                   |
 
 ---
 
@@ -241,10 +241,10 @@ Se a validação falhar, o middleware de erro retorna `422 Unprocessable Entity`
 const createNodeSchema = z.object({
   title: z.string().min(1).max(255),
   content: z.string().min(1),
-  nodeType: z.enum(['MENU', 'ANSWER']),
+  nodeType: z.enum(["MENU", "ANSWER"]),
   parentId: z.string().uuid().nullable(),
   order: z.number().int().min(0),
-})
+});
 ```
 
 ### AppError e handler global
@@ -296,14 +296,14 @@ Documentação completa do modelo ER em [`docs/application-overview.md`](../../d
 
 Entidades principais:
 
-| Entidade        | Descrição                                              |
-|-----------------|--------------------------------------------------------|
-| `User`          | Secretárias e administradores autenticados             |
+| Entidade        | Descrição                                             |
+| --------------- | ----------------------------------------------------- |
+| `User`          | Secretárias e administradores autenticados            |
 | `ChatNode`      | Nós da árvore de navegação (menus e respostas)        |
 | `DocumentChunk` | Trechos indexados de documentos oficiais              |
 | `Document`      | Documentos oficiais (Regulamento, Manual de Estágio…) |
-| `SessionLog`    | Registro de cada sessão de atendimento                 |
-| `Question`      | Perguntas enviadas pelos alunos à secretaria           |
+| `SessionLog`    | Registro de cada sessão de atendimento                |
+| `Question`      | Perguntas enviadas pelos alunos à secretaria          |
 
 ---
 

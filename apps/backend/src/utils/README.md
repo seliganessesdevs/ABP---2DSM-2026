@@ -8,14 +8,14 @@ Funções utilitárias puras e reutilizáveis. Nenhum arquivo aqui tem estado, n
 
 ```
 utils/
-├── hash.ts       # Gera e compara hashes de senha com Argon2id
-├── jwt.ts        # Gera e valida tokens JWT
-└── pagination.ts # Calcula offset/limit a partir de page/pageSize
+├── hash.utils.ts       # Gera e compara hashes de senha com Argon2id
+├── jwt.utils.ts        # Gera e valida tokens JWT
+└── pagination.utils.ts # Calcula offset/limit a partir de page/pageSize
 ```
 
 ---
 
-## `hash.ts`
+## `hash.utils.ts`
 
 Abstrai o `Argon2id` em duas funções simples. Senhas **nunca** são armazenadas em texto puro — sempre passam por aqui antes de ir ao banco. O Argon2id é memory-hard (64 MiB por hash), venceu a Password Hashing Competition em 2015 e oferece resistência superior ao bcrypt contra ataques com GPU/ASIC.
 
@@ -33,7 +33,7 @@ O custo do Argon2id (`memoryCost: 65536`, `timeCost: 3`, `parallelism: 1`) é co
 
 ---
 
-## `jwt.ts`
+## `jwt.utils.ts`
 
 Abstrai o `jsonwebtoken` em duas funções. O token gerado carrega o `sub` (ID do usuário) e o `role`, que o `auth.middleware` usa para popular o `req.user`.
 
@@ -51,7 +51,7 @@ Se o token estiver expirado ou com assinatura inválida, `verifyToken` lança �
 
 ---
 
-## `pagination.ts`
+## `pagination.utils.ts`
 
 Converte os parâmetros de query (`page`, `pageSize`) nos valores que o Prisma espera (`skip`, `take`). Centraliza também os valores padrão para que não fiquem espalhados nos services.
 
@@ -80,3 +80,5 @@ Sem isso, cada service implementaria a lógica de `(page - 1) * pageSize` na mã
 - Toda função deve ser exportada individualmente (named export) — sem export default
 
 ---
+
+> _Próximo documento: [`../modules/README.md`](../modules/README.md)_

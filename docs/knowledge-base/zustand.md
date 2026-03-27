@@ -211,3 +211,5 @@ if (someCondition) clearAuth()
 
 > _Para entender como Zustand e TanStack Query se complementam no projeto,
 > consulte [`../state-management.md`](../state-management.md)._
+
+> _Próximo documento: [`tailwindcss.md`](./tailwindcss.md)_

@@ -159,7 +159,7 @@ DocumentChunk
 ## 🔌 Endpoints <a id="endpoints"></a>
 
 Documentação completa com exemplos de request/response em
-[`docs/api-layer.md`](../../../../docs/api-layer.md).
+[`docs/api-layer.md`](../../../../../docs/api-layer.md).
 
 | Método | Rota | Acesso | Descrição |
 | ------ | ---- | :----: | --------- |
@@ -178,4 +178,4 @@ Documentação completa com exemplos de request/response em
 
 ***
 
-> _Próximo módulo: [`../nodes/README.md`](../nodes/README.md)_
+> _Próximo documento: [`../nodes/README.md`](../nodes/README.md)_

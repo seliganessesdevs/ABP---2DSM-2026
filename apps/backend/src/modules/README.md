@@ -150,3 +150,7 @@ Somente leitura. Expõe os registros de sessão gerados pelo módulo `chatbot` p
 - Todo novo módulo deve ser registrado em `src/routes/index.ts` com seu prefixo
 - Schemas Zod ficam no `routes.ts` ou em arquivo separado `<modulo>.schema.ts` se forem grandes
 - Erros de negócio sempre lançam `AppError` — nunca `res.status()` direto no service
+
+***
+
+> _Próximo documento: [`./auth/README.md`](./auth/README.md)_

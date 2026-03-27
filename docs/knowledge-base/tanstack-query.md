@@ -2,6 +2,9 @@
 
 TanStack Query (antigo React Query) é uma biblioteca de gerenciamento de estado assíncrono para React. Ela substitui o padrão `useEffect + useState` para busca de dados por uma abordagem declarativa com cache, sincronização e controle de estado já embutidos.
 
+> A regra canônica de divisão entre estado de servidor e estado do cliente no FatecBot está em [`../state-management.md`](../state-management.md).
+> Este guia permanece como material de apoio para entender o "porquê" por trás dessa decisão.
+
 ***
 
 ## O Problema com `useEffect`
@@ -166,3 +169,7 @@ root.render(
 ```
 
 Em Next.js com App Router, o `QueryClientProvider` fica em um Client Component wrapper no `layout.tsx`.
+
+***
+
+> _Próximo documento: [`zustand.md`](./zustand.md)_

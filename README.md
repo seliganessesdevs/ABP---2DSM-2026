@@ -37,6 +37,8 @@
 >
 > [📄 Pasta de Documentação](./docs)
 >
+> [🚀 Primeiros Passos](./docs/first-steps.md)
+>
 > 🎓 ABP 2026-1 · 2º Semestre DSM · Fatec Jacareí
 
 ---
@@ -137,7 +139,7 @@ Essa abordagem garante rastreabilidade, confiabilidade da informação e reduç�
 | 3      | Painel Secretária, logs, satisfação, ajustes finais | [Sprint 3 Docs](./docs/sprint3/README.md) | A definir | 🔵 Planejado |
 
 > 📝 Tasks detalhadas por sprint:
-> [Sprint 1 Tasks](./docs/sprint1/tasks.md) · [Sprint 2 Tasks](./docs/sprint2/tasks.md) · [Sprint 3 Tasks](./docs/sprint3/tasks.md)
+> [Sprint 1 Tasks](./docs/sprint1/tasks.md) · Sprint 2 Tasks ⚠️ a criar · Sprint 3 Tasks ⚠️ a criar
 
 ---
 
@@ -296,11 +298,16 @@ fatecbot/
 │       └── README.md      # README específico do backend
 ├── docs/                  # Documentação técnica completa
 │   ├── application-overview.md
+│   ├── first-steps.md
 │   ├── project-structure.md
 │   ├── project-standards.md
 │   ├── api-layer.md
 │   ├── state-management.md
 │   ├── testing.md
+│   ├── troubleshooting.md
+│   ├── mvp-scope.md
+│   ├── seed-data.md
+│   ├── env-matrix.md
 │   ├── sprint1/
 │   ├── sprint2/
 │   ├── sprint3/
@@ -318,11 +325,16 @@ fatecbot/
 
 | Documento                                                        | Conteúdo                                     |
 | ---------------------------------------------------------------- | -------------------------------------------- |
+| [`docs/first-steps.md`](./docs/first-steps.md)                   | Setup inicial, trilhas de leitura e mapa da documentação |
 | [`docs/application-overview.md`](./docs/application-overview.md) | Modelo de dados, fluxos, perfis e data model |
 | [`docs/project-structure.md`](./docs/project-structure.md)       | Estrutura de pastas comentada                |
 | [`docs/project-standards.md`](./docs/project-standards.md)       | Convenções de commit, nomenclatura e linting |
 | [`docs/api-layer.md`](./docs/api-layer.md)                       | Endpoints, exemplos de request/response      |
+| [`docs/state-management.md`](./docs/state-management.md)         | Estratégia de estado com TanStack Query e Zustand |
 | [`docs/testing.md`](./docs/testing.md)                           | Estratégia de testes e exemplos por camada   |
+| [`docs/mvp-scope.md`](./docs/mvp-scope.md)                       | Escopo do MVP, prioridades e critério de corte |
+| [`docs/seed-data.md`](./docs/seed-data.md)                       | Usuários, árvore inicial e dependências do seed |
+| [`docs/env-matrix.md`](./docs/env-matrix.md)                     | Matriz de variáveis de ambiente por camada |
 | [`apps/frontend/README.md`](./apps/frontend/README.md)           | README específico do frontend                |
 | [`apps/backend/README.md`](./apps/backend/README.md)             | README específico do backend                 |
 
@@ -382,3 +394,5 @@ fatecbot/
 ---
 
 > _Projeto acadêmico desenvolvido no âmbito do ABP 2026-1 · Fatec Jacareí · 2º DSM_
+
+> _Próximo documento: [`docs/README.md`](./docs/README.md)_

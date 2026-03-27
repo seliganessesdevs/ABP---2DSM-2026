@@ -67,11 +67,11 @@ Implementa paginação via `page` e `limit` para não sobrecarregar a resposta:
 
 ```ts
 // ✅ Filtros opcionais via query params
-// GET /logs?rating=LIKED&from=2026-03-01&to=2026-03-31&page=1&limit=20
+// GET /logs?satisfaction=LIKED&from=2026-03-01&to=2026-03-31&page=1&limit=20
 
 const where: Prisma.SessionLogWhereInput = {}
 
-if (rating) where.rating = rating
+if (satisfaction) where.satisfaction = satisfaction
 if (from || to) {
   where.createdAt = {
     ...(from && { gte: new Date(from) }),
@@ -116,7 +116,7 @@ async getAll(req: Request, res: Response) {
 ```ts
 // Query params aceitos no GET /logs
 interface LogFiltersDto {
-  rating?: 'LIKED' | 'DISLIKED'
+  satisfaction?: 'LIKED' | 'DISLIKED'
   from?: string      // ISO 8601 — ex: "2026-03-01"
   to?: string        // ISO 8601 — ex: "2026-03-31"
   page?: number      // padrão: 1
@@ -127,16 +127,19 @@ interface LogFiltersDto {
 interface SessionLogResponse {
   id: string
   navigationPath: string[]       // IDs dos nós visitados na ordem
-  rating: 'LIKED' | 'DISLIKED'
-  createdAt: string
+  satisfaction: 'LIKED' | 'DISLIKED'
+  startedAt: string
+  endedAt: string
 }
 
 // Resposta paginada
 interface PaginatedLogsResponse {
   logs: SessionLogResponse[]
-  total: number
-  page: number
-  limit: number
+  meta: {
+    total: number
+    page: number
+    limit: number
+  }
 }
 ```
 
@@ -148,8 +151,9 @@ interface PaginatedLogsResponse {
 SessionLog
 ├── id             String    @id
 ├── navigationPath String[]  (array de IDs dos nós visitados)
-├── rating         Rating    (LIKED | DISLIKED)
-└── createdAt      DateTime
+├── satisfaction   Rating    (LIKED | DISLIKED)
+├── startedAt      DateTime
+└── endedAt        DateTime
 ```
 
 > Os logs são **imutáveis** — uma vez criados pelo `modules/chatbot/`,
@@ -161,7 +165,7 @@ SessionLog
 ## 🔌 Endpoints <a id="endpoints"></a>
 
 Documentação completa com exemplos de request/response em
-[`docs/api-layer.md`](../../../../docs/api-layer.md).
+[`docs/api-layer.md`](../../../../../docs/api-layer.md).
 
 | Método | Rota | Acesso | Descrição |
 | ------ | ---- | :----: | --------- |
@@ -180,4 +184,4 @@ Documentação completa com exemplos de request/response em
 
 ***
 
-> _Próximo documento: [`docs/api-layer.md`](../../../../docs/api-layer.md)_
+> _Próximo documento: [`../../../../../docs/api-layer.md`](../../../../../docs/api-layer.md)_

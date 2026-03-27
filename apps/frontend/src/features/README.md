@@ -133,3 +133,7 @@ Listagem de perguntas recebidas com filtro por status e atualização de status 
 **Alias de importação** — sempre use `@/`, nunca caminhos relativos que cruzem pastas.
 
 **Nova feature** — crie a pasta com as subpastas necessárias, adicione o RF correspondente no cabeçalho deste README e documente os arquivos principais nas tabelas acima.
+
+***
+
+> _Próximo documento: [`./auth/README.md`](./auth/README.md)_

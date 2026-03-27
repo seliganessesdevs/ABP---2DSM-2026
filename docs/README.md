@@ -1,34 +1,45 @@
 # 📚 docs — Documentação Técnica
 
-> Repositório central de toda a documentação técnica do FatecBot.
-> Cobre arquitetura, padrões de engenharia, contrato de API, estratégia de testes,
-> base de conhecimento para o time e registros de decisão técnica (ADRs).
+> Repositório central da documentação técnica do FatecBot.
+> Esta pasta concentra visão arquitetural, padrões de engenharia, contrato de API,
+> estratégia de testes, escopo do MVP, guias de apoio e documentação das sprints.
 
 ***
 
 ## 📑 Índice
 
 - [Estrutura](#estrutura)
-- [Documentos Principais](#principais)
-- [Base de Conhecimento](#knowledge-base)
+- [Comece por aqui](#comece-por-aqui)
+- [Documentos principais](#documentos-principais)
+- [Base de conhecimento](#base-de-conhecimento)
 - [Sprints](#sprints)
-- [ADRs](#adr)
-- [Regras de Contribuição](#regras)
+- [ADRs](#adrs)
+- [Regras de contribuição](#regras-de-contribuicao)
 
 ***
 
 ## 📁 Estrutura <a id="estrutura"></a>
 
-```
+```text
 docs/
-├── application-overview.md     # Visão arquitetural, perfis, modelo de dados e fluxos
-├── project-structure.md        # Organização do monorepo e princípios de estrutura
-├── project-standards.md        # Padrões de branch, commit, PR, lint e nomenclatura
-├── api-layer.md                # Contrato REST: endpoints, request/response e status
-├── state-management.md         # Estratégia de estado (TanStack Query + Zustand)
-├── testing.md                  # Pirâmide de testes, ferramentas e exemplos por camada
-│
-├── knowledge-base/             # Guias técnicos introdutórios para o time
+├── README.md                    # Este índice geral
+├── first-steps.md               # Ponto de entrada para quem vai contribuir
+├── application-overview.md      # Visão geral, perfis, fluxos e modelo de dados
+├── project-structure.md         # Organização do monorepo e princípios de estrutura
+├── project-standards.md         # Branches, commits, PRs, linting e nomenclatura
+├── api-layer.md                 # Contrato REST com envelopes, filtros e paginação
+├── state-management.md          # Estratégia de estado do frontend
+├── testing.md                   # Estratégia de testes e mínimos por sprint
+├── troubleshooting.md           # Problemas comuns no ambiente de desenvolvimento
+├── mvp-scope.md                 # Escopo do MVP do semestre
+├── seed-data.md                 # Dados esperados do seed inicial
+├── env-matrix.md                # Matriz de variáveis de ambiente
+├── assets/
+│   └── README.md                # Convenções de assets e diagramas da documentação
+├── knowledge-base/
+│   ├── README.md
+│   ├── axios.md
+│   ├── docker.md
 │   ├── express.md
 │   ├── git-flow.md
 │   ├── jwt-argon2id.md
@@ -41,102 +52,110 @@ docs/
 │   ├── tanstack-query.md
 │   ├── tratamento-de-erros.md
 │   ├── typescript.md
-│   └── zod.md
-│
-├── sprint1/                    # Documentação da Sprint 1
-│   ├── README.md               # Objetivos, entregáveis e critérios de aceite
-│   └── tasks.md                # Tasks detalhadas com responsáveis e status
-│
-├── sprint2/                    # Documentação da Sprint 2
+│   ├── zod.md
+│   └── zustand.md
+├── sprint1/
 │   ├── README.md
 │   └── tasks.md
-│
-├── sprint3/                    # Documentação da Sprint 3
-│   ├── README.md
-│   └── tasks.md
-│
-├── adr/                        # Architecture Decision Records
-│   └── README.md               # Índice dos ADRs e template
-│
-└── assets/                     # Imagens, diagramas e arquivos visuais
-    └── fatecbot-logo.png
+├── sprint2/
+│   └── README.md
+├── sprint3/
+│   └── README.md
+└── adr/
+    └── README.md
 ```
 
 ***
 
-## 📄 Documentos Principais <a id="principais"></a>
+## 🚦 Comece por aqui <a id="comece-por-aqui"></a>
 
-| Documento | Conteúdo | Leitura recomendada para |
-| --------- | -------- | ------------------------ |
-| [`application-overview.md`](./application-overview.md) | Perfis de usuário, containers, modelo ER e fluxos principais | Qualquer membro antes de começar |
-| [`project-structure.md`](./project-structure.md) | Organização do monorepo, frontend e backend | Antes de criar qualquer arquivo |
-| [`project-standards.md`](./project-standards.md) | Branches, commits, PRs, lint e nomenclatura | Antes do primeiro commit |
-| [`api-layer.md`](./api-layer.md) | Todos os endpoints REST com exemplos de request/response | Frontend ao integrar com a API |
-| [`state-management.md`](./state-management.md) | Quando usar TanStack Query vs Zustand e padrões de cache | Frontend ao criar hooks de dados |
-| [`testing.md`](./testing.md) | Pirâmide de testes, Vitest, Testing Library e exemplos | Ao escrever qualquer teste |
+| Documento | Quando ler | Por que ler agora |
+| --------- | ---------- | ----------------- |
+| [`first-steps.md`](./first-steps.md) | Primeira entrada no projeto | Centraliza setup, trilhas de leitura e mapa da documentação |
+| [`application-overview.md`](./application-overview.md) | Antes de implementar qualquer feature | Resume usuários, fluxos e modelo de dados |
+| [`project-structure.md`](./project-structure.md) | Antes de criar arquivos novos | Mostra onde cada responsabilidade deve viver |
+| [`project-standards.md`](./project-standards.md) | Antes do primeiro commit | Define branches, commits, PRs e convenções obrigatórias |
 
 ***
 
-## 🧠 Base de Conhecimento <a id="knowledge-base"></a>
+## 📄 Documentos Principais <a id="documentos-principais"></a>
+
+| Documento | Conteúdo | Leitura recomendada para |
+| --------- | -------- | ------------------------ |
+| [`first-steps.md`](./first-steps.md) | Entrada rápida no projeto, setup e trilhas de leitura | Qualquer pessoa chegando ao repositório |
+| [`application-overview.md`](./application-overview.md) | Perfis de usuário, containers, modelo de dados e fluxos | Entender o sistema como produto |
+| [`project-structure.md`](./project-structure.md) | Organização do monorepo, responsabilidades por pasta e princípios de modularização | Criar ou mover arquivos com segurança |
+| [`project-standards.md`](./project-standards.md) | Branches, commits, PRs, lint, nomenclatura e regras de env | Contribuir sem quebrar o fluxo do time |
+| [`api-layer.md`](./api-layer.md) | Endpoints, envelopes, filtros, paginação e códigos de status | Integrar frontend e backend |
+| [`state-management.md`](./state-management.md) | Quando usar TanStack Query e quando usar Zustand | Criar hooks e stores no frontend |
+| [`testing.md`](./testing.md) | Estratégia de testes, exemplos e mínimo por sprint | Planejar cobertura antes de desenvolver |
+| [`troubleshooting.md`](./troubleshooting.md) | Diagnóstico de problemas frequentes | Resolver setup, Docker, env e auth |
+| [`mvp-scope.md`](./mvp-scope.md) | O que entra, o que não entra e como priorizar corte | Planejamento de entrega do semestre |
+| [`seed-data.md`](./seed-data.md) | Usuários, árvore inicial e ordem do seed | Implementar ou revisar o seed |
+| [`env-matrix.md`](./env-matrix.md) | Variáveis de ambiente por camada e por ambiente | Configurar execução local, Docker e testes |
+
+***
+
+## 🧠 Base de Conhecimento <a id="base-de-conhecimento"></a>
 
 A pasta [`knowledge-base/`](./knowledge-base/) reúne guias introdutórios sobre as
-tecnologias usadas no projeto. São documentos **didáticos e práticos**, escritos
-para membros que estão aprendendo a stack durante o desenvolvimento.
+tecnologias usadas no projeto. Eles não substituem os documentos canônicos de
+arquitetura, mas ajudam quem está subindo na stack.
 
 | Guia | O que cobre |
 | ---- | ----------- |
+| [`axios.md`](./knowledge-base/axios.md) | Instância HTTP do frontend, interceptors e tratamento de erros |
+| [`docker.md`](./knowledge-base/docker.md) | Containers, Compose, volumes e fluxo de execução local |
 | [`express.md`](./knowledge-base/express.md) | Rotas, middlewares e separação controller/service |
-| [`git-flow.md`](./knowledge-base/git-flow.md) | Fluxo de branches, PRs e comandos do dia a dia |
-| [`jwt-argon2id.md`](./knowledge-base/jwt-argon2id.md) | Autenticação JWT e hash seguro de senhas com Argon2id |
-| [`pnpm.md`](./knowledge-base/pnpm.md) | Gerenciamento de dependências e workspaces |
-| [`prisma.md`](./knowledge-base/prisma.md) | Schema, migrations, CRUD e tratamento de erros |
-| [`react.md`](./knowledge-base/react.md) | Hooks, props, listas, formulários e anti-padrões |
-| [`REST-HTTP.md`](./knowledge-base/REST-HTTP.md) | Métodos, status codes, idempotência e padrões de resposta |
-| [`shadcn.md`](./knowledge-base/shadcn.md) | Uso de componentes e regra de não editar `components/ui/` |
-| [`tailwindcss.md`](./knowledge-base/tailwindcss.md) | Tokens, layout, responsividade e padrões de componente |
-| [`tanstack-query.md`](./knowledge-base/tanstack-query.md) | useQuery, useMutation, queryKey e invalidação de cache |
-| [`tratamento-de-erros.md`](./knowledge-base/tratamento-de-erros.md) | AppError, middleware global e mapeamento de erros |
-| [`typescript.md`](./knowledge-base/typescript.md) | Types, interfaces, utility types e guards |
-| [`zod.md`](./knowledge-base/zod.md) | Schemas, parse/safeParse, inferência e boas práticas |
+| [`git-flow.md`](./knowledge-base/git-flow.md) | Rotina de branch e PR alinhada aos padrões do projeto |
+| [`jwt-argon2id.md`](./knowledge-base/jwt-argon2id.md) | Autenticação JWT e hash seguro com Argon2id |
+| [`pnpm.md`](./knowledge-base/pnpm.md) | Workspaces, scripts e lockfile do monorepo |
+| [`prisma.md`](./knowledge-base/prisma.md) | Schema, queries, paginação, erros e boas práticas |
+| [`react.md`](./knowledge-base/react.md) | Fundamentos de React 18 e práticas adotadas no projeto |
+| [`REST-HTTP.md`](./knowledge-base/REST-HTTP.md) | Convenções REST, métodos HTTP e envelopes de resposta |
+| [`shadcn.md`](./knowledge-base/shadcn.md) | Regras de uso do shadcn/ui e wrappers |
+| [`tailwindcss.md`](./knowledge-base/tailwindcss.md) | Estilização utilitária, composição e padrões do projeto |
+| [`tanstack-query.md`](./knowledge-base/tanstack-query.md) | Fetch declarativo, cache e invalidação |
+| [`tratamento-de-erros.md`](./knowledge-base/tratamento-de-erros.md) | AppError, middleware global e mapeamento de falhas |
+| [`typescript.md`](./knowledge-base/typescript.md) | Regras de tipos, inferência e boas práticas |
+| [`zod.md`](./knowledge-base/zod.md) | Validação de entrada e geração de tipos |
+| [`zustand.md`](./knowledge-base/zustand.md) | Store global de auth e limites de uso |
 
 ***
 
 ## 🏃 Sprints <a id="sprints"></a>
 
-Cada sprint possui uma subpasta com dois arquivos:
+Cada sprint possui uma subpasta própria. Quando existir `tasks.md`, ele é a
+referência operacional daquela sprint.
 
-- **`README.md`** — objetivos da sprint, entregáveis esperados e critérios de aceite
-- **`tasks.md`** — tasks detalhadas com responsáveis, estimativas e status
-
-| Sprint | Foco principal | Pasta |
-| ------ | -------------- | ----- |
-| 1 | Estrutura base, autenticação, navegação do chatbot | [`sprint1/`](./sprint1/) |
-| 2 | Painel Admin (CRUD nós + documentos), RBAC | [`sprint2/`](./sprint2/) |
-| 3 | Painel Secretária, logs, satisfação, ajustes finais | [`sprint3/`](./sprint3/) |
+| Sprint | Foco principal | Documentos |
+| ------ | -------------- | ---------- |
+| 1 | Arquitetura base ponta a ponta | [`README.md`](./sprint1/README.md) · [`tasks.md`](./sprint1/tasks.md) |
+| 2 | Painel Admin, autenticação completa e RBAC | [`README.md`](./sprint2/README.md) · `⚠️ tasks.md a criar` |
+| 3 | Painel da secretária, logs, satisfação e estabilização | [`README.md`](./sprint3/README.md) · `⚠️ tasks.md a criar` |
 
 ***
 
-## 🏛️ ADRs — Architecture Decision Records <a id="adr"></a>
+## 🏛️ ADRs <a id="adrs"></a>
 
-A pasta [`adr/`](./adr/) registra as decisões arquiteturais relevantes tomadas
-durante o projeto. Cada ADR documenta o **contexto**, a **decisão** e as
-**consequências** de uma escolha técnica significativa.
+As decisões arquiteturais relevantes vivem em [`adr/README.md`](./adr/README.md),
+seguindo o formato de contexto, decisão e consequências.
 
-> ⚠️ Toda decisão que afete a estrutura do projeto, a escolha de biblioteca
-> ou o contrato entre frontend e backend **deve ser registrada como um ADR**
-> antes de ser implementada.
+> Toda decisão que altere estrutura do monorepo, modelo de dados central,
+> autenticação ou contrato entre frontend e backend deve ser registrada como ADR.
 
 ***
 
-## 📐 Regras de Contribuição <a id="regras"></a>
+## 📐 Regras de Contribuição <a id="regras-de-contribuicao"></a>
 
-- Documentos novos que cobrem a arquitetura geral entram na raiz de `docs/`
-- Guias introdutórios de tecnologia entram em `knowledge-base/`
-- Imagens e diagramas entram em `assets/` — **nunca** referencie imagens por URL externa nos documentos
-- Todo link entre documentos usa **caminho relativo** — nunca URL absoluta
-- Ao criar um novo arquivo referenciado por outro documento, atualize a tabela do documento que o referencia
-- ADRs seguem o template em [`adr/README.md`](./adr/README.md) e são numerados sequencialmente
+- Documentos de arquitetura geral ficam na raiz de `docs/`
+- Guias didáticos de tecnologia ficam em `docs/knowledge-base/`
+- Arquivos de sprint ficam em `docs/sprint*/`
+- Assets, diagramas e imagens da documentação ficam em `docs/assets/`
+- Todo link entre documentos deve usar caminho relativo
+- Em caso de conflito, os documentos canônicos prevalecem sobre a base de conhecimento e READMEs locais
+- Ao criar um documento novo, atualize este índice e o rodapé de navegação relacionado
 
 ***
 
-> _Próximo documento: [`application-overview.md`](./application-overview.md)_
+> _Próximo documento: [`first-steps.md`](./first-steps.md)_

@@ -136,3 +136,5 @@ export function NodeForm({ onSuccess }: NodeFormProps) {
 
 > _Este README deve ser atualizado sempre que um novo domínio de gestão
 > for adicionado ao painel administrativo._
+
+> _Próximo documento: [`../../../README.md`](../../../README.md)_

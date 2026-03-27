@@ -157,7 +157,7 @@ User
 ## 🔌 Endpoints <a id="endpoints"></a>
 
 Documentação completa com exemplos de request/response em
-[`docs/api-layer.md`](../../../../docs/api-layer.md).
+[`docs/api-layer.md`](../../../../../docs/api-layer.md).
 
 | Método | Rota | Acesso | Descrição |
 | ------ | ---- | :----: | --------- |
@@ -178,4 +178,4 @@ Documentação completa com exemplos de request/response em
 
 ***
 
-> _Próximo módulo: [`../logs/README.md`](../logs/README.md)_
+> _Próximo documento: [`../logs/README.md`](../logs/README.md)_

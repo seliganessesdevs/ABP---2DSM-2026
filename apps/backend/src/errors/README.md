@@ -42,7 +42,7 @@ Sem `AppError`, você teria duas opções ruins:
 
 ```ts
 // ❌ Opção 1 — responder direto no service (errado, service não conhece HTTP)
-res.status(404).json({ error: 'Não encontrado' })
+res.status(404).json({ success: false, message: 'Não encontrado' })
 
 // ❌ Opção 2 — lançar Error nativo (sem statusCode, vira 500)
 throw new Error('Não encontrado')
@@ -63,3 +63,7 @@ O service fica limpo de lógica HTTP, e o `errorMiddleware` tem todas as informa
 - **Nunca** lance `new Error()` diretamente no código da aplicação — sempre use `AppError`
 - A mensagem deve ser **legível pelo cliente** — não exponha detalhes técnicos ou de banco
 - Se os erros crescerem, considere criar subclasses (`NotFoundError`, `UnauthorizedError`) que estendem `AppError` com o status já fixo
+
+***
+
+> _Próximo documento: [`../utils/README.md`](../utils/README.md)_

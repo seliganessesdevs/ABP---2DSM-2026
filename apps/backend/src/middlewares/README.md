@@ -100,3 +100,7 @@ A ordem importa — middlewares são executados na sequência em que são regist
 - O `errorMiddleware` deve sempre ser o último registrado no `server.ts`
 - O `loggerMiddleware` deve sempre ser o primeiro
 - Nunca responda com `res.json()` de erro fora do `errorMiddleware` — use sempre `next(error)`
+
+***
+
+> _Próximo documento: [`../routes/README.md`](../routes/README.md)_

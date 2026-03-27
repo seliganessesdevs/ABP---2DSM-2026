@@ -14,14 +14,17 @@ src/
 ├── routes/         # Registro central de todas as rotas
 ├── errors/         # Classe base para erros controlados
 ├── utils/          # Funções puras reutilizáveis
-└── server.ts       # Ponto de entrada — inicializa e sobe o Express
+├── server.ts       # Cria e exporta o app Express
+└── index.ts        # Sobe o servidor HTTP e inicia a aplicação
 ```
 
 ***
 
 ## `server.ts`
 
-Inicializa a aplicação Express, registra middlewares globais, monta as rotas e sobe o servidor na porta definida em `env.ts`. É o único arquivo que conhece a ordem de montagem de toda a aplicação.
+Inicializa a aplicação Express, registra middlewares globais e monta as rotas.
+Ele **não** chama `.listen()`; essa responsabilidade fica em `index.ts`, o que
+mantém o app importável por testes de integração.
 
 ```ts
 app.use(loggerMiddleware)       // 1. loga tudo
@@ -32,6 +35,20 @@ app.use(errorMiddleware)        // 5. captura todos os erros
 ```
 
 A ordem importa — middlewares são executados na sequência em que são registrados.
+
+## `index.ts`
+
+É o arquivo que lê `env.PORT`, importa o `app` exportado por `server.ts` e
+efetivamente sobe o processo HTTP:
+
+```ts
+import { env } from '@/config/env'
+import { app } from '@/server'
+
+app.listen(env.PORT, () => {
+  console.log(`HTTP server running on port ${env.PORT}`)
+})
+```
 
 ***
 
@@ -90,7 +107,7 @@ Define o `AppError` — classe que estende `Error` com um `statusCode` HTTP. Tod
 
 ### `utils/`
 
-Funções puras sem estado e sem dependência de Express ou Prisma. Contém utilitários de hash de senha (`hash.ts`), geração e validação de JWT (`jwt.ts`) e cálculo de paginação (`pagination.ts`).
+Funções puras sem estado e sem dependência de Express ou Prisma. Contém utilitários de hash de senha (`hash.utils.ts`), geração e validação de JWT (`jwt.utils.ts`) e cálculo de paginação (`pagination.utils.ts`).
 
 → Veja [`utils/README.md`](./utils/README.md)
 
@@ -120,3 +137,7 @@ Cliente
 - Variáveis de ambiente **somente** via `env.ts` — nunca `process.env` direto
 - Erros controlados **sempre** com `AppError` — nunca `new Error()` ou `res.status()` no service
 - Novos módulos devem ser registrados em `src/routes/index.ts`
+
+***
+
+> _Próximo documento: [`config/README.md`](./config/README.md)_

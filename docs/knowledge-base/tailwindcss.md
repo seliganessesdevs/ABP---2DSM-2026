@@ -597,3 +597,7 @@ export const Card = ({ children, className }: CardProps) => (
 // Tailwind permite forçar com ! mas indica problema de especificidade
 <div className="!mt-0">   // só se realmente necessário
 ```
+
+***
+
+> _Próximo documento: [`shadcn.md`](./shadcn.md)_

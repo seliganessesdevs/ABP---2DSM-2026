@@ -308,4 +308,4 @@ Disponível ao fim de qualquer atendimento no chatbot (RF05/RF06).
 
 ---
 
-> _Próximo documento: [`api-layer.md`](./api-layer.md) — documentação completa de todos os endpoints, com exemplos de request e response._
+> _Próximo documento: [`api-layer.md`](./api-layer.md)_

@@ -10,7 +10,7 @@ Types e interfaces TypeScript globais — compartilhados entre features, hooks e
 types/
 ├── api.types.ts        # Envelope padrão de resposta da API
 ├── common.types.ts     # Enums e types compartilhados entre domínios
-└── env.d.ts            # Tipagem das variáveis de ambiente Vite
+└── README.md           # Convenções dos tipos globais do frontend
 ```
 
 ***
@@ -22,14 +22,15 @@ Wrapper genérico que todas as respostas da API seguem. Garante que toda chamada
 ```ts
 export interface ApiResponse<T> {
   success: boolean
-  message: string
   data: T
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {
-  total: number
-  page: number
-  limit: number
+  meta: {
+    total: number
+    page: number
+    limit: number
+  }
 }
 ```
 
@@ -82,24 +83,11 @@ export interface AuthUser {
 
 ***
 
-## `env.d.ts`
+## Tipagem de ambiente
 
-Estende a interface `ImportMetaEnv` do Vite para tipar as variáveis de ambiente. Sem este arquivo, `import.meta.env.VITE_*` seria do tipo `string | undefined`.
-
-```ts
-/// <reference types="vite/client" />
-
-interface ImportMetaEnv {
-  readonly VITE_API_URL: string
-  readonly VITE_ENABLE_DEVTOOLS: string
-}
-
-interface ImportMeta {
-  readonly env: ImportMetaEnv
-}
-```
-
-> Sempre que uma nova variável `VITE_*` for adicionada ao `.env.example`, adicione a tipagem correspondente aqui e a validação em `config/env.ts`.
+O ponto canônico para variáveis do frontend é `src/config/env.ts`. Se o time
+optar por complementar isso com tipagem local de `import.meta.env`, a definição
+deve permanecer sincronizada com o schema Zod desse arquivo.
 
 ***
 
@@ -121,3 +109,5 @@ interface ImportMeta {
 - Qualquer enum adicionado aqui deve ter valor idêntico ao enum correspondente no backend (`schema.prisma` ou `common.types.ts` do backend)
 
 ***
+
+> _Próximo documento: [`../lib/README.md`](../lib/README.md)_

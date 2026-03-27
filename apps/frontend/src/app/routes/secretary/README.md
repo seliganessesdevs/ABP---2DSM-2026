@@ -73,3 +73,5 @@ na API via mutation do TanStack Query, definida em `features/secretary/`.
 
 > _Este README deve ser atualizado sempre que uma nova rota da secretária
 > for adicionada ou removida do projeto._
+
+> _Próximo documento: [`../../../../README.md`](../../../../README.md)_

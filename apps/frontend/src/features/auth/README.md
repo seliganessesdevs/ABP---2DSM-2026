@@ -163,3 +163,5 @@ nenhuma ação manual necessária nos componentes.
 
 > _Este README deve ser atualizado sempre que o fluxo de autenticação,
 > os roles disponíveis ou a estrutura do token JWT forem alterados._
+
+> _Próximo documento: [`../chatbot/README.md`](../chatbot/README.md)_

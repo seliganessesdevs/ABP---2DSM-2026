@@ -28,7 +28,7 @@ throw new AppError('Senha incorreta', 401)
 if (err instanceof AppError) {
   return res.status(err.statusCode).json({
     success: false,
-    error: err.message,
+    message: err.message,
   })
 }
 ```
@@ -52,7 +52,7 @@ Service lança AppError
         → Não: loga internamente, responde 500 com mensagem genérica
 ```
 
-Centralizar assim garante que toda resposta de erro tem o mesmo formato — o frontend pode confiar que sempre vai receber `{ success: false, error: "..." }`.
+Centralizar assim garante que toda resposta de erro tem o mesmo formato — o frontend pode confiar que sempre vai receber `{ success: false, message: "..." }`.
 
 ***
 
@@ -63,7 +63,7 @@ Erros inesperados contêm informações que não podem sair da aplicação:
 ```ts
 // ❌ vaza informação interna
 res.status(500).json({
-  error: err.message,  // "relation 'users' does not exist" — expõe o banco
+  message: err.message,  // "relation 'users' does not exist" — expõe o banco
   stack: err.stack,    // expõe o caminho dos arquivos no servidor
 })
 
@@ -71,7 +71,7 @@ res.status(500).json({
 console.error(err)     // você vê o detalhe no servidor
 res.status(500).json({
   success: false,
-  error: 'Erro interno do servidor',
+  message: 'Erro interno do servidor',
 })
 ```
 
@@ -157,7 +157,7 @@ O `console.error` em produção não é suficiente para uma aplicação real, ma
 console.error(`[${new Date().toISOString()}] ${err.message}`, err.stack)
 
 // Responde com mensagem genérica para o cliente
-res.status(500).json({ success: false, error: 'Erro interno do servidor' })
+res.status(500).json({ success: false, message: 'Erro interno do servidor' })
 ```
 
 ***
@@ -185,3 +185,7 @@ try {
 ```
 
 **Trate erros específicos do Prisma e do JWT** — sem isso, erros comuns como e-mail duplicado e token expirado chegam ao cliente como `500`, quando deveriam ser `409` e `401`.
+
+***
+
+> _Próximo documento: [`docker.md`](./docker.md)_

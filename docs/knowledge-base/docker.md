@@ -213,3 +213,5 @@ docker compose exec backend pnpm db:seed
 > _Este guia cobre o necessário para o dia a dia do projeto. Para aprofundamento,
 > consulte a [documentação oficial do Docker](https://docs.docker.com) e do
 > [Docker Compose](https://docs.docker.com/compose/)._
+
+> _Próximo documento: [`../sprint1/README.md`](../sprint1/README.md)_

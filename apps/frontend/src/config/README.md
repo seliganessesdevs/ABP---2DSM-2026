@@ -65,7 +65,7 @@ const api = axios.create({ baseURL: import.meta.env.VITE_API_URL })
 
 1. Adicione a variável no `.env.example` com valor de exemplo
 2. Adicione o campo no schema Zod em `env.ts`
-3. Adicione a tipagem em `src/types/env.d.ts`
+3. Se o time decidir tipar `import.meta.env` localmente, mantenha essa tipagem sincronizada com o schema
 4. Documente a variável na seção de variáveis de ambiente do `apps/frontend/README.md`
 
 ***
@@ -77,3 +77,5 @@ const api = axios.create({ baseURL: import.meta.env.VITE_API_URL })
 - Variáveis booleanas chegam como string (`'true'`/`'false'`) — use `z.enum(['true', 'false'])`, não `z.boolean()`
 
 ***
+
+> _Próximo documento: [`../types/README.md`](../types/README.md)_

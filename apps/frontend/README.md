@@ -22,6 +22,7 @@
 - [Responsabilidades](#responsabilidades)
 - [Estrutura de Pastas](#estrutura-de-pastas)
 - [Primeiros Passos](#primeiros-passos)
+- [Checklist de Implementação Inicial](#checklist-de-implementacao-inicial)
 - [Scripts Disponíveis](#scripts-disponíveis)
 - [Variáveis de Ambiente](#variáveis-de-ambiente)
 - [Rotas da Aplicação](#rotas-da-aplicação)
@@ -171,6 +172,21 @@ Acesse `http://localhost:5173`.
 
 > ⚠️ Estas credenciais existem apenas no ambiente de desenvolvimento após `pnpm db:seed`.
 > **Nunca use em produção.**
+
+---
+
+## ✅ Checklist de Implementação Inicial <a id="checklist-de-implementacao-inicial"></a>
+
+Antes de qualquer feature de domínio, o frontend deve ter estes arquivos-base:
+
+- `src/app/provider.tsx`
+- `src/app/router.tsx`
+- `src/lib/axios.ts`
+- `src/lib/queryClient.ts`
+- `src/config/env.ts`
+
+Essa fundação garante roteamento, acesso à API, providers globais e validação de
+ambiente antes do crescimento das features.
 
 ---
 
@@ -339,3 +355,5 @@ Painel da secretária com listagem e atualização de status das perguntas receb
 
 > _Este README deve ser atualizado sempre que novas rotas, scripts ou variáveis
 > de ambiente forem adicionados ao projeto._
+
+> _Próximo documento: [`../../docs/state-management.md`](../../docs/state-management.md)_

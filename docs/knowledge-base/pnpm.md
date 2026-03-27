@@ -23,7 +23,7 @@ Se você tem 10 projetos usando React, tem 10 cópias idênticas no disco. Com o
 O pnpm mantém um **store global** — uma única cópia de cada pacote no seu computador. Cada projeto usa links para esse store em vez de cópias:
 
 ```
-~/.pnpm-store/react@19.0.0   (50mb — uma única vez)
+~/.pnpm-store/react@18.0.0   (50mb — uma única vez)
      ↑              ↑              ↑
 projeto-a       projeto-b      projeto-c
 (link)          (link)         (link)
@@ -161,6 +161,10 @@ corepack prepare pnpm@latest --activate
 
 ```json
 {
-  "packageManager": "pnpm@9.0.0"
+  "packageManager": "pnpm@9"
 }
 ```
+
+***
+
+> _Próximo documento: [`git-flow.md`](./git-flow.md)_

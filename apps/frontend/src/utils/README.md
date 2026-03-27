@@ -2,8 +2,6 @@
 
 Funções utilitárias puras de uso global. Sem estado, sem side effects, sem conhecimento de domínio. Recebem um input, retornam um output — testáveis de forma isolada com uma linha.
 
-***
-
 ## Estrutura
 
 ```
@@ -110,4 +108,6 @@ export const hasNextPage = (page: number, total: number, limit: number): boolean
 - Se uma função utilitária for específica de uma feature, coloque-a em `features/<dominio>/` — não generalize prematuramente
 
 ***
+
+> _Próximo documento: [`../features/README.md`](../features/README.md)_
 

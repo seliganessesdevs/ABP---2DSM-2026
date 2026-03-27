@@ -73,7 +73,7 @@ const create = async (req, res) => {
   const exists = await prisma.user.findUnique({
     where: { email: req.body.email },
   });
-  if (exists) return res.status(409).json({ error: "E-mail já existe" });
+  if (exists) return res.status(409).json({ success: false, message: "E-mail já existe" });
   const hash = await argon2.hash(req.body.password, {
     type: argon2.argon2id,
     memoryCost: 65536,
@@ -189,7 +189,7 @@ res.status(200).json({
 // Erro
 res.status(404).json({
   success: false,
-  error: "Pergunta não encontrada",
+  message: "Pergunta não encontrada",
 });
 ```
 
@@ -240,3 +240,7 @@ Nunca use query string para passar dados sensíveis — elas aparecem na URL, no
 **Não misture responsabilidades** — controller orquestra, service tem regras, Prisma persiste. Quando cada camada sabe só o que precisa, fica muito mais fácil testar e manter.
 
 **Proteja todas as rotas que precisam de autenticação** — nunca confie que o frontend "não vai mostrar o botão". A proteção real está no backend, sempre.
+
+---
+
+> _Próximo documento: [`jwt-argon2id.md`](./jwt-argon2id.md)_

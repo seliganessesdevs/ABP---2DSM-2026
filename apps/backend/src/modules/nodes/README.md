@@ -176,7 +176,7 @@ aponta para seu pai via `parentId`. O nó raiz tem `parentId: null`.
 ## 🔌 Endpoints <a id="endpoints"></a>
 
 Documentação completa com exemplos de request/response em
-[`docs/api-layer.md`](../../../../docs/api-layer.md).
+[`docs/api-layer.md`](../../../../../docs/api-layer.md).
 
 | Método | Rota | Acesso | Descrição |
 | ------ | ---- | :----: | --------- |
@@ -198,4 +198,4 @@ Documentação completa com exemplos de request/response em
 
 ***
 
-> _Próximo módulo: [`../questions/README.md`](../questions/README.md)_
+> _Próximo documento: [`../questions/README.md`](../questions/README.md)_

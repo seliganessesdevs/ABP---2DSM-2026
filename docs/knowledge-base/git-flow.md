@@ -1,6 +1,12 @@
+Aqui estão os dois arquivos completos com a correção aplicada — português sem acentos em todos os exemplos e regras de commit.
+git-flow.md
+text
 # Git Flow — Guia para Iniciantes
 
 Git Flow é uma convenção de como organizar branches e commits no Git. Não é uma tecnologia — é um acordo de equipe. Sem ele, um projeto com vários desenvolvedores vira caos: código quebrado na branch principal, histórico impossível de ler, conflitos constantes.
+
+> Para o padrão canônico de branches, commits e PRs do FatecBot, prevalece [`../project-standards.md`](../project-standards.md).
+> Este guia continua útil como apoio conceitual e operacional no dia a dia.
 
 ***
 
@@ -27,23 +33,30 @@ Você cria uma branch nova para cada tarefa. Quando termina, abre um Pull Reques
 
 **Convenção de nomes:**
 
-```bash
-feature/nome-da-feature      # nova funcionalidade
-fix/descricao-do-bug         # correção de bug
-chore/descricao-da-tarefa    # tarefa técnica sem impacto direto no usuário
-docs/descricao               # documentação
-refactor/descricao           # refatoração sem mudança de comportamento
-```
+<tipo>/RF<numero>-<descricao-curta-em-kebab-case>
+text
+
+| Tipo | Quando usar |
+|---|---|
+| `feature/` | Nova funcionalidade |
+| `fix/` | Correção de bug |
+| `chore/` | Tarefa técnica sem impacto direto no usuário |
+| `docs/` | Documentação |
+| `refactor/` | Refatoração sem mudança de comportamento |
 
 **Exemplos reais:**
 
 ```bash
-feature/login-jwt
-feature/listagem-perguntas
-fix/token-expirado-nao-redirecionava
-chore/configurar-eslint
-docs/atualizar-readme
+feature/RF01-chatbot-navigation
+feature/RF04-admin-node-crud
+fix/RF09-jwt-expiration-handling
+docs/project-standards
+chore/setup-docker-compose
+refactor/extract-hash-utils
 ```
+
+> **Regra:** Sempre vincule a branch ao RF correspondente quando houver.
+> Para tarefas sem RF direto, use a descrição curta sem o código: `chore/setup-docker-compose`.
 
 ***
 
@@ -55,32 +68,33 @@ git checkout develop
 git pull origin develop
 
 # 2. Cria a branch da sua tarefa a partir da develop
-git checkout -b feature/listagem-perguntas
+git checkout -b feature/RF01-chatbot-navigation
 
 # 3. Trabalha, commita conforme avança
 git add .
-git commit -m "feat: adiciona endpoint de listagem de perguntas"
-git commit -m "feat: adiciona filtro por status na listagem"
-git commit -m "test: adiciona testes da listagem de perguntas"
+git commit -m "feat(chatbot): adiciona carregamento do no raiz ao iniciar sessao"
+git commit -m "feat(chatbot): adiciona selecao de opcao e navegacao entre nos filhos"
+git commit -m "test(chatbot): adiciona testes unitarios do hook useChatNavigation"
 
 # 4. Antes de abrir PR, atualiza com o que mudou na develop
 git pull origin develop --rebase
 
 # 5. Envia para o repositório remoto
-git push origin feature/listagem-perguntas
+git push origin feature/RF01-chatbot-navigation
 
 # 6. Abre Pull Request no GitHub: feature/... → develop
 ```
 
 ***
 
-## Commits 
+## Commits
 
-Nós usaremos uma convenção para nomear commits de forma padronizada. O formato é:
+Usamos o padrão **Conventional Commits** em **português sem acentos**. O formato completo é:
 
-```
-tipo(escopo): descrição curta no imperativo
-```
+<tipo>(<escopo>): <descricao curta no imperativo>
+[corpo opcional — explica o porque, nao o que]
+[rodape opcional — referencia a task: Closes #42]
+text
 
 | Tipo | Quando usar |
 |---|---|
@@ -91,22 +105,51 @@ tipo(escopo): descrição curta no imperativo
 | `refactor` | Refatoração sem mudança de comportamento |
 | `test` | Adição ou correção de testes |
 | `style` | Formatação, espaçamento — sem mudança de lógica |
+| `perf` | Melhoria de desempenho |
 
-**Exemplos:**
+**Escopos recomendados:**
+
+chatbot | auth | admin | secretary | nodes | documents | logs | questions | db | docker | ci
+text
+
+**Exemplos corretos:**
 
 ```bash
-git commit -m "feat(auth): adiciona autenticação JWT"
-git commit -m "fix(auth): corrige redirecionamento após token expirado"
-git commit -m "chore(backend): atualiza dependências do backend"
-git commit -m "test(chatbot): adiciona testes de integração para login"
-git commit -m "refactor(utils): extrai lógica de hash para utilitário"
+feat(chatbot): adiciona navegacao hierarquica pelo menu de nos
+fix(auth): corrige validacao de expiracao do JWT no refresh
+refactor(admin): extrai NodeEditor para componente de formulario reutilizavel
+test(chatbot): adiciona testes unitarios do hook useChatNavigation
+docs(api-layer): documenta endpoint POST /questions com exemplos
+chore(docker): adiciona healthcheck ao container do postgres
+```
+
+**Exemplos incorretos:**
+
+```bash
+# ❌ Sem tipo
+atualiza chatbot
+
+# ❌ Verbo no passado
+feat(auth): adicionou formulario de login
+
+# ❌ Genérico demais
+fix: corrigindo bugs
+
+# ❌ Sem escopo quando aplicável
+feat: criar painel do admin
+
+# ❌ Com acento (risco de encoding)
+feat(chatbot): adiciona navegação por nós
 ```
 
 **Regras para a descrição:**
 - Imperativo — "adiciona", não "adicionado" ou "adicionando"
 - Minúsculo
 - Sem ponto no final
+- Sem acentos nem cedilha
 - Curta — no máximo 72 caracteres
+
+> Para a especificação completa de commits e PRs, consulte [`../project-standards.md`](../project-standards.md).
 
 ***
 
@@ -125,14 +168,13 @@ Pull Request (PR) é o pedido para mesclar sua branch na `develop`. Antes de apr
 
 ## `.gitignore` — O que Nunca Commitar
 
-```
-node_modules/       # dependências — regeneradas com pnpm install
-.env                # variáveis de ambiente — contém segredos
-dist/               # código compilado — gerado no build
-.DS_Store           # arquivo de sistema do macOS
-*.log               # arquivos de log
-coverage/           # relatório de cobertura de testes
-```
+node_modules/ # dependências — regeneradas com pnpm install
+.env # variáveis de ambiente — contém segredos
+dist/ # código compilado — gerado no build
+.DS_Store # arquivo de sistema do macOS
+*.log # arquivos de log
+coverage/ # relatório de cobertura de testes
+text
 
 Se um arquivo sensível foi commitado acidentalmente, apenas adicioná-lo ao `.gitignore` depois não resolve — ele já está no histórico. É preciso removê-lo com `git rm --cached`.
 
@@ -198,4 +240,8 @@ git rebase --continue
 
 **Sempre atualize antes de abrir PR** — um PR desatualizado tem mais chance de conflito e de quebrar a `develop` ao ser mesclado.
 
-**Mensagens de commit são documentação** — daqui a seis meses, você vai querer entender por que aquela mudança foi feita. "fix: corrige" não ajuda. "fix: corrige redirecionamento para /login quando token expira no middleware de auth" ajuda muito.
+**Mensagens de commit são documentação** — daqui a seis meses, você vai querer entender por que aquela mudança foi feita. `fix: corrigindo` não ajuda. `fix(auth): corrige redirecionamento para /login quando token expira no middleware de auth` ajuda muito.
+
+***
+
+> _Próximo documento: [`tratamento-de-erros.md`](./tratamento-de-erros.md)_

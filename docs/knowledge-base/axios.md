@@ -160,6 +160,7 @@ import type { AxiosError } from 'axios'
 
 interface ApiError {
   message: string
+  errors?: Array<{ field?: string; message: string }>
 }
 
 // Em um hook ou componente
@@ -231,3 +232,5 @@ api.get('/nodes')
 > _Para entender como o Axios se integra ao fluxo de autenticação,
 > consulte [`../knowledge-base/jwt-argon2id.md`](./jwt-argon2id.md) e
 > [`../state-management.md`](../state-management.md)._
+
+> _Próximo documento: [`tanstack-query.md`](./tanstack-query.md)_

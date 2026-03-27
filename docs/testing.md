@@ -14,6 +14,8 @@
 - [Testes Unitários — Frontend](#testes-unitários--frontend)
 - [Testes Unitários — Backend](#testes-unitários--backend)
 - [Testes de Integração — Backend](#testes-de-integração--backend)
+- [Mínimo Obrigatório por Sprint](#minimo-obrigatorio-por-sprint)
+- [Estratégia Ideal](#estrategia-ideal)
 - [Convenções](#convenções)
 
 ---
@@ -549,6 +551,43 @@ describe("POST /api/v1/auth/login", () => {
 
 ---
 
+## ✅ Mínimo Obrigatório por Sprint <a id="minimo-obrigatorio-por-sprint"></a>
+
+### Sprint 1
+
+- Teste do endpoint `GET /api/v1/health`
+- Teste do service ou controller que responde `GET /api/v1/nodes/root`
+- Teste mínimo do hook ou fluxo que carrega o menu inicial no frontend
+
+### Sprint 2
+
+- Testes do fluxo de login com credenciais válidas e inválidas
+- Testes de `ProtectedRoute` e `RoleGuard`
+- Testes das mutations críticas do painel Admin
+
+### Sprint 3
+
+- Testes do fluxo da secretária para listar e atualizar perguntas
+- Testes de leitura dos logs
+- Testes do registro de satisfação e encerramento de sessão do chatbot
+
+> O mínimo obrigatório existe para fechar sprint com segurança. Ele não substitui
+> a estratégia ideal de cobertura do projeto.
+
+---
+
+## 🌟 Estratégia Ideal <a id="estrategia-ideal"></a>
+
+Sem restrição de tempo, o FatecBot deve buscar:
+
+- Services de backend cobertos por testes unitários com branches críticas de regra
+- Controllers e middlewares cobertos por integração com Supertest
+- Hooks de frontend cobertos com estados de loading, sucesso e erro
+- Componentes críticos cobertos com testes de interação
+- Um conjunto pequeno de fluxos E2E cobrindo chatbot público, login admin e secretaria
+
+---
+
 ## 📏 Convenções <a id="convenções"></a>
 
 ### Nomenclatura de arquivos de teste
@@ -592,4 +631,4 @@ it("deve [comportamento esperado] quando [condição]", () => {
 
 ---
 
-> _Próximo documento: [`project-standards.md`](./project-standards.md) — convenções de commits, nomenclatura e linting._
+> _Próximo documento: [`project-standards.md`](./project-standards.md)_

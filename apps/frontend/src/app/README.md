@@ -1,13 +1,8 @@
-Tenho tudo que preciso. Aqui está o README completo para `apps/frontend/src/app/`:
-
-***
-
-```markdown
 # 🧭 src/app — Núcleo da Aplicação
 
-> Ponto de inicialização do frontend. É aqui que a aplicação ganha forma:
-> rotas são definidas, providers são compostos e os componentes de página
-> são conectados à estrutura de navegação.
+> Ponto de entrada do frontend. Esta pasta concentra a composição global da
+> aplicação: providers, roteamento e páginas. A lógica de negócio continua
+> nas features; aqui nós apenas montamos a casca da SPA.
 
 ***
 
@@ -24,15 +19,17 @@ Tenho tudo que preciso. Aqui está o README completo para `apps/frontend/src/app
 
 ## 🎯 Responsabilidade <a id="responsabilidade"></a>
 
-A pasta `app/` é o **único lugar** onde rotas são declaradas e providers são compostos.
-Nenhum outro arquivo do projeto deve registrar rotas ou envolver a árvore de componentes
-com providers globais.
+A pasta `app/` é o **único lugar** onde:
 
-| Arquivo / Pasta | Responsabilidade                                              |
-| --------------- | ------------------------------------------------------------- |
-| `router.tsx`    | Declara todas as rotas da SPA com React Router v6             |
-| `provider.tsx`  | Compõe os providers globais em ordem correta                  |
-| `routes/`       | Componentes de página — um arquivo por rota                   |
+- as rotas são declaradas com React Router
+- os providers globais são compostos
+- as páginas conectam layout + features
+
+| Arquivo / Pasta | Responsabilidade |
+| --------------- | ---------------- |
+| `router.tsx` | Declara todas as rotas da SPA |
+| `provider.tsx` | Compõe Query Client, Router e demais providers globais |
+| `routes/` | Componentes de página, um por rota |
 
 ***
 
@@ -40,116 +37,83 @@ com providers globais.
 
 ```
 app/
-├── router.tsx           # Definição central de todas as rotas
-├── provider.tsx         # Composição de providers (Query, Auth, Theme)
-└── routes/              # Componentes de página por rota
-    ├── index.tsx        # Rota pública: chatbot principal (/)
-    ├── login.tsx        # Página de login (/login)
-    ├── admin/           # Rotas protegidas: painel do administrador (/admin/*)
+├── router.tsx           # Definição central das rotas
+├── provider.tsx         # Composição dos providers globais
+└── routes/
+    ├── index.tsx        # Rota pública do chatbot
+    ├── admin/           # Páginas do painel administrativo
     │   ├── dashboard.tsx
-    │   ├── nodes.tsx
     │   ├── documents.tsx
-    │   ├── users.tsx
-    │   └── logs.tsx
-    └── secretary/       # Rotas protegidas: painel da secretária (/secretary/*)
+    │   ├── logs.tsx
+    │   ├── nodes.tsx
+    │   └── users.tsx
+    └── secretary/       # Páginas do painel da secretária
         ├── dashboard.tsx
         └── questions.tsx
 ```
 
+> Se uma rota ainda não existir no código, trate esta estrutura como alvo de implementação e não como garantia de que tudo já foi criado.
+
 ***
 
-## 🗺️ router.tsx <a id="router"></a>
+## 🗺️ `router.tsx` <a id="router"></a>
 
-Define **todas** as rotas da aplicação em um único lugar usando React Router v6.
-Rotas protegidas são envoltas por `ProtectedRoute` e `RoleGuard`, importados de
-`components/shared/`.
+Define **todas** as rotas da aplicação em um único lugar. As regras de acesso
+devem ser declaradas aqui, com `ProtectedRoute` e `RoleGuard`, sem espalhar
+autorização pelos componentes de página.
 
 ```tsx
-// ✅ Padrão adotado — toda rota nova entra aqui
 <Route element={<ProtectedRoute />}>
   <Route element={<RoleGuard role="ADMIN" />}>
-    <Route path="/admin" element={<AdminDashboard />} />
+    <Route path="/admin" element={<AdminDashboardPage />} />
   </Route>
 </Route>
-
-// ❌ Nunca declare rotas dentro de componentes de feature ou layout
 ```
 
-A tabela completa de rotas e seus níveis de acesso está documentada em
-[`apps/frontend/README.md`](../../../README.md#rotas-da-aplicação).
+As páginas em `routes/` apenas recebem esse contexto e compõem a UI.
 
 ***
 
-## 🔌 provider.tsx <a id="provider"></a>
+## 🔌 `provider.tsx` <a id="provider"></a>
 
-Compõe todos os providers globais em volta da aplicação.
-A **ordem importa**: providers que dependem de outros devem ser filhos deles.
+Compõe os providers globais que precisam existir uma única vez no topo da app.
+O checklist inicial canônico do frontend está em [`../../README.md`](../../README.md),
+mas o mínimo esperado aqui é:
 
-```tsx
-// ✅ Ordem correta de composição
-export function AppProvider({ children }: { children: React.ReactNode }) {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ThemeProvider>
-          {children}
-          <ReactQueryDevtools />
-        </ThemeProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  )
-}
-```
+- `QueryClientProvider`
+- o roteador da aplicação
+- qualquer provider global adicional aprovado pelo time
 
-> ⚠️ **Nunca adicione providers dentro de componentes de página ou feature.**
-> Todo provider com escopo global pertence exclusivamente a este arquivo.
+> Evite inventar providers nesta camada sem necessidade real. Se o estado vem da API, a regra canônica continua sendo usar TanStack Query em vez de contexto global.
 
 ***
 
-## 📄 routes/ <a id="routes"></a>
+## 📄 `routes/` <a id="routes"></a>
 
-Cada arquivo em `routes/` corresponde a **exatamente uma rota** da aplicação.
-Esses componentes são responsáveis apenas por composição de layout e orquestração
-de features — **não contêm lógica de negócio**.
+Cada arquivo em `routes/` representa uma página. Esses componentes não devem
+conter regra de negócio, chamadas HTTP diretas nem estado global de domínio.
+O papel deles é montar layout + feature.
 
 ```tsx
-// ✅ Componente de página correto — compõe, não implementa
 export default function AdminNodesPage() {
   return (
     <AdminLayout>
-      <NodeManager />   {/* lógica vive em features/admin */}
+      <NodeManager />
     </AdminLayout>
   )
 }
-
-// ❌ Lógica de negócio (fetching, mutations) não pertence aqui
-export default function AdminNodesPage() {
-  const [nodes, setNodes] = useState([])
-  useEffect(() => { fetch('/api/nodes').then(...) }, [])
-  // ...
-}
 ```
-
-### Organização por acesso
-
-| Pasta / Arquivo     | Acesso       | Rota                     |
-| ------------------- | :----------: | ------------------------ |
-| `index.tsx`         | Público      | `/`                      |
-| `login.tsx`         | Público      | `/login`                 |
-| `admin/`            | 🔒 ADMIN     | `/admin/*`               |
-| `secretary/`        | 🔒 SECRETARY | `/secretary/*`           |
 
 ***
 
 ## 📐 Regras de Contribuição <a id="regras"></a>
 
-- **Toda rota nova** deve ser declarada em `router.tsx` — nunca em outro lugar
-- **Todo provider global** deve ser adicionado em `provider.tsx`
-- Componentes de página em `routes/` **não importam** diretamente de `lib/` ou `hooks/` globais — apenas de `features/` e `components/`
-- Rotas protegidas **sempre** usam `ProtectedRoute` + `RoleGuard`, nessa ordem
-- O nome do arquivo em `routes/` deve refletir o caminho da rota: `/admin/nodes` → `admin/nodes.tsx`
+- Toda rota nova entra em `router.tsx`
+- Toda composição global entra em `provider.tsx`
+- Componentes de página importam de `features/` e `components/`, não de chamadas HTTP diretas
+- Guards de autenticação e role devem ser declarados no roteador
+- Se a estrutura de páginas mudar, atualize este README e o [`apps/frontend/README.md`](../../README.md)
 
 ***
 
-> _Este README deve ser atualizado sempre que novas rotas ou providers globais
-> forem adicionados ao projeto._
+> _Próximo documento: [`routes/admin/README.md`](./routes/admin/README.md)_

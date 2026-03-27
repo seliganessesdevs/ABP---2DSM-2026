@@ -173,3 +173,5 @@ Usuário pode enviar dúvida → POST /questions → encaminha à secretaria (RF
 
 > _Este README deve ser atualizado sempre que novos tipos de nó, novos endpoints
 > de sessão ou novos componentes de interação forem adicionados ao chatbot._
+
+> _Próximo documento: [`../admin/README.md`](../admin/README.md)_

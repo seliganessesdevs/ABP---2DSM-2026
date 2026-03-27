@@ -144,7 +144,7 @@ JWT gerado com { id, role, exp }
 ## 🔌 Endpoint <a id="endpoint"></a>
 
 Documentação completa com exemplos de request/response em
-[`docs/api-layer.md`](../../../../docs/api-layer.md).
+[`docs/api-layer.md`](../../../../../docs/api-layer.md).
 
 | Método | Rota | Acesso | Descrição |
 | ------ | ---- | :----: | --------- |
@@ -161,4 +161,4 @@ Documentação completa com exemplos de request/response em
 
 ***
 
-> _Próximo módulo: [`../users/README.md`](../users/README.md)_
+> _Próximo documento: [`../users/README.md`](../users/README.md)_

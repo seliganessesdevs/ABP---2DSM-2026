@@ -91,3 +91,5 @@ data/hora de cada interação. Somente leitura — nenhuma ação de escrita dis
 
 > _Este README deve ser atualizado sempre que uma nova rota de administrador
 > for adicionada ou removida do projeto._
+
+> _Próximo documento: [`../secretary/README.md`](../secretary/README.md)_

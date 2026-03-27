@@ -1,8 +1,8 @@
 # 🧠 knowledge-base — Guias Técnicos
 
 > Guias introdutórios sobre as tecnologias usadas no FatecBot.
-> Escritos para membros que estão aprendendo a stack durante o desenvolvimento —
-> diretos, práticos e sempre com exemplos do contexto real do projeto.
+> O objetivo aqui é reduzir atrito de onboarding sem duplicar as decisões
+> arquiteturais canônicas definidas em `docs/`.
 
 ***
 
@@ -11,19 +11,20 @@
 - [Sobre esta pasta](#sobre)
 - [Guias disponíveis](#guias)
 - [Como usar](#como-usar)
-- [Regras de Contribuição](#regras)
+- [Relação com os documentos canônicos](#canonicos)
+- [Regras de contribuição](#regras)
 
 ***
 
 ## 🎯 Sobre esta pasta <a id="sobre"></a>
 
-Os documentos aqui **não são referências completas** das tecnologias — para isso
-existe a documentação oficial de cada lib. O objetivo é outro: entregar o
-**mínimo necessário para contribuir com o projeto**, com exemplos reais da
-arquitetura do FatecBot e alertas sobre os erros mais comuns.
+Os documentos daqui explicam ferramentas e conceitos da stack do projeto com foco
+prático. Eles ajudam quem está aprendendo React, Express, Prisma, Docker e afins,
+mas **não substituem**:
 
-Se você está travado em algo relacionado à stack, comece por aqui antes de
-sair procurando no Google.
+- [`../project-standards.md`](../project-standards.md) para fluxo de trabalho e convenções
+- [`../api-layer.md`](../api-layer.md) para contrato de API
+- [`../state-management.md`](../state-management.md) para TanStack Query e Zustand
 
 ***
 
@@ -31,54 +32,68 @@ sair procurando no Google.
 
 ### Backend
 
-| Guia | O que você vai aprender |
-| ---- | ----------------------- |
-| [`express.md`](./express.md) | Como estruturar rotas, middlewares e a separação entre controller e service |
-| [`prisma.md`](./prisma.md) | Como definir o schema, rodar migrations e fazer CRUD com type-safety |
-| [`jwt-argon2id.md`](./jwt-argon2id.md) | Como funciona o fluxo de autenticação JWT e por que usamos Argon2id no lugar do bcrypt |
-| [`zod.md`](./zod.md) | Como validar request bodies e inferir tipos TypeScript a partir dos schemas |
-| [`tratamento-de-erros.md`](./tratamento-de-erros.md) | Como usar `AppError`, o middleware global e mapear erros do Prisma e do Zod |
-| [`REST-HTTP.md`](./REST-HTTP.md) | Métodos HTTP, status codes, idempotência e padrões de resposta da API |
+| Guia | O que você vai encontrar |
+| ---- | ------------------------ |
+| [`express.md`](./express.md) | Rotas, middlewares e separação controller/service |
+| [`prisma.md`](./prisma.md) | Schema, queries, paginação, seleção de campos e erros comuns |
+| [`jwt-argon2id.md`](./jwt-argon2id.md) | Fluxo de autenticação, payload JWT e uso de Argon2id |
+| [`zod.md`](./zod.md) | Validação de body, params e query strings com tipos inferidos |
+| [`tratamento-de-erros.md`](./tratamento-de-erros.md) | AppError, middleware global e resposta consistente de erro |
+| [`REST-HTTP.md`](./REST-HTTP.md) | Convenções REST, métodos HTTP e status codes |
 
 ### Frontend
 
-| Guia | O que você vai aprender |
-| ---- | ----------------------- |
-| [`react.md`](./react.md) | Hooks essenciais, props, listas, formulários e os anti-padrões mais comuns |
-| [`tanstack-query.md`](./tanstack-query.md) | Por que não usar `useEffect` para fetch e como usar `useQuery` e `useMutation` |
-| [`shadcn.md`](./shadcn.md) | Como usar componentes shadcn/ui e a regra de nunca editar `components/ui/` |
-| [`tailwindcss.md`](./tailwindcss.md) | Tokens, utilitários de layout, responsividade e padrões de estilização do projeto |
+| Guia | O que você vai encontrar |
+| ---- | ------------------------ |
+| [`react.md`](./react.md) | Fundamentos de React 18, hooks e boas práticas de componentes |
+| [`axios.md`](./axios.md) | Instância HTTP, interceptors e integração com autenticação |
+| [`tanstack-query.md`](./tanstack-query.md) | Fetch declarativo, cache e invalidação |
+| [`zustand.md`](./zustand.md) | Store global de auth e limites claros de uso |
+| [`shadcn.md`](./shadcn.md) | Uso dos componentes base e regra de não editar `components/ui/` |
+| [`tailwindcss.md`](./tailwindcss.md) | Tokens, composição de classes e padrões de estilo |
 
 ### Geral
 
-| Guia | O que você vai aprender |
-| ---- | ----------------------- |
-| [`typescript.md`](./typescript.md) | Types, interfaces, utility types, type guards e uso prático no Express e React |
-| [`pnpm.md`](./pnpm.md) | Como o pnpm workspaces funciona, comandos essenciais e diferenças do npm |
-| [`git-flow.md`](./git-flow.md) | Fluxo de branches, como abrir um PR, comandos do dia a dia e erros comuns |
+| Guia | O que você vai encontrar |
+| ---- | ------------------------ |
+| [`typescript.md`](./typescript.md) | Types, interfaces, guards e inferência no projeto |
+| [`pnpm.md`](./pnpm.md) | Workspaces, scripts e lockfile do monorepo |
+| [`docker.md`](./docker.md) | Containers, Compose, variáveis de ambiente e persistência |
+| [`git-flow.md`](./git-flow.md) | Rotina de branch e PR alinhada aos padrões do projeto |
 
 ***
 
 ## 🔍 Como usar <a id="como-usar"></a>
 
-Não é necessário ler tudo de uma vez. Use conforme a necessidade:
+Não é necessário ler tudo em sequência. Use conforme a necessidade:
 
-- Vai trabalhar no backend pela primeira vez? Leia `express.md` → `prisma.md` → `tratamento-de-erros.md`
-- Vai trabalhar no frontend pela primeira vez? Leia `react.md` → `tanstack-query.md` → `shadcn.md`
-- Vai fazer seu primeiro commit? Leia `git-flow.md` antes
-- Não entende por que estamos usando Argon2id? Leia `jwt-argon2id.md`
-- Perdido com TypeScript? Leia `typescript.md`
-
-***
-
-## 📐 Regras de Contribuição <a id="regras"></a>
-
-- Novos guias entram aqui apenas se cobrirem uma tecnologia **efetivamente usada no projeto**
-- O tom deve ser **didático e direto** — sem reproduzir a documentação oficial, foque no que é relevante para o FatecBot
-- Todo guia deve ter pelo menos um exemplo de código real do projeto, não genérico
-- Ao adicionar um novo guia, atualize a tabela neste README e a tabela em [`docs/README.md`](../README.md)
-- Guias não substituem os padrões definidos em [`project-standards.md`](../project-standards.md) — em caso de conflito, o standards prevalece
+- Vai trabalhar no backend pela primeira vez: `express.md` → `prisma.md` → `tratamento-de-erros.md`
+- Vai trabalhar no frontend pela primeira vez: `react.md` → `tanstack-query.md` → `zustand.md` → `axios.md`
+- Vai subir o ambiente pela primeira vez: `docker.md` → `pnpm.md`
+- Vai abrir seu primeiro PR: `git-flow.md` e depois `../project-standards.md`
+- Vai mexer em formulários ou validação: `zod.md`
 
 ***
 
-> _Próximo documento: [`../application-overview.md`](../application-overview.md)_
+## 🧭 Relação com os documentos canônicos <a id="canonicos"></a>
+
+- Padrões de branch, commit e PR: consulte [`../project-standards.md`](../project-standards.md)
+- Contrato de API: consulte [`../api-layer.md`](../api-layer.md)
+- Estado global e cache de dados: consulte [`../state-management.md`](../state-management.md)
+
+Quando houver conflito entre este diretório e um documento canônico em `docs/`,
+o documento canônico prevalece.
+
+***
+
+## 📐 Regras de contribuição <a id="regras"></a>
+
+- Adicione guias aqui apenas para tecnologias realmente usadas no FatecBot
+- O tom deve ser didático e direto, sem tentar substituir a documentação oficial
+- Sempre que possível, use exemplos coerentes com a arquitetura do projeto
+- Ao adicionar um novo guia, atualize este README e [`../README.md`](../README.md)
+- Se um guia entrar em conflito com um documento canônico, ajuste o guia e preserve o link para a referência oficial do projeto
+
+***
+
+> _Próximo documento: [`react.md`](./react.md)_

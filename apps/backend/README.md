@@ -23,6 +23,7 @@
 - [Responsabilidades](#responsabilidades)
 - [Estrutura de Pastas](#estrutura-de-pastas)
 - [Primeiros Passos](#primeiros-passos)
+- [Checklist de Implementação Inicial](#checklist-de-implementacao-inicial)
 - [Scripts Disponíveis](#scripts-disponíveis)
 - [Variáveis de Ambiente](#variáveis-de-ambiente)
 - [Endpoints](#endpoints)
@@ -143,8 +144,25 @@ pnpm dev
 
 ```bash
 curl http://localhost:3333/api/v1/health
-# → { "success": true, "message": "API online" }
+# → { "success": true }
 ```
+
+---
+
+## ✅ Checklist de Implementação Inicial <a id="checklist-de-implementacao-inicial"></a>
+
+Antes de qualquer feature de domínio, o backend deve ter estes artefatos mínimos:
+
+- `src/server.ts` criando e exportando o app Express sem `listen()`
+- `src/index.ts` iniciando o servidor na porta configurada
+- `src/config/env.ts` validando envs com Zod
+- `src/config/database.ts` exportando o singleton de `PrismaClient`
+- `src/errors/AppError.ts` para erros controlados
+- `src/middlewares/error.middleware.ts` como handler global
+- `GET /api/v1/health` público para validação operacional da API
+
+Sem essa base, qualquer módulo futuro passa a duplicar infraestrutura ou esconder
+erros de ambiente que deveriam falhar cedo.
 
 ---
 
@@ -309,3 +327,5 @@ Entidades principais:
 
 > _Este README deve ser atualizado sempre que novos endpoints, scripts ou variáveis
 > de ambiente forem adicionados ao projeto._
+
+> _Próximo documento: [`../../docs/application-overview.md`](../../docs/application-overview.md)_

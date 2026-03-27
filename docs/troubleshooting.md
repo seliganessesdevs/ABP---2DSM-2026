@@ -301,3 +301,5 @@ npm install -g pnpm
 
 > _Se o seu problema não está aqui, abra uma issue no repositório descrevendo
 > o erro completo, os passos para reproduzir e o que já tentou._
+
+> _Próximo documento: [`mvp-scope.md`](./mvp-scope.md)_

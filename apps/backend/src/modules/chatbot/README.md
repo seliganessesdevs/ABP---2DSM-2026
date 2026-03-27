@@ -78,15 +78,19 @@ filhos diretos ordenados pelo campo `order`.
 `AppError('Nó não encontrado', 404)`.
 
 **`registerRating`** — cria um `SessionLog` no banco com o fluxo de
-navegação percorrido, a avaliação de satisfação e o timestamp da interação.
+navegação percorrido, a avaliação de satisfação e os timestamps da sessão.
+
+> O contrato HTTP canônico deste endpoint vive em [`../../../../../docs/api-layer.md`](../../../../../docs/api-layer.md).
+> Se o nome de um campo divergir deste exemplo resumido, prevalece a documentação da camada de API.
 
 ```ts
 // ✅ Estrutura do SessionLog registrado
 await prisma.sessionLog.create({
   data: {
     navigationPath: dto.navigationPath, // array de IDs dos nós visitados
-    rating: dto.rating,                 // 'LIKED' | 'DISLIKED'
-    createdAt: new Date(),
+    satisfaction: dto.satisfaction,     // 'LIKED' | 'DISLIKED'
+    startedAt: dto.startedAt,
+    endedAt: dto.endedAt,
   },
 })
 ```
@@ -129,7 +133,9 @@ interface DocumentChunkResponse {
 // Body esperado no POST /sessions/rating
 interface RatingDto {
   navigationPath: string[]       // IDs dos nós visitados na ordem
-  rating: 'LIKED' | 'DISLIKED'
+  satisfaction: 'LIKED' | 'DISLIKED'
+  startedAt: string
+  endedAt: string
 }
 ```
 
@@ -162,7 +168,7 @@ SessionLog registrado no banco → 201
 ## 🔌 Endpoints <a id="endpoints"></a>
 
 Documentação completa com exemplos de request/response em
-[`docs/api-layer.md`](../../../../docs/api-layer.md).
+[`docs/api-layer.md`](../../../../../docs/api-layer.md).
 
 | Método | Rota | Acesso | Descrição |
 | ------ | ---- | :----: | --------- |
@@ -182,4 +188,4 @@ Documentação completa com exemplos de request/response em
 
 ***
 
-> _Próximo módulo: [`../questions/README.md`](../questions/README.md)_
+> _Próximo documento: [`../questions/README.md`](../questions/README.md)_

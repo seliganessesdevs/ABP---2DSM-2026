@@ -179,3 +179,7 @@ Quanto mais longo e aleatório o segredo, melhor. Use um gerador como `openssl r
 **Guarde o `JWT_SECRET` em variável de ambiente** — hardcodar o segredo no código é uma das vulnerabilidades mais comuns e mais graves.
 
 **Retorne a mesma mensagem para e-mail e senha inválidos** — mensagens específicas ajudam atacantes a enumerar usuários cadastrados.
+
+---
+
+> _Próximo documento: [`prisma.md`](./prisma.md)_

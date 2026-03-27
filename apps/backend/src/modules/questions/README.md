@@ -97,6 +97,9 @@ return prisma.question.findMany({ where, orderBy: { createdAt: 'desc' } })
 pergunta existe antes de atualizar — lança `AppError('Pergunta não encontrada', 404)`
 se o `id` não existir no banco.
 
+> A transição canônica de status está definida em [`../../../../../docs/api-layer.md`](../../../../../docs/api-layer.md):
+> `Question` só pode ir de `OPEN` para `ANSWERED`.
+
 ### questions.controller.ts
 
 Chama o service e formata a resposta HTTP. Não contém lógica de negócio:
@@ -120,7 +123,7 @@ interface CreateQuestionDto {
 
 // Body esperado no PATCH /questions/:id
 interface UpdateStatusDto {
-  status: 'OPEN' | 'ANSWERED'
+  status: 'ANSWERED'
 }
 
 // Resposta retornada ao frontend
@@ -163,7 +166,7 @@ Pergunta marcada como ANSWERED → 200
 ## 🔌 Endpoints <a id="endpoints"></a>
 
 Documentação completa com exemplos de request/response em
-[`docs/api-layer.md`](../../../../docs/api-layer.md).
+[`docs/api-layer.md`](../../../../../docs/api-layer.md).
 
 | Método | Rota | Acesso | Descrição |
 | ------ | ---- | :----: | --------- |
@@ -184,4 +187,4 @@ Documentação completa com exemplos de request/response em
 
 ***
 
-> _Próximo módulo: [`../users/README.md`](../users/README.md)_
+> _Próximo documento: [`../users/README.md`](../users/README.md)_

@@ -1,46 +1,206 @@
-# Sprint 1 — Tasks
+# FatecBot — Sprint 1 · Tabela de Tasks
 
-## Objetivo da sprint
+> **Sprint 1 — Fundação, Autenticação e Chatbot Público**
+> Período: A definir · Status: 🔵 Planejado
+>
+> **Objetivo:** sistema funcional do ponto de vista do aluno — chatbot navegável, envio de pergunta e infraestrutura base autenticada.
 
-Validar que a arquitetura funciona de ponta a ponta: Docker sobe → banco migrado → seed roda → `GET /nodes/root` responde → frontend exibe o menu inicial.
+---
 
-## Critérios de aceite
+## Legenda de Requisitos
 
-- `docker compose up --build` sobe os três containers sem erro
-- `GET /api/v1/health` retorna `{ success: true }`
-- Seed popula o banco com admin padrão e nós iniciais
-- `GET /api/v1/nodes/root` retorna o nó raiz com filhos
-- Frontend exibe o menu inicial carregado da API em `http://localhost:5173`
+### Funcionais
 
-> ⚠️ Autenticação completa, login e proteção de rotas entram na Sprint 2.
+| Código | Descrição resumida |
+|--------|-------------------|
+| RF01 | Navegação conversacional — menus e submenus hierárquicos |
+| RF02 | Repositório de conhecimento — nós, documentos, chunks e metadados |
+| RF03 | Perfis de usuário — Aluno (público), Secretária e Administrador |
+| RF05 | Encaminhamento de pergunta — texto + e-mail institucional |
+| RF07 | Avaliação de satisfação — "Gostei" / "Não gostei" ao fim do atendimento |
+| RF08 | Registro de logs — navigationPath, satisfação, timestamps |
+| RF09 | Autenticação — login/senha para Secretária e Administrador |
+| RF10 | Autorização por papel (RBAC) — controle de acesso no backend |
+| RF11 | Proteção de rotas — middleware JWT obrigatório em rotas sensíveis |
 
-## Tabela de tasks
+### Não Funcionais
 
-| Backlog ID | Task | Tipo do item | Descrição | Prioridade | Especificidades | Pontuação | Status | Tecnologias utilizadas | Prazo | Atribuídos |
-| ---------- | ---- | ------------ | --------- | ---------- | --------------- | --------- | ------ | ---------------------- | ----- | ---------- |
-| T-01 | Configurar `docker-compose.yml` | Infraestrutura | Ajustar a orquestração dos três serviços principais do projeto. Deve permitir subir banco, backend e frontend com um único comando. | 🔴 Alta | Definir serviços `db`, `backend` e `frontend`; usar PostgreSQL 16; garantir `depends_on`, `healthcheck` do banco, portas configuráveis por env e volume persistente para dados do Postgres. | 3 | ⬜ Não iniciado | Docker, Docker Compose, PostgreSQL 16 | — | — |
-| T-02 | Criar Dockerfile do backend | Infraestrutura | Estruturar o build do backend em container dedicado. | 🔴 Alta | O container precisa instalar dependências do workspace certo, expor a porta 3333 e executar o backend em modo compatível com desenvolvimento da Sprint 1. Referência: `docs/knowledge-base/docker.md`. | 2 | ⬜ Não iniciado | Docker, Node.js 20, pnpm | — | — |
-| T-03 | Criar Dockerfile do frontend | Infraestrutura | Estruturar o build do frontend em container dedicado. | 🔴 Alta | O container precisa subir o Vite em `5173`, respeitar `VITE_API_URL` e funcionar junto ao Compose sem configuração manual adicional. | 2 | ⬜ Não iniciado | Docker, React 18, Vite, pnpm | — | — |
-| T-04 | Configurar monorepo pnpm | Infraestrutura | Garantir que a raiz consiga instalar dependências e executar scripts dos apps. | 🔴 Alta | Revisar `pnpm-workspace.yaml`, scripts raiz e convenções de filtro `pnpm --filter frontend` e `pnpm --filter backend`; evitar scripts divergentes do que está documentado. | 2 | ⬜ Não iniciado | pnpm, monorepo | — | — |
-| T-05 | Criar `.env.example` coerente com Compose | Infraestrutura | Consolidar as variáveis mínimas necessárias para banco, backend e frontend. | 🔴 Alta | Incluir `POSTGRES_*`, `DATABASE_URL`, `JWT_*`, `PORT`, `NODE_ENV`, `FRONTEND_PORT`, `VITE_API_URL` e `VITE_ENABLE_DEVTOOLS`; manter comentários claros para uso local. | 2 | ⬜ Não iniciado | Docker Compose, Zod, Vite | — | — |
-| T-06 | Validar ambiente completo da Sprint 1 | Infraestrutura | Executar uma rodada completa de subida e verificar se a arquitetura base responde. | 🔴 Alta | Confirmar containers, healthcheck do banco, endpoint `/health`, seed manual e frontend carregando o menu inicial; registrar falhas encontradas no `docs/troubleshooting.md` se necessário. | 3 | ⬜ Não iniciado | Docker Compose, PostgreSQL 16, Node.js 20, React 18 | — | — |
-| T-07 | Implementar `server.ts` e `index.ts` | Backend | Criar a base do servidor Express com separação entre criação do app e inicialização da porta. | 🔴 Alta | `server.ts` deve exportar o app sem `listen`; `index.ts` deve inicializar o servidor. Isso é pré-requisito para testes e para o endpoint de health. | 2 | ⬜ Não iniciado | Node.js 20, TypeScript 5, Express | — | — |
-| T-08 | Implementar `config/env.ts` com Zod | Backend | Validar as variáveis de ambiente do backend no startup. | 🔴 Alta | Validar `DATABASE_URL`, `JWT_SECRET`, `JWT_EXPIRES_IN`, `PORT` e `NODE_ENV`; o processo deve falhar cedo se houver env ausente ou inválida. | 2 | ⬜ Não iniciado | TypeScript 5, Zod | — | — |
-| T-09 | Implementar singleton de `PrismaClient` | Backend | Criar a configuração central de acesso ao banco para o backend. | 🔴 Alta | Criar `config/database.ts` como ponto único de instância do Prisma Client; evitar múltiplas conexões e deixar a importação estável para services futuros. | 2 | ⬜ Não iniciado | Prisma, PostgreSQL 16, TypeScript 5 | — | — |
-| T-10 | Criar `AppError` e `error.middleware.ts` | Backend | Padronizar o tratamento de erros controlados e inesperados. | 🔴 Alta | `AppError` deve carregar `statusCode`; `error.middleware.ts` deve responder no envelope de erro do projeto e tratar ao menos `AppError` e falhas inesperadas. | 3 | ⬜ Não iniciado | Express, TypeScript 5, Zod | — | — |
-| T-11 | Criar `GET /api/v1/health` | Backend | Expor um endpoint simples para validação da API. | 🔴 Alta | O endpoint deve responder rápido, ser público e retornar `{ success: true }`; registrar em `routes/index.ts` com o prefixo `/api/v1`. | 1 | ⬜ Não iniciado | Express, TypeScript 5 | — | — |
-| T-12 | Modelar `schema.prisma` com entidades do MVP | Banco de dados | Criar o schema inicial do banco com as entidades centrais do projeto. | 🔴 Alta | Incluir `User`, `ChatNode`, `Document`, `DocumentChunk`, `SessionLog`, `Question` e enums relacionados; manter coerência com `docs/application-overview.md` e `docs/api-layer.md`. | 5 | ⬜ Não iniciado | Prisma, PostgreSQL 16 | — | — |
-| T-13 | Gerar migration inicial | Banco de dados | Criar a primeira migration do projeto a partir do schema definido. | 🔴 Alta | A migration precisa ser reproduzível em Docker e em ambiente local; deve ser compatível com `pnpm db:migrate` documentado no projeto. | 2 | ⬜ Não iniciado | Prisma Migrate, PostgreSQL 16 | — | — |
-| T-14 | Implementar `prisma/seed.ts` com admin e nós iniciais | Banco de dados | Popular o banco com dados mínimos para a Sprint 1. | 🔴 Alta | Criar admin padrão, secretária de desenvolvimento e árvore inicial do chatbot conforme `docs/seed-data.md`; hashear senhas com `argon2`. | 5 | ⬜ Não iniciado | Prisma, argon2, TypeScript 5 | — | — |
-| T-15 | Validar execução do seed | Banco de dados | Garantir que o seed funcione de forma previsível após migration e reset. | 🔴 Alta | Testar `pnpm db:seed` e `pnpm db:reset`; confirmar criação dos usuários e do nó raiz antes de seguir para integração frontend/backend. | 2 | ⬜ Não iniciado | Prisma, PostgreSQL 16, pnpm | — | — |
-| T-16 | Criar `chatbot.types.ts` | Backend | Definir os tipos centrais do módulo público do chatbot. | 🔴 Alta | Tipar retorno do nó raiz, nó individual, filhos, chunks e payload de sessão; os tipos devem refletir o contrato descrito em `docs/api-layer.md`. | 2 | ⬜ Não iniciado | TypeScript 5 | — | — |
-| T-17 | Implementar `chatbot.service.ts` com `getRoot` e `getNode` | Backend | Criar a lógica de leitura pública da árvore do chatbot. | 🔴 Alta | `getRoot` deve buscar o nó raiz e seus filhos ordenados; `getNode` deve buscar um nó por ID, incluindo filhos e chunks; usar PrismaClient singleton e lançar `AppError` em `404`. | 3 | ⬜ Não iniciado | Express, Prisma, TypeScript 5 | — | — |
-| T-18 | Implementar `chatbot.controller.ts` e `chatbot.routes.ts` | Backend | Expor os endpoints públicos do chatbot. | 🔴 Alta | Criar ao menos `GET /api/v1/nodes/root` e `GET /api/v1/nodes/:id`; registrar o módulo em `routes/index.ts`; manter envelope padrão de sucesso. | 3 | ⬜ Não iniciado | Express, TypeScript 5 | — | — |
-| T-19 | Configurar base do frontend com Vite, React, Tailwind e shadcn/ui | Frontend | Ajustar a fundação do app frontend para a Sprint 1. | 🔴 Alta | Garantir React 18, TypeScript 5, Tailwind CSS, shadcn/ui e organização em `src/app`, `src/features`, `src/lib` e `src/config`; alinhar com `apps/frontend/README.md`. | 5 | ⬜ Não iniciado | React 18, TypeScript 5, Vite, Tailwind CSS, shadcn/ui | — | — |
-| T-20 | Implementar `config/env.ts`, `lib/axios.ts` e `lib/queryClient.ts` | Frontend | Criar a base de infraestrutura do frontend para consumo da API. | 🔴 Alta | `config/env.ts` valida `VITE_*`; `lib/axios.ts` centraliza baseURL; `lib/queryClient.ts` cria o QueryClient; tudo deve seguir a divisão entre estado local e estado de servidor documentada. | 3 | ⬜ Não iniciado | React 18, Axios, TanStack Query v5, Zod | — | — |
-| T-21 | Implementar `app/provider.tsx` e `app/router.tsx` | Frontend | Montar providers globais e rotas iniciais da aplicação. | 🔴 Alta | `provider.tsx` deve envolver o app com QueryClientProvider; `router.tsx` deve declarar a rota pública principal para o chatbot da Sprint 1. | 2 | ⬜ Não iniciado | React 18, React Router, TanStack Query v5 | — | — |
-| T-22 | Implementar `chatbot.api.ts` e `useChatNavigation.ts` simplificado | Frontend | Criar a camada de consumo do chatbot público no frontend. | 🔴 Alta | O hook deve carregar o nó raiz, navegar para nós filhos e manter histórico suficiente para a experiência inicial; usar TanStack Query para dados da API. | 3 | ⬜ Não iniciado | React 18, TanStack Query v5, Axios, TypeScript 5 | — | — |
-| T-23 | Implementar `ChatWindow`, `MessageBubble` e `OptionButton` | Frontend | Construir os componentes mínimos para renderizar o chatbot público. | 🔴 Alta | Os componentes devem exibir o conteúdo do nó atual, listar filhos como opções clicáveis e suportar carregamento inicial do menu principal. | 3 | ⬜ Não iniciado | React 18, Tailwind CSS, shadcn/ui, TypeScript 5 | — | — |
-| T-24 | Validar fluxo completo frontend ↔ backend | Frontend | Confirmar que a UI pública consome a API real e mostra o menu inicial. | 🔴 Alta | Verificar em `http://localhost:5173` o carregamento do nó raiz vindo de `GET /api/v1/nodes/root`; usar este teste como fechamento operacional da Sprint 1. | 2 | ⬜ Não iniciado | React 18, Axios, TanStack Query v5, Express | — | — |
+| Código | Descrição resumida |
+|--------|-------------------|
+| RNF01 | Interface simples, clara e responsiva (mobile e desktop) |
+| RNF02 | Tempo de resposta adequado ao uso interativo |
+| RNF05 | Containerização com Docker — 3 containers |
+| RNF06 | Orquestração via Docker Compose com comando único |
+| RNF08 | Autenticação JWT com `sub`, `role` e `exp` via `Authorization: Bearer` |
+| RNF09 | Senhas com Argon2id; segredos em variáveis de ambiente; sem exposição de dados sensíveis |
 
-> _Próximo documento: [`../sprint2/README.md`](../sprint2/README.md)_
+> RF04, RF06, RF08 (painel admin/secretária) e RNF03/RNF04/RNF07 não são cobertos na Sprint 1.
+
+---
+
+## Tabela de Rastreabilidade — Sprint 1
+
+| Task | Tipo | Módulo | Nome | RFs | RNFs | Prioridade |
+|------|------|--------|------|-----|------|------------|
+| TASK-001 | `[BE]` | Infra | Bootstrap do servidor Express | — | RNF05 · RNF06 | 🔴 Crítica |
+| TASK-002 | `[BE]` | Infra | Configuração de ambiente e banco de dados | — | RNF05 · RNF09 | 🔴 Crítica |
+| TASK-003 | `[BE]` | Infra | Classe AppError e middleware de erros | RF11 | RNF02 · RNF09 | 🔴 Crítica |
+| TASK-004 | `[BE]` | Infra | Schema Prisma e migration inicial | RF01 · RF02 · RF03 · RF05 · RF07 · RF08 · RF09 | — | 🔴 Crítica |
+| TASK-005 | `[BE]` | Infra | Seed de dados iniciais | RF02 · RF03 · RF09 | RNF09 | 🟡 Alta |
+| TASK-006 | `[BE]` | Infra | Utils: hash e JWT | RF09 | RNF08 · RNF09 | 🔴 Crítica |
+| TASK-007 | `[FE]` | Infra | Bootstrap do projeto Vite + TypeScript | — | RNF01 · RNF05 | 🔴 Crítica |
+| TASK-008 | `[FE]` | Infra | Tipos globais compartilhados | RF01 · RF03 · RF07 | — | 🔴 Crítica |
+| TASK-009 | `[FE]` | Infra | Instância Axios e React Query client | RF09 · RF11 | RNF02 · RNF08 | 🔴 Crítica |
+| TASK-010 | `[FE]` | Infra | Provider global e Router | RF03 · RF09 · RF10 · RF11 | — | 🔴 Crítica |
+| TASK-011 | `[FE]` | Infra | Utils frontend | RF09 | RNF01 · RNF08 | 🟡 Alta |
+| TASK-012 | `[FE]` | Infra | Componentes compartilhados base | — | RNF01 · RNF02 | 🟡 Alta |
+| TASK-013 | `[FE]` | Infra | Hooks globais utilitários | — | RNF01 · RNF02 | 🟢 Média |
+| TASK-014 | `[INFRA]` | Docker | Docker Compose e Dockerfiles | — | RNF05 · RNF06 | 🔴 Crítica |
+| TASK-015 | `[BE]` | Auth | auth.types.ts — DTOs de autenticação | RF03 · RF09 | RNF08 | 🔴 Crítica |
+| TASK-016 | `[BE]` | Auth | auth.service.ts — lógica de autenticação | RF03 · RF09 | RNF08 · RNF09 | 🔴 Crítica |
+| TASK-017 | `[BE]` | Auth | auth.controller.ts + auth.routes.ts | RF09 · RF11 | — | 🔴 Crítica |
+| TASK-018 | `[BE]` | Auth | auth.middleware.ts — validação JWT | RF09 · RF11 | RNF08 | 🔴 Crítica |
+| TASK-019 | `[BE]` | Auth | rbac.middleware.ts — autorização por role | RF03 · RF10 · RF11 | — | 🔴 Crítica |
+| TASK-020 | `[FE]` | Auth | auth.types.ts — tipos de autenticação | RF03 · RF09 | RNF08 | 🔴 Crítica |
+| TASK-021 | `[FE]` | Auth | auth.store.ts — estado global (Zustand) | RF09 · RF10 · RF11 | — | 🔴 Crítica |
+| TASK-022 | `[FE]` | Auth | auth.api.ts — chamadas de autenticação | RF09 | RNF08 | 🔴 Crítica |
+| TASK-023 | `[FE]` | Auth | useLogin.ts — hook de login | RF03 · RF09 · RF10 | — | 🔴 Crítica |
+| TASK-024 | `[FE]` | Auth | LoginForm.tsx — componente de formulário | RF09 | RNF01 | 🟡 Alta |
+| TASK-025 | `[FE]` | Auth | ProtectedRoute.tsx + RoleGuard.tsx | RF03 · RF10 · RF11 | — | 🔴 Crítica |
+| TASK-026 | `[BE]` | Chatbot | chatbot.types.ts — DTOs de navegação | RF01 · RF02 · RF07 · RF08 | — | 🔴 Crítica |
+| TASK-027 | `[BE]` | Chatbot | chatbot.service.ts — lógica de navegação | RF01 · RF02 · RF07 · RF08 | — | 🔴 Crítica |
+| TASK-028 | `[BE]` | Chatbot | chatbot.controller.ts + chatbot.routes.ts | RF01 · RF07 · RF08 | — | 🔴 Crítica |
+| TASK-029 | `[FE]` | Chatbot | chatbot.types.ts — tipos de navegação | RF01 · RF02 · RF07 · RF08 | — | 🔴 Crítica |
+| TASK-030 | `[FE]` | Chatbot | chatbot.api.ts — chamadas de navegação | RF01 · RF07 · RF08 | — | 🔴 Crítica |
+| TASK-031 | `[FE]` | Chatbot | useChatNavigation.ts — hook de sessão | RF01 · RF07 · RF08 | RNF02 | 🔴 Crítica |
+| TASK-032 | `[FE]` | Chatbot | MessageBubble.tsx + OptionButton.tsx | RF01 | RNF01 | 🟡 Alta |
+| TASK-033 | `[FE]` | Chatbot | EvidenceCard.tsx | RF02 | RNF01 | 🟡 Alta |
+| TASK-034 | `[FE]` | Chatbot | SatisfactionRating.tsx | RF07 · RF08 | RNF01 | 🟡 Alta |
+| TASK-035 | `[FE]` | Chatbot | ChatWindow.tsx — orquestrador do chatbot | RF01 · RF02 · RF07 | RNF01 | 🟡 Alta |
+| TASK-036 | `[BE]` | Questions | questions.types.ts — DTOs | RF05 · RF08 | — | 🟡 Alta |
+| TASK-037 | `[BE]` | Questions | questions.service.ts — criação de pergunta | RF05 · RF08 | — | 🟡 Alta |
+| TASK-038 | `[BE]` | Questions | questions.controller.ts + questions.routes.ts (POST público) | RF05 · RF11 | — | 🟡 Alta |
+| TASK-039 | `[FE]` | Questions | QuestionForm.tsx — formulário de envio | RF05 · RF08 | RNF01 | 🟡 Alta |
+| TASK-040 | `[BE]` | Infra | routes/index.ts — composição global de rotas | RF01 · RF05 · RF09 · RF11 | — | 🔴 Crítica |
+
+---
+
+## Cobertura de Requisitos por Task
+
+A tabela abaixo mostra, para cada RF/RNF coberto na Sprint 1, **quais tasks o implementam**.
+Use para verificar se um requisito tem cobertura completa antes do Sprint Review.
+
+### Requisitos Funcionais
+
+| Requisito | Descrição | Tasks que implementam |
+|-----------|-----------|----------------------|
+| **RF01** | Navegação conversacional | TASK-004 · TASK-008 · TASK-026 · TASK-027 · TASK-028 · TASK-029 · TASK-030 · TASK-031 · TASK-032 · TASK-035 · TASK-040 |
+| **RF02** | Repositório de conhecimento | TASK-004 · TASK-008 · TASK-026 · TASK-027 · TASK-029 · TASK-033 · TASK-035 |
+| **RF03** | Perfis de usuário | TASK-004 · TASK-008 · TASK-010 · TASK-015 · TASK-016 · TASK-019 · TASK-020 · TASK-023 · TASK-025 |
+| **RF05** | Encaminhamento de pergunta | TASK-004 · TASK-036 · TASK-037 · TASK-038 · TASK-039 · TASK-040 |
+| **RF07** | Avaliação de satisfação | TASK-004 · TASK-008 · TASK-026 · TASK-027 · TASK-028 · TASK-029 · TASK-030 · TASK-031 · TASK-034 · TASK-035 |
+| **RF08** | Registro de logs | TASK-004 · TASK-026 · TASK-027 · TASK-028 · TASK-029 · TASK-030 · TASK-031 · TASK-034 · TASK-036 · TASK-037 · TASK-039 |
+| **RF09** | Autenticação | TASK-002 · TASK-004 · TASK-005 · TASK-006 · TASK-009 · TASK-010 · TASK-011 · TASK-015 · TASK-016 · TASK-017 · TASK-018 · TASK-020 · TASK-021 · TASK-022 · TASK-023 · TASK-024 · TASK-040 |
+| **RF10** | Autorização por papel (RBAC) | TASK-010 · TASK-019 · TASK-021 · TASK-023 · TASK-025 |
+| **RF11** | Proteção de rotas | TASK-003 · TASK-009 · TASK-010 · TASK-017 · TASK-018 · TASK-019 · TASK-021 · TASK-025 · TASK-038 · TASK-040 |
+
+### Requisitos Não Funcionais
+
+| Requisito | Descrição | Tasks que implementam |
+|-----------|-----------|----------------------|
+| **RNF01** | Interface responsiva | TASK-007 · TASK-011 · TASK-012 · TASK-013 · TASK-024 · TASK-032 · TASK-033 · TASK-034 · TASK-035 · TASK-039 |
+| **RNF02** | Tempo de resposta adequado | TASK-003 · TASK-009 · TASK-012 · TASK-013 · TASK-031 |
+| **RNF05** | Containerização Docker | TASK-001 · TASK-002 · TASK-007 · TASK-014 |
+| **RNF06** | Docker Compose — comando único | TASK-001 · TASK-014 |
+| **RNF08** | JWT com sub · role · exp via Bearer | TASK-006 · TASK-009 · TASK-011 · TASK-015 · TASK-016 · TASK-018 · TASK-020 · TASK-022 |
+| **RNF09** | Argon2id · segredos em env · sem leak sensível | TASK-002 · TASK-003 · TASK-005 · TASK-006 · TASK-016 |
+
+---
+
+## Visão por Módulo
+
+### 🏗️ Infraestrutura — 14 tasks (TASK-001 a TASK-014)
+
+Tasks sem RF direto: são **pré-condição técnica** para a entrega de todos os outros requisitos.
+Focam em RNF05 (Docker), RNF06 (Compose), RNF01 (frontend), RNF08/RNF09 (segurança base).
+
+| Task | Entrega chave | Desbloqueia |
+|------|---------------|-------------|
+| TASK-001 | Servidor Express rodando em `:3333` com `/health` | Todas as tasks `[BE]` |
+| TASK-002 | `env.ts` validado + `db` Prisma singleton | TASK-004 · TASK-006 · TASK-015+ |
+| TASK-003 | `AppError` + `errorMiddleware` + `loggerMiddleware` | Todos os services e controllers |
+| TASK-004 | Schema completo + migrations aplicadas | Todos os services (lê o banco) |
+| TASK-005 | Admin + Secretária + nó raiz no banco | Testes end-to-end da Sprint 1 |
+| TASK-006 | `hashPassword` · `comparePassword` · `generateToken` · `verifyToken` | TASK-016 (auth.service) |
+| TASK-007 | Vite + TS + Tailwind + alias `@/` | Todas as tasks `[FE]` |
+| TASK-008 | Tipos `ApiResponse` · `Role` · `NodeType` · `Satisfaction` | Todas as features FE |
+| TASK-009 | Axios com interceptor JWT + `queryClient` | TASK-022 · TASK-030 · TASK-037+ |
+| TASK-010 | `provider.tsx` + `router.tsx` com rotas `/`, `/login`, `/admin/*`, `/secretary/*` | Páginas de todas as features |
+| TASK-011 | `formatDate` · `decodeJWT` · `isTokenExpired` | TASK-023 (hook de login) |
+| TASK-012 | `LoadingSpinner` · `ErrorBoundary` | TASK-024 · TASK-032+ |
+| TASK-013 | `useDebounce` · `usePagination` | Sprint 2/3 (listas paginadas) |
+| TASK-014 | `docker-compose.yml` + Dockerfiles — 3 containers em `docker compose up` | Ambiente integrado |
+
+### 🔐 Módulo Auth — 11 tasks (TASK-015 a TASK-025)
+
+Cobre: **RF09** (autenticação), **RF10** (RBAC), **RF11** (proteção de rotas), **RF03** (perfis).
+
+```
+[BE] TASK-015 → TASK-016 → TASK-017
+               ↓
+[BE] TASK-006 ↗
+               TASK-018 (auth.middleware) → todas as rotas protegidas
+               TASK-019 (rbac.middleware) → rotas ADMIN/SECRETARY
+
+[FE] TASK-020 → TASK-021 → TASK-022 → TASK-023 → TASK-024
+                              ↓
+                         TASK-009 (axios injeta token de TASK-021)
+                              TASK-025 (ProtectedRoute + RoleGuard)
+```
+
+### 🤖 Módulo Chatbot — 10 tasks (TASK-026 a TASK-035)
+
+Cobre: **RF01** (navegação), **RF02** (evidência documental), **RF07** (satisfação), **RF08** (log de sessão).
+
+```
+[BE] TASK-026 → TASK-027 → TASK-028
+
+[FE] TASK-029 → TASK-030 → TASK-031 ──► TASK-032 (MessageBubble + OptionButton)
+                                    ├──► TASK-033 (EvidenceCard)
+                                    ├──► TASK-034 (SatisfactionRating)
+                                    └──► TASK-035 (ChatWindow ← orquestra tudo)
+```
+
+### ❓ Módulo Questions — 4 tasks (TASK-036 a TASK-039) + TASK-040
+
+Cobre: **RF05** (encaminhamento de pergunta público), **RF08** (vínculo com SessionLog).
+`TASK-040` fecha o ciclo montando todas as rotas no Express.
+
+---
+
+## Tasks em Paralelo — Sem Conflito de Arquivo
+
+O quadro abaixo permite alocar dois desenvolvedores simultaneamente sem risco de merge conflict.
+
+| Dev A (Backend) | Dev B (Frontend) | Podem rodar em paralelo? |
+|-----------------|-----------------|--------------------------|
+| TASK-015 `auth.types.ts [BE]` | TASK-020 `auth.types.ts [FE]` | ✅ Sim — arquivos distintos |
+| TASK-016 `auth.service.ts` | TASK-021 `auth.store.ts` | ✅ Sim |
+| TASK-017 `auth.controller + routes` | TASK-022 `auth.api.ts` | ✅ Sim |
+| TASK-018 `auth.middleware.ts` | TASK-023 `useLogin.ts` | ✅ Sim |
+| TASK-019 `rbac.middleware.ts` | TASK-024 `LoginForm.tsx` | ✅ Sim |
+| TASK-026 `chatbot.types.ts [BE]` | TASK-029 `chatbot.types.ts [FE]` | ✅ Sim — arquivos distintos |
+| TASK-027 `chatbot.service.ts` | TASK-030 `chatbot.api.ts` | ✅ Sim |
+| TASK-028 `chatbot.controller + routes` | TASK-031 `useChatNavigation.ts` | ✅ Sim |
+| TASK-036 `questions.types.ts [BE]` | TASK-032 `MessageBubble + OptionButton` | ✅ Sim |
+| TASK-037 `questions.service.ts` | TASK-033 `EvidenceCard.tsx` | ✅ Sim |
+| TASK-038 `questions.controller + routes` | TASK-034 `SatisfactionRating.tsx` | ✅ Sim |
+| TASK-040 `routes/index.ts` | TASK-035 `ChatWindow.tsx` | ✅ Sim |
+
+> ⚠️ **Arquivo compartilhado de atenção:** `routes/index.ts` (TASK-040) — atualizado apenas quando
+> TASK-017, TASK-028 e TASK-038 estiverem concluídas. Nunca editar junto com outra task de routes.
+
+---
+
+> Documento gerado com base no backlog `fatecbot-backlog.md` e nos requisitos do `README.md`.
+> Próximo: `docs/sprint1/README.md` com critérios de aceite por task.

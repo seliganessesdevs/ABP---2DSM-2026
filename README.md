@@ -105,7 +105,7 @@ Essa abordagem garante rastreabilidade, confiabilidade da informação e reduç�
 | **RNF05** | Containerização com Docker (3 containers: PostgreSQL, Backend, Frontend)                                                          |
 | **RNF06** | Orquestração via Docker Compose com inicialização em comando único                                                                |
 | **RNF07** | README principal + READMEs específicos por pasta principal                                                                        |
-| **RNF08** | Autenticação JWT com `id`, `role` e `exp` via `Authorization: Bearer`                                                             |
+| **RNF08** | Autenticação JWT com `sub`, `role` e `exp` via `Authorization: Bearer`                                                            |
 | **RNF09** | Senhas com Argon2id (memory-hard com 64 MiB por hash), segredos em variáveis de ambiente, sem exposição de dados sensíveis na API |
 
 ---
@@ -134,12 +134,12 @@ Essa abordagem garante rastreabilidade, confiabilidade da informação e reduç�
 
 | Sprint | Objetivos                                           | Documentação                              | Período   | Status       |
 | ------ | --------------------------------------------------- | ----------------------------------------- | --------- | ------------ |
-| 1      | Estrutura base, autenticação, navegação do chatbot  | [Sprint 1 Docs](./docs/sprint1/README.md) | A definir | 🔵 Planejado |
-| 2      | Painel Admin (CRUD nós + documentos), RBAC          | [Sprint 2 Docs](./docs/sprint2/README.md) | A definir | 🔵 Planejado |
-| 3      | Painel Secretária, logs, satisfação, ajustes finais | [Sprint 3 Docs](./docs/sprint3/README.md) | A definir | 🔵 Planejado |
+| 1      | Estrutura base, autenticação, navegação do chatbot  | [Sprint 1 Docs](./docs/sprint1/README.md) | Iteração 1 | 🔵 Planejado |
+| 2      | Painel Admin (CRUD nós + documentos), RBAC          | [Sprint 2 Docs](./docs/sprint2/README.md) | Iteração 2 | 🔵 Planejado |
+| 3      | Painel Secretária, logs, satisfação, ajustes finais | [Sprint 3 Docs](./docs/sprint3/README.md) | Iteração 3 | 🔵 Planejado |
 
 > 📝 Tasks detalhadas por sprint:
-> [Sprint 1 Tasks](./docs/sprint1/tasks.md) · Sprint 2 Tasks ⚠️ a criar · Sprint 3 Tasks ⚠️ a criar
+> [Sprint 1 Tasks](./docs/sprint1/tasks.md) · [Sprint 2 Tasks](./docs/sprint2/tasks.md) · [Sprint 3 Tasks](./docs/sprint3/tasks.md)
 
 ---
 
@@ -190,18 +190,18 @@ Um item está **concluído** quando:
   <a href="https://www.figma.com/"><img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" /></a>
 </p>
 
-                        | Camada             | Tecnologia                          | Justificativa                              |
-                        |--------------------|-------------------------------------|--------------------------------------------|
-                        | **Frontend**       | React 18 + TypeScript               | Obrigatório (RP01)                         |
-                        | **Build Tool**     | Vite                                | HMR rápido, nativo com React + TS          |
-                        | **Estilização**    | Tailwind CSS + shadcn/ui            | Componentização acessível e responsiva     |
-                        | **Backend**        | Node.js 20 + TypeScript + Express   | Obrigatório (RP02)                         |
-                        | **ORM**            | Prisma                              | DDL/DML explícitos com type-safety         |
-                        | **Banco de Dados** | PostgreSQL                          | Obrigatório (RP03)                         |
-                        | **Autenticação**   | JWT + Argon2id                      | Obrigatório (RP06, RNF08, RNF09); Argon2id é memory-hard (64 MiB/hash), vencedor da Password Hashing Competition (2015) e superior ao bcrypt contra GPU/ASIC |
-                        | **Containers**     | Docker + Docker Compose             | Obrigatório (RP04, RNF05, RNF06)           |
-                        | **Testes**         | Vitest + Testing Library            | Cobertura unitária e de componentes        |
-                        | **Linting**        | ESLint + Prettier                   | Padronização de código                     |
+| Camada             | Tecnologia                        | Justificativa                                                                                                  |
+| ------------------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------- |
+| **Frontend**       | React 18 + TypeScript             | Aderente ao escopo funcional da interface (RF01, RF05, RF07)                                                  |
+| **Build Tool**     | Vite                              | HMR rápido e integração nativa com React + TypeScript                                                         |
+| **Estilização**    | Tailwind CSS + shadcn/ui          | Componentização acessível e responsiva (RNF01)                                                                 |
+| **Backend**        | Node.js 20 + TypeScript + Express | API REST modular para requisitos de autenticação, autorização e regras de negócio (RF09, RF10, RF11)         |
+| **ORM**            | Prisma                            | DDL/DML explícitos com type-safety e rastreabilidade do modelo de dados (RF02)                               |
+| **Banco de Dados** | PostgreSQL                        | Persistência relacional para nós, documentos, sessões e perguntas (RF02, RF08)                                |
+| **Autenticação**   | JWT + Argon2id                    | Obrigatório por segurança (RNF08, RNF09); Argon2id é memory-hard (64 MiB/hash), com alta resistência a GPU/ASIC |
+| **Containers**     | Docker + Docker Compose           | Requisito de containerização e orquestração em comando único (RNF05, RNF06)                                   |
+| **Testes**         | Vitest + Testing Library          | Cobertura unitária e de componentes para sustentação do MVP                                                    |
+| **Linting**        | ESLint + Prettier                 | Padronização e qualidade contínua do código                                                                    |
 
 
 

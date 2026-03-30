@@ -24,7 +24,9 @@ das sessões e estabilização da aplicação para demonstração final.
 
 ## Pendência operacional
 
-- `⚠️ tasks.md a criar`
+- [`tasks.md`](./tasks.md)
+
+O `tasks.md` desta sprint consolida o backlog operacional de fechamento do MVP.
 
 ***
 

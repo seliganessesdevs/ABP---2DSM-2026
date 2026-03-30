@@ -13,6 +13,7 @@
 ## 📑 Índice
 
 - [Convenções](#convenções)
+- [Health Check](#health-check)
 - [Autenticação](#autenticação)
 - [Chatbot](#chatbot)
 - [Perguntas](#perguntas)
@@ -88,6 +89,32 @@ Os query params previstos neste documento são:
 - `GET /questions`: `status`, `page`, `limit`
 - `GET /logs`: `satisfaction`, `from`, `to`, `page`, `limit`
 - Endpoints sem query params documentados aqui não devem aceitar filtros implícitos sem atualização deste contrato
+
+---
+
+## ❤️ Health Check <a id="health-check"></a>
+
+### `GET /health`
+
+Valida se a API está operacional.
+
+- **Acesso:** Público
+- **Role exigida:** —
+
+**Request**
+
+```http
+GET /api/v1/health
+```
+
+**Response `200 OK`**
+
+```json
+{
+  "success": true,
+  "data": {}
+}
+```
 
 ---
 

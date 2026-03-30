@@ -131,8 +131,8 @@ referência operacional daquela sprint.
 | Sprint | Foco principal | Documentos |
 | ------ | -------------- | ---------- |
 | 1 | Arquitetura base ponta a ponta | [`README.md`](./sprint1/README.md) · [`tasks.md`](./sprint1/tasks.md) |
-| 2 | Painel Admin, autenticação completa e RBAC | [`README.md`](./sprint2/README.md) · `⚠️ tasks.md a criar` |
-| 3 | Painel da secretária, logs, satisfação e estabilização | [`README.md`](./sprint3/README.md) · `⚠️ tasks.md a criar` |
+| 2 | Painel Admin, autenticação completa e RBAC | [`README.md`](./sprint2/README.md) · [`tasks.md`](./sprint2/tasks.md) |
+| 3 | Painel da secretária, logs, satisfação e estabilização | [`README.md`](./sprint3/README.md) · [`tasks.md`](./sprint3/tasks.md) |
 
 ***
 

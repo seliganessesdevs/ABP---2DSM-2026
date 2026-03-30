@@ -20,14 +20,14 @@ entrada das features mais complexas de autenticação, RBAC e painéis internos.
 - Seed com usuários de desenvolvimento e nós iniciais do chatbot
 - Endpoint `GET /api/v1/health` respondendo
 - Endpoint `GET /api/v1/nodes/root` respondendo com o nó raiz e filhos
+- Fluxo de login base (`POST /api/v1/auth/login`) documentado e rastreado nas tasks da sprint
+- Camada de proteção por JWT/RBAC prevista nas tasks da sprint para rotas sensíveis
 - Frontend exibindo o menu inicial carregado da API
 
 ***
 
 ## Fora do escopo desta sprint
 
-- Login completo
-- Proteção de rotas
 - CRUD administrativo
 - Fluxo completo da secretária
 

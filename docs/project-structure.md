@@ -106,7 +106,7 @@ apps/frontend/
 │   │   │
 │   │   └── secretary/              # Domínio: painel da secretária (RF06)
 │   │       ├── api/
-│   │       │   └── questions.api.ts  # GET /questions, PATCH /questions/:id/status
+│   │       │   └── questions.api.ts  # GET /questions, PATCH /questions/:id
 │   │       ├── components/
 │   │       │   ├── QuestionsTable.tsx
 │   │       │   └── StatusBadge.tsx
@@ -176,7 +176,7 @@ apps/backend/
 │   │   │   └── auth.types.ts       # LoginDTO, TokenPayload
 │   │   │
 │   │   ├── chatbot/                # Navegação conversacional (RF01, RF02, RF07, RF08)
-│   │   │   ├── chatbot.controller.ts  # GET /nodes/:id, POST /session/end
+│   │   │   ├── chatbot.controller.ts  # GET /nodes/:id, POST /sessions/rating
 │   │   │   ├── chatbot.service.ts     # Busca nó, registra log, registra satisfação
 │   │   │   ├── chatbot.routes.ts
 │   │   │   └── chatbot.types.ts       # ChatNodeResponse, SessionLogDTO
@@ -206,7 +206,7 @@ apps/backend/
 │   │   │   └── users.types.ts           # CreateUserDTO, UserResponse
 │   │   │
 │   │   └── logs/                   # Logs de atendimento (RF08 — Admin)
-│   │       ├── logs.controller.ts   # GET /logs (com filtros por data/curso)
+│   │       ├── logs.controller.ts   # GET /logs (filtros: satisfaction, from, to)
 │   │       ├── logs.service.ts
 │   │       ├── logs.routes.ts
 │   │       └── logs.types.ts
@@ -254,10 +254,10 @@ docs/
 │   └── tasks.md                    # Tarefas detalhadas por integrante
 ├── sprint2/
 │   ├── README.md
-│   └── tasks.md                    # ⚠️ a criar
+│   └── tasks.md                    # Backlog operacional da Sprint 2
 ├── sprint3/
 │   ├── README.md
-│   └── tasks.md                    # ⚠️ a criar
+│   └── tasks.md                    # Backlog operacional da Sprint 3
 │
 └── adr/
     └── README.md                   # ADR-001 a ADR-003 centralizados em um único documento

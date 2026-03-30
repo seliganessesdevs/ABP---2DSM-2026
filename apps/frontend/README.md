@@ -52,78 +52,17 @@ interface do usuário. Toda lógica de negócio, segurança e persistência vive
 
 ## 📁 Estrutura de Pastas <a id="estrutura-de-pastas"></a>
 
-```
-frontend/
-├── public/                      # Arquivos estáticos (favicon, robots.txt)
-│
-├── src/
-│   ├── app/                     # Núcleo da aplicação
-│   │   ├── router.tsx           # Definição de todas as rotas
-│   │   ├── provider.tsx         # Composição de providers (Auth, Query, Theme)
-│   │   └── routes/              # Componentes de página por rota
-│   │       ├── index.tsx        # Rota pública: chatbot principal (/)
-│   │       ├── login.tsx        # Página de login (/login)
-│   │       ├── admin/           # Rotas protegidas: painel admin (/admin/*)
-│   │       └── secretary/       # Rotas protegidas: painel secretaria (/secretary/*)
-│   │
-│   ├── assets/                  # Imagens, ícones e fontes
-│   │
-│   ├── components/
-│   │   ├── ui/                  # Componentes base gerados pelo shadcn/ui
-│   │   │   └── ⚠️ não editar   # Customizar via wrappers em shared/ ou features/
-│   │   ├── layout/              # Estruturas de layout reutilizáveis
-│   │   │   ├── AdminLayout.tsx  # Sidebar + topbar para painéis autenticados
-│   │   │   └── PublicLayout.tsx # Layout minimalista para o chatbot público
-│   │   └── shared/              # Componentes com lógica própria e reutilizáveis
-│   │       ├── ProtectedRoute.tsx   # Redireciona para /login se não autenticado
-│   │       ├── RoleGuard.tsx        # Bloqueia acesso por role (RBAC no frontend)
-│   │       ├── LoadingSpinner.tsx
-│   │       └── ErrorBoundary.tsx
-│   │
-│   ├── config/
-│   │   └── env.ts               # Variáveis de ambiente validadas com Zod
-│   │
-│   ├── features/                # ← Coração da aplicação: módulos por domínio
-│   │   ├── chatbot/             # RF01, RF02, RF07, RF05
-│   │   │   ├── api/
-│   │   │   ├── components/
-│   │   │   ├── hooks/
-│   │   │   └── types/
-│   │   ├── auth/                # RF09
-│   │   │   ├── api/
-│   │   │   ├── components/
-│   │   │   ├── hooks/
-│   │   │   ├── stores/          # Zustand: token JWT, user, role
-│   │   │   └── types/
-│   │   ├── admin/               # RF04
-│   │   │   ├── api/
-│   │   │   ├── components/
-│   │   │   └── hooks/
-│   │   └── secretary/           # RF06
-│   │       ├── api/
-│   │       ├── components/
-│   │       └── hooks/
-│   │
-│   ├── hooks/                   # Hooks globais reutilizáveis
-│   ├── lib/
-│   │   ├── axios.ts             # Instância Axios com interceptor de Authorization
-│   │   └── queryClient.ts       # Configuração do TanStack Query
-│   ├── types/                   # Types globais compartilhados
-│   └── utils/                   # Funções puras utilitárias
-│
-├── index.html
-├── vite.config.ts
-├── tailwind.config.ts
-├── tsconfig.json
-├── tsconfig.app.json
-├── eslint.config.ts
-├── vitest.config.ts
-├── .env.example
-└── README.md                    # Este arquivo
-```
+Resumo da estrutura do frontend:
 
-> Documentação completa com justificativa de cada pasta em
-> [`docs/project-structure.md`](../../docs/project-structure.md).
+- `src/app/`: bootstrap da aplicação, providers e rotas.
+- `src/features/`: domínios de negócio (`chatbot`, `auth`, `admin`, `secretary`).
+- `src/components/`: UI base, layouts e componentes compartilhados.
+- `src/lib/`: cliente Axios e Query Client.
+- `src/config/env.ts`: validação de variáveis de ambiente.
+- `src/types/`, `src/hooks/`, `src/utils/`: tipos e utilitários globais.
+
+Documentação canônica da árvore completa e responsabilidades por pasta:
+[`docs/project-structure.md`](../../docs/project-structure.md).
 
 ---
 

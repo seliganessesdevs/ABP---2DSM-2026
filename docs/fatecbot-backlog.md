@@ -16,6 +16,7 @@
 | `[FIGMA]` | Task de design de interface (Figma — sem arquivos de código) |
 | **Entrada** | O que deve existir/estar pronto antes de iniciar |
 | **Saída** | O que a task entrega como artefato testável |
+| **Peso** | Story points estimados (escala Fibonacci: 1 · 2 · 3 · 5 · 8 · 13) |
 | **Arquivos** | Arquivos exclusivamente criados/editados por esta task |
 
 > **Regra de ouro:** arquivos de `types/`, `api/`, `service/` e `hooks/` são sempre tasks separadas.
@@ -24,6 +25,9 @@
 ---
 
 ## 🗂️ SPRINT 1 — Fundação, Autenticação e Chatbot Público
+
+> 🎯 **Total de pontos nesta sprint: 112 pts** · 43 tasks · Acumulado até aqui: 112 pts
+
 
 > Objetivo: sistema funcional do ponto de vista do aluno (chatbot + envio de pergunta) e infraestrutura base.
 
@@ -37,6 +41,7 @@
 
 **Módulo:** Infra / `src/`
 **Prioridade:** 🔴 Crítica (bloqueante para todas as tasks BE)
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/server.ts`
@@ -65,6 +70,7 @@ GET /api/v1/health
 
 **Módulo:** Infra / `src/config/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/config/env.ts`
@@ -101,6 +107,7 @@ export const db: PrismaClient
 
 **Módulo:** Infra / `src/errors/` + `src/middlewares/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/errors/AppError.ts`
@@ -135,6 +142,7 @@ export const errorMiddleware: ErrorRequestHandler
 
 **Módulo:** Infra / `prisma/`
 **Prioridade:** 🔴 Crítica (bloqueante para todos os services)
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/prisma/schema.prisma`
@@ -165,6 +173,7 @@ model Question    { id String @id @default(uuid()), text String, email String, s
 
 **Módulo:** Infra / `prisma/`
 **Prioridade:** 🟡 Alta
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/prisma/seed.ts`
@@ -184,6 +193,7 @@ model Question    { id String @id @default(uuid()), text String, email String, s
 
 **Módulo:** Infra / `src/utils/`
 **Prioridade:** 🔴 Crítica (bloqueante para auth.service)
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/utils/hash.utils.ts`
@@ -223,6 +233,7 @@ export function paginate(page: number, limit: number): { skip: number; take: num
 
 **Módulo:** Design / Figma
 **Prioridade:** 🟡 Alta (bloqueante para todos os demais frames Figma)
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `[Figma] Página "Design System"` — frames: Cores, Tipografia, Espaçamentos, Componentes Base
@@ -244,6 +255,7 @@ export function paginate(page: number, limit: number): { skip: number; take: num
 
 **Módulo:** Design / Figma — Sprint 1 / Auth
 **Prioridade:** 🟡 Alta
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `[Figma] Página "Sprint 1 / Auth"` — frames: Login, Login-Erro, Login-Loading
@@ -264,6 +276,7 @@ export function paginate(page: number, limit: number): { skip: number; take: num
 
 **Módulo:** Design / Figma — Sprint 1 / Chatbot
 **Prioridade:** 🔴 Crítica
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `[Figma] Página "Sprint 1 / Chatbot"` — frames: ChatWindow, MessageBubble, OptionButton, EvidenceCard, SatisfactionRating, QuestionForm
@@ -291,6 +304,7 @@ export function paginate(page: number, limit: number): { skip: number; take: num
 
 **Módulo:** Infra / raiz do frontend
 **Prioridade:** 🔴 Crítica (bloqueante para todas as tasks FE)
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/vite.config.ts`
@@ -318,6 +332,7 @@ export function paginate(page: number, limit: number): { skip: number; take: num
 
 **Módulo:** Infra / `src/types/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/types/api.types.ts`
@@ -352,6 +367,7 @@ export type NodeType = 'MENU' | 'ANSWER'
 
 **Módulo:** Infra / `src/lib/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/lib/axios.ts`
@@ -386,6 +402,7 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 
 **Módulo:** Infra / `src/app/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/app/provider.tsx`
@@ -407,6 +424,7 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 
 **Módulo:** Infra / `src/utils/`
 **Prioridade:** 🟡 Alta
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/utils/date.utils.ts`
@@ -427,6 +445,7 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 
 **Módulo:** Infra / `src/components/shared/`
 **Prioridade:** 🟡 Alta
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/components/shared/LoadingSpinner.tsx`
@@ -445,6 +464,7 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 
 **Módulo:** Infra / `src/hooks/`
 **Prioridade:** 🟢 Média
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/hooks/useDebounce.ts`
@@ -467,6 +487,7 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 
 **Módulo:** Raiz do monorepo
 **Prioridade:** 🔴 Crítica
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `docker-compose.yml`
@@ -493,6 +514,7 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 
 **Módulo:** `src/modules/auth/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `1 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/auth/auth.types.ts`
@@ -530,6 +552,7 @@ export interface AuthUserResponse {
 
 **Módulo:** `src/modules/auth/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/auth/auth.service.ts`
@@ -559,6 +582,7 @@ export class AuthService {
 
 **Módulo:** `src/modules/auth/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/auth/auth.controller.ts`
@@ -588,6 +612,7 @@ Body: { "email": string, "password": string }
 
 **Módulo:** `src/middlewares/`
 **Prioridade:** 🔴 Crítica (bloqueante para todas as rotas protegidas)
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/middlewares/auth.middleware.ts`
@@ -617,6 +642,7 @@ export const authenticate: RequestHandler
 
 **Módulo:** `src/middlewares/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/middlewares/rbac.middleware.ts`
@@ -641,6 +667,7 @@ export function authorize(...roles: Array<'ADMIN' | 'SECRETARY'>): RequestHandle
 
 **Módulo:** `src/features/auth/types/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `1 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/auth/types/auth.types.ts`
@@ -675,6 +702,7 @@ export interface JWTPayload {
 
 **Módulo:** `src/features/auth/stores/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/auth/stores/auth.store.ts`
@@ -704,6 +732,7 @@ export const useAuthStore: UseBoundStore<StoreApi<AuthStore>>
 
 **Módulo:** `src/features/auth/api/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `1 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/auth/api/auth.api.ts`
@@ -725,6 +754,7 @@ export const authApi = {
 
 **Módulo:** `src/features/auth/hooks/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/auth/hooks/useLogin.ts`
@@ -753,6 +783,7 @@ export function useLogin(): {
 
 **Módulo:** `src/features/auth/components/`
 **Prioridade:** 🟡 Alta
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/auth/components/LoginForm.tsx`
@@ -773,6 +804,7 @@ export function useLogin(): {
 
 **Módulo:** `src/components/shared/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/components/shared/ProtectedRoute.tsx`
@@ -804,6 +836,7 @@ export function useLogin(): {
 
 **Módulo:** `src/modules/chatbot/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/chatbot/chatbot.types.ts`
@@ -851,6 +884,7 @@ export interface CreateSessionLogDTO {
 
 **Módulo:** `src/modules/chatbot/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/chatbot/chatbot.service.ts`
@@ -876,6 +910,7 @@ export class ChatbotService {
 
 **Módulo:** `src/modules/chatbot/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/chatbot/chatbot.controller.ts`
@@ -904,6 +939,7 @@ POST /api/v1/sessions/rating → 201: { success: true, data: { sessionLogId: str
 
 **Módulo:** `src/features/chatbot/types/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/types/chatbot.types.ts`
@@ -947,6 +983,7 @@ export interface SessionRatingPayload {
 
 **Módulo:** `src/features/chatbot/api/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/api/chatbot.api.ts`
@@ -970,6 +1007,7 @@ export const chatbotApi = {
 
 **Módulo:** `src/features/chatbot/hooks/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/hooks/useChatNavigation.ts`
@@ -1001,6 +1039,7 @@ export function useChatNavigation(): {
 
 **Módulo:** `src/features/chatbot/components/`
 **Prioridade:** 🟡 Alta
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/components/MessageBubble.tsx`
@@ -1021,6 +1060,7 @@ export function useChatNavigation(): {
 
 **Módulo:** `src/features/chatbot/components/`
 **Prioridade:** 🟡 Alta
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/components/EvidenceCard.tsx`
@@ -1038,6 +1078,7 @@ export function useChatNavigation(): {
 
 **Módulo:** `src/features/chatbot/components/`
 **Prioridade:** 🟡 Alta
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/components/SatisfactionRating.tsx`
@@ -1058,6 +1099,7 @@ export function useChatNavigation(): {
 
 **Módulo:** `src/features/chatbot/components/`
 **Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/components/ChatWindow.tsx`
@@ -1085,6 +1127,7 @@ export function useChatNavigation(): {
 
 **Módulo:** `src/modules/questions/`
 **Prioridade:** 🟡 Alta
+**Peso:** `1 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/questions/questions.types.ts`
@@ -1116,6 +1159,7 @@ export interface QuestionResponseDTO {
 
 **Módulo:** `src/modules/questions/`
 **Prioridade:** 🟡 Alta
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/questions/questions.service.ts`
@@ -1141,6 +1185,7 @@ export class QuestionsService {
 
 **Módulo:** `src/modules/questions/`
 **Prioridade:** 🟡 Alta
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/questions/questions.controller.ts`
@@ -1166,6 +1211,7 @@ Body: { "text": string, "email": string, "sessionLogId"?: string }
 
 **Módulo:** `src/features/chatbot/components/`
 **Prioridade:** 🟡 Alta
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/components/QuestionForm.tsx`
@@ -1190,6 +1236,7 @@ Body: { "text": string, "email": string, "sessionLogId"?: string }
 
 **Módulo:** `src/routes/`
 **Prioridade:** 🔴 Crítica (deve ser atualizado a cada novo módulo)
+**Peso:** `1 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/routes/index.ts`
@@ -1208,6 +1255,9 @@ Body: { "text": string, "email": string, "sessionLogId"?: string }
 
 ## 🗂️ SPRINT 2 — Painel Admin (CRUD Nós + Documentos + Usuários + RBAC)
 
+> 🎯 **Total de pontos nesta sprint: 60 pts** · 15 tasks · Acumulado até aqui: 172 pts
+
+
 ---
 
 ### 🌳 Módulo Nodes (Admin)
@@ -1218,6 +1268,7 @@ Body: { "text": string, "email": string, "sessionLogId"?: string }
 
 **Módulo:** `src/modules/nodes/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/nodes/nodes.types.ts`
@@ -1252,6 +1303,7 @@ export interface NodeListItemDTO {
 
 **Módulo:** `src/modules/nodes/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/nodes/nodes.service.ts`
@@ -1279,6 +1331,7 @@ export class NodesService {
 
 **Módulo:** `src/modules/nodes/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/nodes/nodes.controller.ts`
@@ -1306,6 +1359,7 @@ DELETE /api/v1/nodes/:id        → 200: { success: true }
 
 **Módulo:** `src/features/admin/api/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/api/nodes.api.ts`
@@ -1330,6 +1384,7 @@ export const nodesApi = {
 
 **Módulo:** `src/features/admin/hooks/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/hooks/useNodes.ts`
@@ -1354,6 +1409,7 @@ export function useNodes(): {
 
 **Módulo:** `src/features/admin/components/`
 **Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/components/NodeTree.tsx`
@@ -1372,6 +1428,7 @@ export function useNodes(): {
 
 **Módulo:** `src/features/admin/components/`
 **Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/components/NodeEditor.tsx`
@@ -1395,6 +1452,7 @@ export function useNodes(): {
 
 **Módulo:** `src/modules/documents/`
 **Prioridade:** 🟡 Alta
+**Peso:** `1 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/documents/documents.types.ts`
@@ -1419,6 +1477,7 @@ export interface DocumentResponseDTO {
 
 **Módulo:** `src/modules/documents/`
 **Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/documents/documents.service.ts`
@@ -1443,6 +1502,7 @@ DELETE /api/v1/documents/:id → 200: { success: true }
 
 **Módulo:** `src/features/admin/`
 **Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/api/documents.api.ts`
@@ -1467,6 +1527,7 @@ DELETE /api/v1/documents/:id → 200: { success: true }
 
 **Módulo:** `src/modules/users/`
 **Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/users/users.types.ts`
@@ -1493,6 +1554,7 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 **Módulo:** `src/features/admin/`
 **Prioridade:** 🟡 Alta
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/api/users.api.ts`
@@ -1512,6 +1574,7 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 **Módulo:** Design / Figma — Sprint 2 / Admin
 **Prioridade:** 🟡 Alta
+**Peso:** `8 pts`
 
 **Arquivos exclusivos desta task:**
 - `[Figma] Página "Sprint 2 / Admin"` — frames: AdminLayout, Dashboard, Nodes, Documents, Users
@@ -1538,6 +1601,7 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 **Módulo:** `src/components/layout/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/components/layout/AdminLayout.tsx`
@@ -1557,6 +1621,7 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 **Módulo:** `src/app/routes/admin/`
 **Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/app/routes/admin/dashboard.tsx`
@@ -1581,6 +1646,9 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 ## 🗂️ SPRINT 3 — Painel Secretária, Logs, Satisfação e Ajustes Finais
 
+> 🎯 **Total de pontos nesta sprint: 30 pts** · 9 tasks · Acumulado até aqui: 202 pts
+
+
 ---
 
 ### ❓ Módulo Questions — Lado Secretária
@@ -1591,6 +1659,7 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 **Módulo:** `src/modules/questions/` (extensão de `TASK-040`)
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/questions/questions.service.ts` *(adicionar métodos `listQuestions` e `updateStatus`)*
@@ -1608,6 +1677,7 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 **Módulo:** `src/modules/questions/` (extensão de `TASK-041`)
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/questions/questions.controller.ts` *(adicionar handlers GET e PATCH)*
@@ -1636,6 +1706,7 @@ PATCH /api/v1/questions/:id
 
 **Módulo:** `src/features/secretary/api/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `2 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/secretary/api/questions.api.ts`
@@ -1658,6 +1729,7 @@ export const questionsApi = {
 
 **Módulo:** `src/features/secretary/hooks/`
 **Prioridade:** 🔴 Crítica
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/secretary/hooks/useQuestions.ts`
@@ -1683,6 +1755,7 @@ export function useQuestions(statusFilter?: QuestionStatus): {
 
 **Módulo:** `src/features/secretary/components/`
 **Prioridade:** 🟡 Alta
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/secretary/components/QuestionsTable.tsx`
@@ -1705,6 +1778,7 @@ export function useQuestions(statusFilter?: QuestionStatus): {
 
 **Módulo:** `src/modules/logs/`
 **Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/logs/logs.types.ts`
@@ -1732,6 +1806,7 @@ GET /api/v1/logs?satisfaction=DISLIKED&from=ISO&to=ISO&page=1&limit=20
 
 **Módulo:** `src/features/admin/`
 **Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/api/logs.api.ts`
@@ -1757,6 +1832,7 @@ GET /api/v1/logs?satisfaction=DISLIKED&from=ISO&to=ISO&page=1&limit=20
 
 **Módulo:** Design / Figma — Sprint 3 / Secretary
 **Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
 
 **Arquivos exclusivos desta task:**
 - `[Figma] Página "Sprint 3 / Secretary"` — frames: SecretaryDashboard, Questions, LogsAdmin
@@ -1781,6 +1857,7 @@ GET /api/v1/logs?satisfaction=DISLIKED&from=ISO&to=ISO&page=1&limit=20
 
 **Módulo:** `src/app/routes/`
 **Prioridade:** 🟡 Alta
+**Peso:** `3 pts`
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/app/routes/secretary/dashboard.tsx`
@@ -1865,3 +1942,106 @@ TASK-010 (Bootstrap FE)
 
 > **Convenção de commits:** `feat(task-001): bootstrap Express app`
 > Cada commit deve referenciar o ID da task para rastreabilidade no backlog.
+
+---
+
+## 📉 Referência de Pesos para Burndown Chart
+
+> Escala Fibonacci adotada: **1** (só tipos/config) · **2** (arquivo simples) · **3** (lógica média) · **5** (múltiplos arquivos / lógica complexa) · **8** (feature grande integrada)
+
+### Sprint 1 — 112 pts
+
+| Task | Nome | Pts | Pts Restantes (ideal) |
+|------|------|-----|-----------------------|
+| TASK-001 | Bootstrap do servidor Express | 2 | 112 |
+| TASK-002 | Configuração de ambiente e banco de dados | 2 | 110 |
+| TASK-003 | Classe AppError e middleware de erros | 3 | 108 |
+| TASK-004 | Schema Prisma e migration inicial | 5 | 105 |
+| TASK-005 | Seed de dados iniciais | 2 | 100 |
+| TASK-006 | Utils: hash e JWT | 3 | 98 |
+| TASK-007 | [FIGMA] Design System e tokens visuais | 5 | 95 |
+| TASK-008 | [FIGMA] Wireframes — Login e autenticação | 3 | 90 |
+| TASK-009 | [FIGMA] Wireframes — Interface do Chatbot público | 5 | 87 |
+| TASK-010 | Bootstrap do projeto Vite + TypeScript | 2 | 82 |
+| TASK-011 | Tipos globais compartilhados | 2 | 80 |
+| TASK-012 | Instância Axios e React Query client | 3 | 78 |
+| TASK-013 | Provider global e Router | 2 | 75 |
+| TASK-014 | Utils frontend | 2 | 73 |
+| TASK-015 | Componentes compartilhados base | 2 | 71 |
+| TASK-016 | Hooks globais utilitários | 2 | 69 |
+| TASK-017 | Docker Compose e Dockerfiles | 3 | 67 |
+| TASK-018 | auth.types.ts [BE] | 1 | 64 |
+| TASK-019 | auth.service.ts | 3 | 63 |
+| TASK-020 | auth.controller.ts + auth.routes.ts | 3 | 60 |
+| TASK-021 | auth.middleware.ts | 2 | 57 |
+| TASK-022 | rbac.middleware.ts | 2 | 55 |
+| TASK-023 | auth.types.ts [FE] | 1 | 53 |
+| TASK-024 | auth.store.ts | 2 | 52 |
+| TASK-025 | auth.api.ts | 1 | 50 |
+| TASK-026 | useLogin.ts | 3 | 49 |
+| TASK-027 | LoginForm.tsx | 3 | 46 |
+| TASK-028 | ProtectedRoute.tsx + RoleGuard.tsx | 2 | 43 |
+| TASK-029 | chatbot.types.ts [BE] | 2 | 41 |
+| TASK-030 | chatbot.service.ts | 5 | 39 |
+| TASK-031 | chatbot.controller.ts + routes | 3 | 34 |
+| TASK-032 | chatbot.types.ts [FE] | 2 | 31 |
+| TASK-033 | chatbot.api.ts | 2 | 29 |
+| TASK-034 | useChatNavigation.ts | 5 | 27 |
+| TASK-035 | MessageBubble.tsx + OptionButton.tsx | 3 | 22 |
+| TASK-036 | EvidenceCard.tsx | 2 | 19 |
+| TASK-037 | SatisfactionRating.tsx | 3 | 17 |
+| TASK-038 | ChatWindow.tsx | 5 | 14 |
+| TASK-039 | questions.types.ts [BE] | 1 | 9 |
+| TASK-040 | questions.service.ts | 2 | 8 |
+| TASK-041 | questions.controller.ts + routes | 2 | 6 |
+| TASK-042 | QuestionForm.tsx | 3 | 4 |
+| TASK-043 | routes/index.ts | 1 | 1 |
+
+> **Total Sprint 1:** 112 pts · Acumulado geral: 112 pts
+
+### Sprint 2 — 60 pts
+
+| Task | Nome | Pts | Pts Restantes (ideal) |
+|------|------|-----|-----------------------|
+| TASK-044 | nodes.types.ts | 2 | 60 |
+| TASK-045 | nodes.service.ts | 5 | 58 |
+| TASK-046 | nodes.controller.ts + routes | 3 | 53 |
+| TASK-047 | nodes.api.ts | 2 | 50 |
+| TASK-048 | useNodes.ts | 3 | 48 |
+| TASK-049 | NodeTree.tsx | 5 | 45 |
+| TASK-050 | NodeEditor.tsx | 5 | 40 |
+| TASK-051 | documents.types.ts | 1 | 35 |
+| TASK-052 | documents service + controller + routes | 5 | 34 |
+| TASK-053 | documents.api + useDocuments + DocumentList | 5 | 29 |
+| TASK-054 | users (types + service + controller + routes) | 5 | 24 |
+| TASK-055 | users.api.ts + UserList.tsx | 3 | 19 |
+| TASK-056 | [FIGMA] Mockups do painel Admin | 8 | 16 |
+| TASK-057 | AdminLayout.tsx + PublicLayout.tsx | 3 | 8 |
+| TASK-058 | Páginas do painel Admin (4 páginas) | 5 | 5 |
+
+> **Total Sprint 2:** 60 pts · Acumulado geral: 172 pts
+
+### Sprint 3 — 30 pts
+
+| Task | Nome | Pts | Pts Restantes (ideal) |
+|------|------|-----|-----------------------|
+| TASK-059 | questions.service.ts — extensão | 2 | 30 |
+| TASK-060 | questions.controller.ts — extensão | 2 | 28 |
+| TASK-061 | questions.api.ts [secretária] | 2 | 26 |
+| TASK-062 | useQuestions.ts | 3 | 24 |
+| TASK-063 | QuestionsTable.tsx + StatusBadge.tsx | 3 | 21 |
+| TASK-064 | logs (types + service + controller + routes) | 5 | 18 |
+| TASK-065 | logs.api + useLogs + LogTable | 5 | 13 |
+| TASK-066 | [FIGMA] Mockups do painel Secretária | 5 | 8 |
+| TASK-067 | Páginas Secretária + Logs Admin | 3 | 3 |
+
+> **Total Sprint 3:** 30 pts · Acumulado geral: 202 pts
+
+### Resumo Geral
+
+| Sprint | Tasks | Pontos | % do Total |
+|--------|-------|--------|------------|
+| Sprint 1 | 43 | 112 | 55% |
+| Sprint 2 | 15 | 60 | 30% |
+| Sprint 3 | 9 | 30 | 15% |
+| **Total** | **67** | **202** | **100%** |

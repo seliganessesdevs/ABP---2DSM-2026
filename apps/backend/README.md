@@ -51,56 +51,20 @@ O frontend nunca se conecta diretamente ao PostgreSQL.
 
 ## 📁 Estrutura de Pastas <a id="estrutura-de-pastas"></a>
 
-```
-backend/
-├── prisma/
-│   ├── schema.prisma        # Modelo de dados (DDL via Prisma)
-│   ├── migrations/          # Histórico de migrations
-│   └── seed.ts              # Dados iniciais: nós do chatbot + admin padrão
-│
-├── src/
-│   ├── server.ts            # Cria e exporta o app Express (sem listen)
-│   ├── index.ts             # Entry point: chama server.listen()
-│   │
-│   ├── config/
-│   │   ├── env.ts           # Lê e valida variáveis de ambiente com Zod
-│   │   └── database.ts      # Singleton do PrismaClient
-│   │
-│   ├── middlewares/
-│   │   ├── auth.middleware.ts    # Valida JWT Bearer e popula req.user
-│   │   ├── rbac.middleware.ts    # authorize('ADMIN' | 'SECRETARY')
-│   │   ├── error.middleware.ts   # Handler global de erros → AppError → JSON
-│   │   └── logger.middleware.ts  # Log de requisições HTTP
-│   │
-│   ├── modules/             # Módulos organizados por domínio de negócio
-│   │   ├── auth/            # Login, geração de JWT
-│   │   ├── chatbot/         # Navegação nos nós, registro de sessão e satisfação
-│   │   ├── questions/       # Envio e gestão de perguntas à secretaria
-│   │   ├── nodes/           # CRUD de nós de navegação (Admin)
-│   │   ├── documents/       # Gestão de documentos e chunks (Admin)
-│   │   ├── users/           # Gestão de usuários da secretaria (Admin)
-│   │   └── logs/            # Visualização de logs de atendimento (Admin)
-│   │
-│   ├── routes/
-│   │   └── index.ts         # Composição de todas as rotas com prefixo /api/v1
-│   │
-│   ├── errors/
-│   │   └── AppError.ts      # Classe de erro customizada (statusCode + message)
-│   │
-│   └── utils/
-│       ├── hash.utils.ts    # Argon2id: hashPassword, comparePassword
-│       ├── jwt.utils.ts     # generateToken, verifyToken
-│       └── pagination.utils.ts
-│
-├── tsconfig.json
-├── eslint.config.ts
-├── vitest.config.ts
-├── .env.example
-└── README.md                # Este arquivo
-```
+Resumo da estrutura do backend:
 
-> Cada módulo em `src/modules/` segue a estrutura:
-> `<modulo>.controller.ts` · `<modulo>.service.ts` · `<modulo>.routes.ts` · `<modulo>.types.ts`
+- `prisma/`: schema, migrations e seed.
+- `src/config/`: validação de env e conexão com banco.
+- `src/middlewares/`: auth, RBAC, logger e tratamento global de erro.
+- `src/modules/`: domínios de negócio (`auth`, `chatbot`, `questions`, `nodes`, `documents`, `users`, `logs`).
+- `src/routes/index.ts`: composição de rotas em `/api/v1`.
+- `src/utils/`: utilitários de hash, JWT e paginação.
+
+Documentação canônica da árvore completa e responsabilidades por pasta:
+[`docs/project-structure.md`](../../docs/project-structure.md).
+
+Cada módulo em `src/modules/` segue a estrutura:
+`<modulo>.controller.ts` · `<modulo>.service.ts` · `<modulo>.routes.ts` · `<modulo>.types.ts`.
 
 ---
 

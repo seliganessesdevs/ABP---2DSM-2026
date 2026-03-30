@@ -111,7 +111,8 @@ GET /api/v1/health
 
 ```json
 {
-  "success": true
+  "success": true,
+  "data": {}
 }
 ```
 

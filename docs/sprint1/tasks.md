@@ -16,6 +16,9 @@
 | `[INFRA]` | Task de infraestrutura (raiz do monorepo) |
 | `[FIGMA]` | Task de design de interface (Figma — sem arquivos de código) |
 
+> Este documento funciona como visão operacional da sprint.
+> Para o detalhamento completo de contratos de cada task, use `docs/fatecbot-backlog.md` como fonte canônica.
+
 ---
 
 ## Legenda de Requisitos
@@ -45,7 +48,8 @@
 | RNF08 | Autenticação JWT com `sub`, `role` e `exp` via `Authorization: Bearer` |
 | RNF09 | Senhas com Argon2id; segredos em variáveis de ambiente; sem exposição de dados sensíveis |
 
-> RF04, RF06, RF08 (painel admin/secretária) e RNF03/RNF04/RNF07 não são cobertos na Sprint 1.
+> RF04 e RF06 (painel admin/secretária) e RNF03/RNF04/RNF07 não são cobertos na Sprint 1.
+> RF08 é coberto na Sprint 1 para rastreamento de sessões e satisfação no fluxo público do chatbot.
 
 ---
 

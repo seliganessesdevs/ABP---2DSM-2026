@@ -24,10 +24,9 @@ painel administrativo para gestão de nós, documentos e usuários.
 
 ## Pendência operacional
 
-- `⚠️ tasks.md a criar`
+- [`tasks.md`](./tasks.md)
 
-Até a criação do arquivo de tasks, este README funciona como referência resumida
-do foco da sprint.
+O `tasks.md` desta sprint organiza o backlog operacional e o detalhamento por frente.
 
 ***
 

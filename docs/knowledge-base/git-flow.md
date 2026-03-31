@@ -1,6 +1,3 @@
-Aqui estão os dois arquivos completos com a correção aplicada — português sem acentos em todos os exemplos e regras de commit.
-git-flow.md
-text
 # Git Flow — Guia para Iniciantes
 
 Git Flow é uma convenção de como organizar branches e commits no Git. Não é uma tecnologia — é um acordo de equipe. Sem ele, um projeto com vários desenvolvedores vira caos: código quebrado na branch principal, histórico impossível de ler, conflitos constantes.
@@ -23,18 +20,26 @@ Pense no repositório como um rio com afluentes. A branch principal (`main`) é 
 | `main` | Código de produção — sempre estável |
 | `develop` | Integração das features — pode ter trabalho em progresso |
 
+
 Ninguém commita diretamente na `main`. Todo código novo entra pela `develop` e só vai para `main` quando está pronto para produção.
+
 
 ***
 
+
 ## Branches de Trabalho
 
-Você cria uma branch nova para cada tarefa. Quando termina, abre um Pull Request para `develop`.
+
+Você cria uma branch nova para cada task. Quando termina, abre um Pull Request para `develop`.
+
 
 **Convenção de nomes:**
 
-<tipo>/RF<numero>-<descricao-curta-em-kebab-case>
-text
+
+```
+<tipo>/TASK-NNN-<descricao-curta-em-kebab-case>
+```
+
 
 | Tipo | Quando usar |
 |---|---|
@@ -44,43 +49,54 @@ text
 | `docs/` | Documentação |
 | `refactor/` | Refatoração sem mudança de comportamento |
 
+
 **Exemplos reais:**
 
+
 ```bash
-feature/RF01-chatbot-navigation
-feature/RF04-admin-node-crud
-fix/RF09-jwt-expiration-handling
-docs/project-standards
-chore/setup-docker-compose
-refactor/extract-hash-utils
+feature/TASK-032-chatbot-navigation-service
+feature/TASK-048-admin-node-crud
+fix/TASK-023-jwt-expiration-handling
+docs/TASK-010-use-case-diagram
+chore/TASK-019-docker-compose-setup
+refactor/TASK-036-extract-session-hook
 ```
 
-> **Regra:** Sempre vincule a branch ao RF correspondente quando houver.
-> Para tarefas sem RF direto, use a descrição curta sem o código: `chore/setup-docker-compose`.
+
+> **Regra:** Uma branch por task. O ID da task já carrega a rastreabilidade com o backlog — não é necessário repetir os RFs no nome da branch.
+> Para tarefas sem task formal, use a descrição curta sem o código: `chore/setup-eslint`.
+
 
 ***
 
+
 ## O Fluxo do Dia a Dia
+
 
 ```bash
 # 1. Atualiza seu repositório local
 git checkout develop
 git pull origin develop
 
-# 2. Cria a branch da sua tarefa a partir da develop
-git checkout -b feature/RF01-chatbot-navigation
 
-# 3. Trabalha, commita conforme avança
+# 2. Cria a branch da sua tarefa a partir da develop
+git checkout -b feature/TASK-032-chatbot-navigation-service
+
+
+# 3. Trabalha, commita conforme avança (escopo = módulo alterado)
 git add .
 git commit -m "feat(chatbot): adiciona carregamento do no raiz ao iniciar sessao"
 git commit -m "feat(chatbot): adiciona selecao de opcao e navegacao entre nos filhos"
 git commit -m "test(chatbot): adiciona testes unitarios do hook useChatNavigation"
 
+
 # 4. Antes de abrir PR, atualiza com o que mudou na develop
 git pull origin develop --rebase
 
+
 # 5. Envia para o repositório remoto
-git push origin feature/RF01-chatbot-navigation
+git push origin feature/TASK-032-chatbot-navigation-service
+
 
 # 6. Abre Pull Request no GitHub: feature/... → develop
 ```

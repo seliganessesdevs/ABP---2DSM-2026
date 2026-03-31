@@ -14,7 +14,9 @@
 | `[BE]` | Task de backend (`apps/backend/`) |
 | `[FE]` | Task de frontend (`apps/frontend/`) |
 | `[INFRA]` | Task de infraestrutura (raiz do monorepo) |
-| `[FIGMA]` | Task de design de interface (Figma — sem arquivos de código) |
+| `[FIGMA]` | Task de design de interface |
+| `[UML]`   | Task de modelagem UML com Astah (`docs/uml/`) |
+| `[DB]`    | Task de modelagem de banco de dados com dbdesigner (`docs/database/`) |
 
 > Este documento funciona como visão operacional da sprint.
 > Para o detalhamento completo de contratos de cada task, use `docs/fatecbot-backlog.md` como fonte canônica.
@@ -53,9 +55,183 @@
 
 ---
 
+---
+
+## 📖 User Stories — Sprint 1
+
+> Cada User Story segue o formato padrão do Scrum:
+> **Como** [tipo de usuário] · **Quero** [ação ou funcionalidade] · **Para que** [benefício entregue]
+>
+> Os Critérios de Aceitação detalham as condições que a funcionalidade deve atender para ser considerada concluída,
+> escritos na perspectiva do usuário, descrevendo o comportamento esperado do sistema de forma clara e verificável na Sprint Review.
+
+---
+
+### US-01 · RF01 — Navegação Conversacional
+
+> **Tasks:** TASK-009 · TASK-031 · TASK-032 · TASK-033 · TASK-034 · TASK-035 · TASK-036 · TASK-037 · TASK-040
+
+**Como** aluno  
+**Quero** navegar por menus e submenus do chatbot  
+**Para que** eu encontre a informação que preciso sem precisar contatar a secretaria diretamente
+
+**Critérios de Aceitação:**
+
+- O aluno deve ver as opções de atendimento disponíveis logo ao abrir o chatbot.
+- Ao clicar em uma opção, o chatbot deve exibir o próximo nível de informações ou a resposta correspondente.
+- Quando houver mais opções para escolher, o chatbot exibe botões de navegação; quando houver uma resposta final, ela é apresentada como texto.
+- O sistema deve registrar todos os tópicos que o aluno visitou durante a conversa.
+- A interface deve funcionar corretamente tanto em celular quanto em computador.
+
+
+---
+
+### US-02 · RF02 — Repositório de Conhecimento
+
+> **Tasks:** TASK-004 · TASK-031 · TASK-032 · TASK-038 · TASK-040
+
+**Como** administrador  
+**Quero** que as respostas do chatbot sejam baseadas em documentos oficiais com trechos rastreáveis  
+**Para que** os alunos recebam informações verificáveis e a secretaria tenha credibilidade nas respostas
+
+**Critérios de Aceitação:**
+
+- As respostas do chatbot devem indicar de qual documento oficial a informação foi extraída, com o nome do documento, página e seção.
+- O trecho do documento deve ser exibido em destaque junto à resposta, para que o aluno possa verificar a fonte.
+- Quando uma resposta não tiver documento associado, o chatbot ainda exibe a informação disponível normalmente.
+- O sistema deve armazenar os documentos e seus trechos de forma organizada para que possam ser consultados pelo chatbot.
+
+
+---
+
+### US-03 · RF03 — Acesso Público sem Cadastro
+
+> **Tasks:** TASK-013 · TASK-015 · TASK-024 · TASK-028 · TASK-030
+
+**Como** visitante  
+**Quero** acessar o chatbot sem precisar criar uma conta  
+**Para que** eu tire dúvidas de forma ágil e sem fricção
+
+**Critérios de Aceitação:**
+
+- O visitante deve conseguir acessar e usar o chatbot sem precisar criar conta ou fazer login.
+- Ao tentar acessar as áreas restritas (painel admin ou secretária) sem estar autenticado, o sistema deve redirecionar para a tela de login.
+- Um usuário autenticado como secretária não deve conseguir acessar as funcionalidades exclusivas do administrador.
+- Após o login bem-sucedido, o sistema deve direcionar cada usuário automaticamente para o painel correspondente ao seu perfil.
+
+
+---
+
+### US-04 · RF05 — Encaminhamento de Pergunta
+
+> **Tasks:** TASK-041 · TASK-042 · TASK-043 · TASK-044
+
+**Como** aluno  
+**Quero** enviar uma dúvida diretamente à secretaria ao final do atendimento  
+**Para que** eu receba suporte nos casos em que o bot não cobriu o que eu precisava
+
+**Critérios de Aceitação:**
+
+- O aluno deve poder enviar uma dúvida preenchendo apenas o texto da pergunta e seu e-mail institucional.
+- Se o aluno tentar enviar sem preencher o texto ou com um e-mail inválido, o sistema deve exibir uma mensagem de erro indicando o problema.
+- Após o envio bem-sucedido, o aluno deve ver uma confirmação de que a mensagem foi recebida pela secretaria.
+- A pergunta enviada fica automaticamente vinculada à sessão de atendimento que a originou, para facilitar o contexto para a secretaria.
+
+
+---
+
+### US-05 · RF07 — Avaliação de Satisfação
+
+> **Tasks:** TASK-031 · TASK-032 · TASK-033 · TASK-036 · TASK-039
+
+**Como** aluno  
+**Quero** avaliar se o atendimento foi satisfatório ao final da conversa  
+**Para que** o sistema melhore com base no meu feedback
+
+**Critérios de Aceitação:**
+
+- Ao receber uma resposta final do chatbot, o aluno deve ver os botões "👍 Gostei" e "👎 Não gostei" para avaliar o atendimento.
+- Após clicar em uma das opções, o sistema deve exibir uma mensagem de agradecimento pelo feedback.
+- O aluno só deve conseguir avaliar uma vez por atendimento — após votar, os botões ficam desabilitados.
+- A avaliação deve ser registrada junto ao histórico da sessão para análise posterior.
+
+
+---
+
+### US-06 · RF08 — Registro de Logs de Sessão
+
+> **Tasks:** TASK-004 · TASK-031 · TASK-032 · TASK-033 · TASK-036 · TASK-039 · TASK-041 · TASK-042
+
+**Como** administrador  
+**Quero** que o sistema registre o fluxo de navegação, a satisfação e os timestamps de cada sessão  
+**Para que** eu possa auditar o uso, identificar pontos de melhoria e analisar os temas mais consultados
+
+**Critérios de Aceitação:**
+
+- O sistema deve registrar automaticamente quais tópicos o aluno navegou, quando iniciou e quando finalizou o atendimento.
+- Quando o aluno avalia a conversa, o horário de encerramento deve ser registrado automaticamente.
+- Se o aluno enviar uma dúvida ao final do atendimento, a pergunta deve ficar vinculada à sessão correspondente.
+- Toda pergunta recebida deve ser registrada como pendente de resposta, até que a secretaria a marque como respondida.
+
+
+---
+
+### US-07 · RF09 — Autenticação por Login e Senha
+
+> **Tasks:** TASK-006 · TASK-020 · TASK-021 · TASK-022 · TASK-023 · TASK-025 · TASK-026 · TASK-027 · TASK-028 · TASK-029
+
+**Como** secretária acadêmica  
+**Quero** fazer login com e-mail institucional e senha  
+**Para que** eu acesse o painel de gestão com segurança
+
+**Critérios de Aceitação:**
+
+- A secretária e o administrador devem conseguir acessar o sistema informando e-mail e senha na tela de login.
+- Se as credenciais estiverem incorretas, o sistema deve exibir uma mensagem de erro genérica, sem indicar qual campo está errado.
+- As senhas devem ser armazenadas de forma segura no banco de dados, sem que o valor original possa ser recuperado.
+- Durante o carregamento do login, o botão de envio deve mostrar um indicador de espera e, em caso de falha, a mensagem de erro deve aparecer sem recarregar a página.
+
+
+---
+
+### US-08 · RF10 — Autorização por Papel (RBAC)
+
+> **Tasks:** TASK-024 · TASK-026 · TASK-028 · TASK-030
+
+**Como** sistema  
+**Quero** garantir que cada role acesse apenas as funcionalidades permitidas  
+**Para que** nenhum usuário execute ações além do seu nível de autorização
+
+**Critérios de Aceitação:**
+
+- A secretária não deve conseguir acessar funcionalidades exclusivas do administrador; ao tentar, o sistema deve negar o acesso.
+- Cada perfil de usuário deve ser direcionado automaticamente para a área correspondente após o login.
+- O sistema deve controlar o acesso a cada área do painel com base no papel do usuário autenticado.
+- As restrições de acesso devem ser verificadas tanto no servidor quanto no frontend, garantindo proteção em ambas as camadas.
+
+
+---
+
+### US-09 · RF11 — Proteção de Rotas por JWT
+
+> **Tasks:** TASK-003 · TASK-014 · TASK-023 · TASK-026 · TASK-030 · TASK-043 · TASK-045
+
+**Como** desenvolvedor  
+**Quero** que todas as rotas administrativas estejam protegidas por middleware JWT  
+**Para que** nenhuma rota sensível seja acessível sem autenticação válida
+
+**Critérios de Aceitação:**
+
+- Qualquer tentativa de acessar as áreas administrativas sem sessão ativa deve redirecionar o usuário para a tela de login.
+- Se a sessão do usuário expirar durante o uso, o sistema deve redirecionar para o login automaticamente.
+- O chatbot público deve permanecer acessível para qualquer visitante, sem necessidade de autenticação.
+- As áreas restritas só devem ser exibidas após confirmação de identidade válida pelo sistema.
+
+---
+
 ## Tabela de Rastreabilidade — Sprint 1
 
-> 🎯 **Total Sprint 1: 112 pts** · 43 tasks
+> 🎯 **Total Sprint 1: 118 pts** · 45 tasks
 
 | Task | Tipo | Módulo | Nome | RFs | RNFs | Prioridade | Pts |
 |------|------|--------|------|-----|------|------------|-----|
@@ -68,154 +244,99 @@
 | TASK-007 | `[FIGMA]` | Design | Design System e tokens visuais | — | RNF01 | 🟡 Alta | **5** |
 | TASK-008 | `[FIGMA]` | Design | Wireframes — Login e fluxo de autenticação | RF03 · RF09 | RNF01 | 🟡 Alta | **3** |
 | TASK-009 | `[FIGMA]` | Design | Wireframes — Interface do Chatbot público | RF01 · RF02 · RF05 · RF07 | RNF01 | 🔴 Crítica | **5** |
-| TASK-010 | `[FE]` | Infra | Bootstrap do projeto Vite + TypeScript | — | RNF01 · RNF05 | 🔴 Crítica | **2** |
-| TASK-011 | `[FE]` | Infra | Tipos globais compartilhados | RF01 · RF03 · RF07 | — | 🔴 Crítica | **2** |
-| TASK-012 | `[FE]` | Infra | Instância Axios e React Query client | RF09 · RF11 | RNF02 · RNF08 | 🔴 Crítica | **3** |
-| TASK-013 | `[FE]` | Infra | Provider global e Router | RF03 · RF09 · RF10 · RF11 | — | 🔴 Crítica | **2** |
-| TASK-014 | `[FE]` | Infra | Utils frontend | RF09 | RNF01 · RNF08 | 🟡 Alta | **2** |
-| TASK-015 | `[FE]` | Infra | Componentes compartilhados base | — | RNF01 · RNF02 | 🟡 Alta | **2** |
-| TASK-016 | `[FE]` | Infra | Hooks globais utilitários | — | RNF01 · RNF02 | 🟢 Média | **2** |
-| TASK-017 | `[INFRA]` | Docker | Docker Compose e Dockerfiles | — | RNF05 · RNF06 | 🔴 Crítica | **3** |
-| TASK-018 | `[BE]` | Auth | auth.types.ts — DTOs de autenticação | RF03 · RF09 | RNF08 | 🔴 Crítica | **1** |
-| TASK-019 | `[BE]` | Auth | auth.service.ts — lógica de autenticação | RF03 · RF09 | RNF08 · RNF09 | 🔴 Crítica | **3** |
-| TASK-020 | `[BE]` | Auth | auth.controller.ts + auth.routes.ts | RF09 · RF11 | — | 🔴 Crítica | **3** |
-| TASK-021 | `[BE]` | Auth | auth.middleware.ts — validação JWT | RF09 · RF11 | RNF08 | 🔴 Crítica | **2** |
-| TASK-022 | `[BE]` | Auth | rbac.middleware.ts — autorização por role | RF03 · RF10 · RF11 | — | 🔴 Crítica | **2** |
-| TASK-023 | `[FE]` | Auth | auth.types.ts — tipos de autenticação | RF03 · RF09 | RNF08 | 🔴 Crítica | **1** |
-| TASK-024 | `[FE]` | Auth | auth.store.ts — estado global (Zustand) | RF09 · RF10 · RF11 | — | 🔴 Crítica | **2** |
-| TASK-025 | `[FE]` | Auth | auth.api.ts — chamadas de autenticação | RF09 | RNF08 | 🔴 Crítica | **1** |
-| TASK-026 | `[FE]` | Auth | useLogin.ts — hook de login | RF03 · RF09 · RF10 | — | 🔴 Crítica | **3** |
-| TASK-027 | `[FE]` | Auth | LoginForm.tsx — componente de formulário | RF09 | RNF01 | 🟡 Alta | **3** |
-| TASK-028 | `[FE]` | Auth | ProtectedRoute.tsx + RoleGuard.tsx | RF03 · RF10 · RF11 | — | 🔴 Crítica | **2** |
-| TASK-029 | `[BE]` | Chatbot | chatbot.types.ts — DTOs de navegação | RF01 · RF02 · RF07 · RF08 | — | 🔴 Crítica | **2** |
-| TASK-030 | `[BE]` | Chatbot | chatbot.service.ts — lógica de navegação | RF01 · RF02 · RF07 · RF08 | — | 🔴 Crítica | **5** |
-| TASK-031 | `[BE]` | Chatbot | chatbot.controller.ts + chatbot.routes.ts | RF01 · RF07 · RF08 | — | 🔴 Crítica | **3** |
-| TASK-032 | `[FE]` | Chatbot | chatbot.types.ts — tipos de navegação | RF01 · RF02 · RF07 · RF08 | — | 🔴 Crítica | **2** |
-| TASK-033 | `[FE]` | Chatbot | chatbot.api.ts — chamadas de navegação | RF01 · RF07 · RF08 | — | 🔴 Crítica | **2** |
-| TASK-034 | `[FE]` | Chatbot | useChatNavigation.ts — hook de sessão | RF01 · RF07 · RF08 | RNF02 | 🔴 Crítica | **5** |
-| TASK-035 | `[FE]` | Chatbot | MessageBubble.tsx + OptionButton.tsx | RF01 | RNF01 | 🟡 Alta | **3** |
-| TASK-036 | `[FE]` | Chatbot | EvidenceCard.tsx | RF02 | RNF01 | 🟡 Alta | **2** |
-| TASK-037 | `[FE]` | Chatbot | SatisfactionRating.tsx | RF07 · RF08 | RNF01 | 🟡 Alta | **3** |
-| TASK-038 | `[FE]` | Chatbot | ChatWindow.tsx — orquestrador do chatbot | RF01 · RF02 · RF07 | RNF01 | 🟡 Alta | **5** |
-| TASK-039 | `[BE]` | Questions | questions.types.ts — DTOs | RF05 · RF08 | — | 🟡 Alta | **1** |
-| TASK-040 | `[BE]` | Questions | questions.service.ts — criação de pergunta | RF05 · RF08 | — | 🟡 Alta | **2** |
-| TASK-041 | `[BE]` | Questions | questions.controller.ts + questions.routes.ts (POST público) | RF05 · RF11 | — | 🟡 Alta | **2** |
-| TASK-042 | `[FE]` | Questions | QuestionForm.tsx — formulário de envio | RF05 · RF08 | RNF01 | 🟡 Alta | **3** |
-| TASK-043 | `[BE]` | Infra | routes/index.ts — composição global de rotas | RF01 · RF05 · RF09 · RF11 | — | 🔴 Crítica | **1** |
-
----
-
-## Cobertura de Requisitos por Task
-
-A tabela abaixo mostra, para cada RF/RNF coberto na Sprint 1, **quais tasks o implementam**.
-Use para verificar se um requisito tem cobertura completa antes do Sprint Review.
-
-### Requisitos Funcionais
-
-| Requisito | Descrição | Tasks que implementam |
-|-----------|-----------|----------------------|
-| **RF01** | Navegação conversacional | TASK-004 · TASK-009 · TASK-011 · TASK-029 · TASK-030 · TASK-031 · TASK-032 · TASK-033 · TASK-034 · TASK-035 · TASK-038 · TASK-043 |
-| **RF02** | Repositório de conhecimento | TASK-004 · TASK-009 · TASK-011 · TASK-029 · TASK-030 · TASK-032 · TASK-036 · TASK-038 |
-| **RF03** | Perfis de usuário | TASK-004 · TASK-008 · TASK-011 · TASK-013 · TASK-018 · TASK-019 · TASK-022 · TASK-023 · TASK-026 · TASK-028 |
-| **RF05** | Encaminhamento de pergunta | TASK-004 · TASK-009 · TASK-039 · TASK-040 · TASK-041 · TASK-042 · TASK-043 |
-| **RF07** | Avaliação de satisfação | TASK-004 · TASK-009 · TASK-011 · TASK-029 · TASK-030 · TASK-031 · TASK-032 · TASK-033 · TASK-034 · TASK-037 · TASK-038 |
-| **RF08** | Registro de logs | TASK-004 · TASK-029 · TASK-030 · TASK-031 · TASK-032 · TASK-033 · TASK-034 · TASK-037 · TASK-039 · TASK-040 · TASK-042 |
-| **RF09** | Autenticação | TASK-002 · TASK-004 · TASK-005 · TASK-006 · TASK-008 · TASK-012 · TASK-013 · TASK-014 · TASK-018 · TASK-019 · TASK-020 · TASK-021 · TASK-023 · TASK-024 · TASK-025 · TASK-026 · TASK-027 · TASK-043 |
-| **RF10** | Autorização por papel (RBAC) | TASK-013 · TASK-022 · TASK-024 · TASK-026 · TASK-028 |
-| **RF11** | Proteção de rotas | TASK-003 · TASK-012 · TASK-013 · TASK-020 · TASK-021 · TASK-022 · TASK-024 · TASK-028 · TASK-041 · TASK-043 |
-
-### Requisitos Não Funcionais
-
-| Requisito | Descrição | Tasks que implementam |
-|-----------|-----------|----------------------|
-| **RNF01** | Interface responsiva | TASK-007 · TASK-008 · TASK-009 · TASK-010 · TASK-014 · TASK-015 · TASK-016 · TASK-027 · TASK-035 · TASK-036 · TASK-037 · TASK-038 · TASK-042 |
-| **RNF02** | Tempo de resposta adequado | TASK-003 · TASK-012 · TASK-015 · TASK-016 · TASK-034 |
-| **RNF05** | Containerização Docker | TASK-001 · TASK-002 · TASK-010 · TASK-017 |
-| **RNF06** | Docker Compose — comando único | TASK-001 · TASK-017 |
-| **RNF08** | JWT com sub · role · exp via Bearer | TASK-006 · TASK-012 · TASK-014 · TASK-018 · TASK-019 · TASK-021 · TASK-023 · TASK-025 |
-| **RNF09** | Argon2id · segredos em env · sem leak sensível | TASK-002 · TASK-003 · TASK-005 · TASK-006 · TASK-019 |
-
----
-
-## Tasks em Paralelo — Sem Conflito de Arquivo
-
-O quadro abaixo permite alocar dois desenvolvedores simultaneamente sem risco de merge conflict.
-
-| Dev A (Backend / Design) | Dev B (Frontend) | Podem rodar em paralelo? |
-|--------------------------|-----------------|--------------------------|
-| TASK-007 `Design System [FIGMA]` | TASK-001 a TASK-006 (BE Infra) | ✅ Sim — artefatos distintos |
-| TASK-008 `Wireframes Login [FIGMA]` | TASK-018 `auth.types.ts [BE]` | ✅ Sim |
-| TASK-009 `Wireframes Chatbot [FIGMA]` | TASK-029 `chatbot.types.ts [BE]` | ✅ Sim |
-| TASK-018 `auth.types.ts [BE]` | TASK-023 `auth.types.ts [FE]` | ✅ Sim — arquivos distintos |
-| TASK-019 `auth.service.ts` | TASK-024 `auth.store.ts` | ✅ Sim |
-| TASK-020 `auth.controller + routes` | TASK-025 `auth.api.ts` | ✅ Sim |
-| TASK-021 `auth.middleware.ts` | TASK-026 `useLogin.ts` | ✅ Sim |
-| TASK-022 `rbac.middleware.ts` | TASK-027 `LoginForm.tsx` | ✅ Sim |
-| TASK-029 `chatbot.types.ts [BE]` | TASK-032 `chatbot.types.ts [FE]` | ✅ Sim — arquivos distintos |
-| TASK-030 `chatbot.service.ts` | TASK-033 `chatbot.api.ts` | ✅ Sim |
-| TASK-031 `chatbot.controller + routes` | TASK-034 `useChatNavigation.ts` | ✅ Sim |
-| TASK-039 `questions.types.ts [BE]` | TASK-035 `MessageBubble + OptionButton` | ✅ Sim |
-| TASK-040 `questions.service.ts` | TASK-036 `EvidenceCard.tsx` | ✅ Sim |
-| TASK-041 `questions.controller + routes` | TASK-037 `SatisfactionRating.tsx` | ✅ Sim |
-| TASK-043 `routes/index.ts` | TASK-038 `ChatWindow.tsx` | ✅ Sim |
-
-> ⚠️ **Arquivo compartilhado de atenção:** `routes/index.ts` (TASK-043) — atualizado apenas quando
-> TASK-020, TASK-031 e TASK-041 estiverem concluídas. Nunca editar junto com outra task de routes.
+| TASK-010 | `[UML]`  | Modelagem | Diagrama de Casos de Uso — Astah | RF01 · RF02 · RF03 · RF04 · RF05 · RF06 · RF07 · RF08 · RF09 · RF10 · RF11 | — | 🟡 Alta | **3** |
+| TASK-011 | `[DB]`   | Modelagem | Modelagem do Banco de Dados — dbdesigner | RF01 · RF02 · RF03 · RF04 · RF05 · RF07 · RF08 · RF09 | RNF09 | 🔴 Crítica | **3** |
+| TASK-012 | `[FE]` | Infra | Bootstrap do projeto Vite + TypeScript | — | RNF01 · RNF05 | 🔴 Crítica | **2** |
+| TASK-013 | `[FE]` | Infra | Tipos globais compartilhados | RF01 · RF03 · RF07 | — | 🔴 Crítica | **2** |
+| TASK-014 | `[FE]` | Infra | Instância Axios e React Query client | RF09 · RF11 | RNF02 · RNF08 | 🔴 Crítica | **3** |
+| TASK-015 | `[FE]` | Infra | Provider global e Router | RF03 · RF09 · RF10 · RF11 | — | 🔴 Crítica | **2** |
+| TASK-016 | `[FE]` | Infra | Utils frontend | RF09 | RNF01 · RNF08 | 🟡 Alta | **2** |
+| TASK-017 | `[FE]` | Infra | Componentes compartilhados base | — | RNF01 · RNF02 | 🟡 Alta | **2** |
+| TASK-018 | `[FE]` | Infra | Hooks globais utilitários | — | RNF01 · RNF02 | 🟢 Média | **2** |
+| TASK-019 | `[INFRA]` | Docker | Docker Compose e Dockerfiles | — | RNF05 · RNF06 | 🔴 Crítica | **3** |
+| TASK-020 | `[BE]` | Auth | auth.types.ts — DTOs de autenticação | RF03 · RF09 | RNF08 | 🔴 Crítica | **1** |
+| TASK-021 | `[BE]` | Auth | auth.service.ts — lógica de autenticação | RF03 · RF09 | RNF08 · RNF09 | 🔴 Crítica | **3** |
+| TASK-022 | `[BE]` | Auth | auth.controller.ts + auth.routes.ts | RF09 · RF11 | — | 🔴 Crítica | **3** |
+| TASK-023 | `[BE]` | Auth | auth.middleware.ts — validação JWT | RF09 · RF11 | RNF08 | 🔴 Crítica | **2** |
+| TASK-024 | `[BE]` | Auth | rbac.middleware.ts — autorização por role | RF03 · RF10 · RF11 | — | 🔴 Crítica | **2** |
+| TASK-025 | `[FE]` | Auth | auth.types.ts — tipos de autenticação | RF03 · RF09 | RNF08 | 🔴 Crítica | **1** |
+| TASK-026 | `[FE]` | Auth | auth.store.ts — estado global (Zustand) | RF09 · RF10 · RF11 | — | 🔴 Crítica | **2** |
+| TASK-027 | `[FE]` | Auth | auth.api.ts — chamadas de autenticação | RF09 | RNF08 | 🔴 Crítica | **1** |
+| TASK-028 | `[FE]` | Auth | useLogin.ts — hook de login | RF03 · RF09 · RF10 | — | 🔴 Crítica | **3** |
+| TASK-029 | `[FE]` | Auth | LoginForm.tsx — componente de formulário | RF09 | RNF01 | 🟡 Alta | **3** |
+| TASK-030 | `[FE]` | Auth | ProtectedRoute.tsx + RoleGuard.tsx | RF03 · RF10 · RF11 | — | 🔴 Crítica | **2** |
+| TASK-031 | `[BE]` | Chatbot | chatbot.types.ts — DTOs de navegação | RF01 · RF02 · RF07 · RF08 | — | 🔴 Crítica | **2** |
+| TASK-032 | `[BE]` | Chatbot | chatbot.service.ts — lógica de navegação | RF01 · RF02 · RF07 · RF08 | — | 🔴 Crítica | **5** |
+| TASK-033 | `[BE]` | Chatbot | chatbot.controller.ts + chatbot.routes.ts | RF01 · RF07 · RF08 | — | 🔴 Crítica | **3** |
+| TASK-034 | `[FE]` | Chatbot | chatbot.types.ts — tipos de navegação | RF01 · RF02 · RF07 · RF08 | — | 🔴 Crítica | **2** |
+| TASK-035 | `[FE]` | Chatbot | chatbot.api.ts — chamadas de navegação | RF01 · RF07 · RF08 | — | 🔴 Crítica | **2** |
+| TASK-036 | `[FE]` | Chatbot | useChatNavigation.ts — hook de sessão | RF01 · RF07 · RF08 | RNF02 | 🔴 Crítica | **5** |
+| TASK-037 | `[FE]` | Chatbot | MessageBubble.tsx + OptionButton.tsx | RF01 | RNF01 | 🟡 Alta | **3** |
+| TASK-038 | `[FE]` | Chatbot | EvidenceCard.tsx | RF02 | RNF01 | 🟡 Alta | **2** |
+| TASK-039 | `[FE]` | Chatbot | SatisfactionRating.tsx | RF07 · RF08 | RNF01 | 🟡 Alta | **3** |
+| TASK-040 | `[FE]` | Chatbot | ChatWindow.tsx — orquestrador do chatbot | RF01 · RF02 · RF07 | RNF01 | 🟡 Alta | **5** |
+| TASK-041 | `[BE]` | Questions | questions.types.ts — DTOs | RF05 · RF08 | — | 🟡 Alta | **1** |
+| TASK-042 | `[BE]` | Questions | questions.service.ts — criação de pergunta | RF05 · RF08 | — | 🟡 Alta | **2** |
+| TASK-043 | `[BE]` | Questions | questions.controller.ts + questions.routes.ts (POST público) | RF05 · RF11 | — | 🟡 Alta | **2** |
+| TASK-044 | `[FE]` | Questions | QuestionForm.tsx — formulário de envio | RF05 · RF08 | RNF01 | 🟡 Alta | **3** |
+| TASK-045 | `[BE]` | Infra | routes/index.ts — composição global de rotas | RF01 · RF05 · RF09 · RF11 | — | 🔴 Crítica | **1** |
 
 ---
 
 ## 📉 Burndown de Referência — Sprint 1
 
-> Linha ideal: partindo de **112 pts** no dia 0, chegando a **0 pts** no último dia.
+> Linha ideal: partindo de **118 pts** no dia 0, chegando a **0 pts** no último dia.
 > Marque uma task como concluída assim que seu PR for mergeado em `develop`.
 
 | Task | Pts | Pts Restantes (ideal) |
 |------|-----|-----------------------|
-| TASK-001 | 2 | 112 |
-| TASK-002 | 2 | 110 |
-| TASK-003 | 3 | 108 |
-| TASK-004 | 5 | 105 |
-| TASK-005 | 2 | 100 |
-| TASK-006 | 3 | 98 |
-| TASK-007 | 5 | 95 |
-| TASK-008 | 3 | 90 |
-| TASK-009 | 5 | 87 |
-| TASK-010 | 2 | 82 |
-| TASK-011 | 2 | 80 |
-| TASK-012 | 3 | 78 |
-| TASK-013 | 2 | 75 |
-| TASK-014 | 2 | 73 |
-| TASK-015 | 2 | 71 |
-| TASK-016 | 2 | 69 |
-| TASK-017 | 3 | 67 |
-| TASK-018 | 1 | 64 |
-| TASK-019 | 3 | 63 |
-| TASK-020 | 3 | 60 |
-| TASK-021 | 2 | 57 |
-| TASK-022 | 2 | 55 |
-| TASK-023 | 1 | 53 |
-| TASK-024 | 2 | 52 |
-| TASK-025 | 1 | 50 |
-| TASK-026 | 3 | 49 |
-| TASK-027 | 3 | 46 |
-| TASK-028 | 2 | 43 |
-| TASK-029 | 2 | 41 |
-| TASK-030 | 5 | 39 |
-| TASK-031 | 3 | 34 |
-| TASK-032 | 2 | 31 |
-| TASK-033 | 2 | 29 |
-| TASK-034 | 5 | 27 |
-| TASK-035 | 3 | 22 |
-| TASK-036 | 2 | 19 |
-| TASK-037 | 3 | 17 |
-| TASK-038 | 5 | 14 |
-| TASK-039 | 1 | 9 |
-| TASK-040 | 2 | 8 |
-| TASK-041 | 2 | 6 |
-| TASK-042 | 3 | 4 |
-| TASK-043 | 1 | 1 |
+| TASK-001 | 2 | 118 |
+| TASK-002 | 2 | 116 |
+| TASK-003 | 3 | 114 |
+| TASK-004 | 5 | 111 |
+| TASK-005 | 2 | 106 |
+| TASK-006 | 3 | 104 |
+| TASK-007 | 5 | 101 |
+| TASK-008 | 3 | 96 |
+| TASK-009 | 5 | 93 |
+| TASK-010 | 3 | 88 |
+| TASK-011 | 3 | 85 |
+| TASK-012 | 2 | 82 |
+| TASK-013 | 2 | 80 |
+| TASK-014 | 3 | 78 |
+| TASK-015 | 2 | 75 |
+| TASK-016 | 2 | 73 |
+| TASK-017 | 2 | 71 |
+| TASK-018 | 2 | 69 |
+| TASK-019 | 3 | 67 |
+| TASK-020 | 1 | 64 |
+| TASK-021 | 3 | 63 |
+| TASK-022 | 3 | 60 |
+| TASK-023 | 2 | 57 |
+| TASK-024 | 2 | 55 |
+| TASK-025 | 1 | 53 |
+| TASK-026 | 2 | 52 |
+| TASK-027 | 1 | 50 |
+| TASK-028 | 3 | 49 |
+| TASK-029 | 3 | 46 |
+| TASK-030 | 2 | 43 |
+| TASK-031 | 2 | 41 |
+| TASK-032 | 5 | 39 |
+| TASK-033 | 3 | 34 |
+| TASK-034 | 2 | 31 |
+| TASK-035 | 2 | 29 |
+| TASK-036 | 5 | 27 |
+| TASK-037 | 3 | 22 |
+| TASK-038 | 2 | 19 |
+| TASK-039 | 3 | 17 |
+| TASK-040 | 5 | 14 |
+| TASK-041 | 1 | 9 |
+| TASK-042 | 2 | 8 |
+| TASK-043 | 2 | 6 |
+| TASK-044 | 3 | 4 |
+| TASK-045 | 1 | 1 |
 
-> **Total Sprint 1:** 112 pts · 43 tasks
+> **Total Sprint 1:** 118 pts · 45 tasks
 > Escala Fibonacci: **1** tipo/config · **2** arquivo simples · **3** lógica média · **5** múltiplos arquivos ou lógica complexa
 
 ---

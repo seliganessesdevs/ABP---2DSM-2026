@@ -9,7 +9,7 @@
 ## 📑 Índice
 
 - [Branches](#branches)
-- [Commits](#commits)
+- [Commits](#️commits)
 - [Pull Requests](#pull-requests)
 - [Nomenclatura de Código](#nomenclatura-de-código)
 - [TypeScript](#typescript)
@@ -20,10 +20,11 @@
 
 ---
 
-
 ## 🌿 Branches <a id="branches"></a>
 
+
 ### Estratégia: GitHub Flow simplificado
+
 
 | Branch          | Finalidade                                               |
 |-----------------|----------------------------------------------------------|
@@ -35,39 +36,57 @@
 | `chore/*`       | Configuração de ferramentas, CI, dependências            |
 | `refactor/*`    | Reestruturação de código sem mudança de comportamento    |
 
+
 ### Nomenclatura de branches
+
+
+O nome da branch sempre referencia o **ID da task** do backlog, garantindo rastreabilidade direta com o item de trabalho.
+
+
+```
+<tipo>/TASK-NNN-descricao-curta
+```
 
 
 **Exemplos:**
 
+
 ```bash
-feature/RF01-chatbot-navigation
-feature/RF04-admin-node-crud
-fix/RF09-jwt-expiration-handling
-docs/project-standards
-chore/setup-docker-compose
-refactor/extract-hash-utils
+feature/TASK-022-auth-controller-routes
+feature/TASK-032-chatbot-navigation-service
+fix/TASK-023-jwt-expiration-handling
+docs/TASK-010-use-case-diagram
+chore/TASK-019-docker-compose-setup
+refactor/TASK-036-extract-session-hook
 ```
 
-> **Regra:** Sempre vincule a branch ao RF correspondente quando houver.
-> Para tarefas sem RF direto, use a descrição curta sem código.
-Seção ## ✍️ Commits
-text
+
+> **Regra:** Uma branch por task. Se a task cobre múltiplos RFs, isso já está mapeado no backlog — não é necessário repetir no nome da branch.
+
+***
+
 ## ✍️ Commits <a id="commits"></a>
 
-### Padrão: Conventional Commits em português sem acentos
 
-Todo commit deve seguir o formato:
+### Padrão: Conventional Commits por módulo
 
-<tipo>(<escopo>): <descricao curta no imperativo>
+
+A branch já identifica a task. O commit deve descrever **o que foi alterado tecnicamente**, usando o módulo ou feature como escopo.
+
+
+```
+<tipo>(<modulo>): <descricao curta no imperativo>
 [corpo opcional — explica o porque, nao o que]
-[rodape opcional — referencia a task: Closes #42]
-text
+[rodape opcional — referencia a issue ou PR: Closes #42]
+```
+
 
 > ⚠️ Não use acentos, cedilha ou caracteres especiais na mensagem de commit.
 > Risco real de corrompimento de encoding em diferentes terminais e ferramentas de CI.
 
+
 ### Tipos permitidos
+
 
 | Tipo       | Quando usar                                                   |
 |------------|---------------------------------------------------------------|
@@ -80,36 +99,62 @@ text
 | `chore`    | Atualização de dependências, configurações de build/CI        |
 | `perf`     | Melhoria de desempenho                                        |
 
+
 ### Escopos recomendados
 
+
+```
 chatbot | auth | admin | secretary | nodes | documents | logs | questions | db | docker | ci
+```
+
+
+### Como branch e commit se complementam
+
+
+| Camada | Responde a | Exemplo |
+|--------|-----------|---------|
+| **Branch** | *Qual item do backlog isso resolve?* | `feature/TASK-022-auth-controller-routes` |
+| **Commit** | *O que foi alterado tecnicamente?* | `feat(auth): adiciona controller e rotas de autenticacao` |
 
 
 ### Exemplos corretos
 
+
 ```bash
-feat(chatbot): adiciona navegacao hierarquica pelo menu de nos
-fix(auth): corrige validacao de expiracao do JWT no refresh
-refactor(admin): extrai NodeEditor para componente de formulario reutilizavel
-test(chatbot): adiciona testes unitarios do hook useChatNavigation
-docs(api-layer): documenta endpoint POST /questions com exemplos
+# Branch: feature/TASK-022-auth-controller-routes
+feat(auth): adiciona controller e rotas de autenticacao
+fix(auth): corrige status code no login invalido
+test(auth): adiciona teste de integracao do endpoint POST /login
+
+# Branch: feature/TASK-032-chatbot-navigation-service
+feat(chatbot): adiciona servico de navegacao hierarquica
+refactor(chatbot): extrai query de chunks para metodo privado
+
+# Branch: chore/TASK-019-docker-compose-setup
 chore(docker): adiciona healthcheck ao container do postgres
+chore(docker): configura variaveis de ambiente no compose
 ```
 
+
 ### Exemplos incorretos
+
 
 ```bash
 # ❌ Sem tipo
 atualiza chatbot
 
+
 # ❌ Verbo no passado
 feat(auth): adicionou formulario de login
+
 
 # ❌ Genérico demais
 fix: corrigindo bugs
 
+
 # ❌ Sem escopo quando aplicável
 feat: criar painel do admin
+
 
 # ❌ Com acento (risco de encoding)
 feat(chatbot): adiciona navegação por nós

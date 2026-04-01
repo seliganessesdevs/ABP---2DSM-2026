@@ -112,28 +112,165 @@ Essa abordagem garante rastreabilidade, confiabilidade da informação e reduç�
 
 ## 📖 User Stories <a id="user-stories"></a>
 
-| Requisito | User Story                                                                                                                                                     |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **RF01**  | Como **aluno**, quero navegar por menus e submenus do chatbot, para encontrar a informação que preciso sem contato direto com a secretaria.                    |
-| **RF02**  | Como **administrador**, quero manter um repositório de conhecimento estruturado, para que as respostas do bot sejam rastreáveis até documentos oficiais.       |
-| **RF03**  | Como **visitante**, quero usar o chatbot sem me cadastrar, para tirar dúvidas de forma ágil e sem fricção.                                                     |
-| **RF04**  | Como **administrador**, quero criar, editar e excluir nós de navegação e documentos, para manter o conteúdo do bot sempre atualizado.                          |
-| **RF05**  | Como **aluno**, quero poder enviar uma dúvida diretamente à secretaria ao final do atendimento, para receber suporte em casos não cobertos pelo bot.           |
-| **RF06**  | Como **secretária acadêmica**, quero visualizar e atualizar o status das perguntas recebidas, para gerenciar os atendimentos pendentes com eficiência.         |
-| **RF07**  | Como **aluno**, quero avaliar se o atendimento foi satisfatório, para contribuir com a melhoria contínua do sistema.                                           |
-| **RF08**  | Como **administrador**, quero visualizar logs completos de atendimento com data e hora, para auditoria e análise de uso.                                       |
-| **RF09**  | Como **secretária acadêmica**, quero fazer login com e-mail e senha, para acessar o painel de gestão de perguntas com segurança.                               |
-| **RF10**  | Como **sistema**, devo garantir que cada role acesse apenas as funcionalidades permitidas, para evitar acessos não autorizados.                                |
-| **RF11**  | Como **desenvolvedor**, quero que todas as rotas administrativas estejam protegidas por middleware JWT, para garantir que nenhuma rota sensível fique exposta. |
+> Cada User Story segue o formato: **Como** [tipo de usuário] / **Quero** [ação] / **Para que** [benefício].
+> Os critérios de aceitação definem as condições que a funcionalidade deve atender para ser considerada concluída.
+
+---
+
+### RF01 — Navegação Conversacional
+
+> Como **aluno**, quero navegar por menus e submenus do chatbot, para encontrar a informação que preciso sem contato direto com a secretaria.
+
+**Critérios de Aceitação:**
+- O menu raiz é exibido automaticamente ao abrir o chatbot, sem necessidade de qualquer interação prévia
+- Cada opção clicável exibe o submenu correspondente como nova mensagem do bot
+- O histórico de navegação é mantido visível durante toda a sessão (trilha de mensagens)
+- Nós do tipo `ANSWER` exibem o conteúdo da resposta e não apresentam novos botões de opção
+- O usuário consegue identificar visualmente a diferença entre uma mensagem do bot e uma ação do usuário
+
+---
+
+### RF02 — Repositório de Conhecimento
+
+> Como **administrador**, quero manter um repositório de conhecimento estruturado, para que as respostas do bot sejam rastreáveis até documentos oficiais.
+
+**Critérios de Aceitação:**
+- Cada nó de resposta pode ter zero ou mais chunks de documentos associados
+- Quando um nó possui chunks, eles são exibidos ao usuário como cartões de evidência com: trecho do texto, nome do documento, página e seção de origem
+- Os documentos cadastrados possuem tipo (ex.: Regulamento, Calendário, Manual) e URL de referência
+- Não é possível exibir um chunk órfão (sem documento pai associado)
+
+---
+
+### RF03 — Perfis de Usuário
+
+> Como **visitante**, quero usar o chatbot sem me cadastrar, para tirar dúvidas de forma ágil e sem fricção.
+
+**Critérios de Aceitação:**
+- O chatbot público é acessível sem autenticação em qualquer dispositivo
+- Usuários com role `ADMIN` e `SECRETARY` só acessam seus painéis após login válido
+- Tentativa de acesso a rotas protegidas sem token válido resulta em redirecionamento para `/login`
+- O papel (role) do usuário autenticado é refletido nas opções de menu exibidas na interface
+
+---
+
+### RF04 — Gestão de Conteúdo (Admin)
+
+> Como **administrador**, quero criar, editar e excluir nós de navegação e documentos, para manter o conteúdo do bot sempre atualizado.
+
+**Critérios de Aceitação:**
+- O administrador consegue criar um novo nó informando: título, conteúdo, tipo (`MENU` ou `ANSWER`), nó pai e ordem
+- O administrador consegue editar qualquer campo de um nó existente; as alterações refletem imediatamente no chatbot público
+- A exclusão de um nó pai só é permitida após a remoção ou realocação de seus filhos
+- O administrador consegue fazer upload ou vincular documentos e associar chunks a nós de resposta
+- Todas as ações de CRUD geram registro em log com timestamp e identificação do usuário responsável
+
+---
+
+### RF05 — Encaminhamento de Pergunta
+
+> Como **aluno**, quero poder enviar uma dúvida diretamente à secretaria ao final do atendimento, para receber suporte em casos não cobertos pelo bot.
+
+**Critérios de Aceitação:**
+- O formulário de envio exige: texto da dúvida (obrigatório) e e-mail institucional do aluno (obrigatório, formato válido)
+- Após o envio bem-sucedido, o usuário recebe confirmação visual na interface
+- A pergunta é persistida no banco com status `OPEN` e referência ao `sessionLogId` quando disponível
+- Campos inválidos exibem mensagem de erro específica inline (ex.: "E-mail inválido")
+- O envio é possível sem autenticação (rota pública)
+
+---
+
+### RF06 — Gestão de Perguntas (Secretária)
+
+> Como **secretária acadêmica**, quero visualizar e atualizar o status das perguntas recebidas, para gerenciar os atendimentos pendentes com eficiência.
+
+**Critérios de Aceitação:**
+- O painel exibe a lista de perguntas com: texto, e-mail do aluno, status atual e data de criação
+- A secretária consegue filtrar perguntas por status (`OPEN` / `ANSWERED`)
+- A secretária consegue atualizar o status de uma pergunta para `ANSWERED`; a alteração é refletida imediatamente na listagem
+- Perguntas abertas são destacadas visualmente em relação às respondidas
+- A listagem é paginada e exibe no máximo 20 itens por página
+
+---
+
+### RF07 — Avaliação de Satisfação
+
+> Como **aluno**, quero avaliar se o atendimento foi satisfatório, para contribuir com a melhoria contínua do sistema.
+
+**Critérios de Aceitação:**
+- O componente de avaliação ("Gostei" / "Não gostei") é exibido ao final de um atendimento concluído (nó do tipo `ANSWER`)
+- Após selecionar uma opção, o usuário recebe confirmação visual e os botões ficam desabilitados
+- A avaliação é enviada junto com o log de sessão (`satisfaction: LIKED | DISLIKED`)
+- Não é possível enviar mais de uma avaliação por sessão
+- A avaliação é opcional; o aluno pode encerrar o chat sem avaliar
+
+---
+
+### RF08 — Registro de Logs
+
+> Como **administrador**, quero visualizar logs completos de atendimento com data e hora, para auditoria e análise de uso.
+
+**Critérios de Aceitação:**
+- Cada sessão gera um `SessionLog` com: caminho de navegação (`navigationPath` como array de IDs), satisfação (se registrada), `startedAt` e `endedAt`
+- Os logs são visíveis no painel administrativo com filtro por período e por satisfação
+- Perguntas enviadas são associadas ao `sessionLogId` correspondente quando originadas de uma sessão ativa
+- Os dados de log nunca expõem informações pessoais além do e-mail informado voluntariamente pelo aluno
+
+---
+
+### RF09 — Autenticação
+
+> Como **secretária acadêmica**, quero fazer login com e-mail e senha, para acessar o painel de gestão de perguntas com segurança.
+
+**Critérios de Aceitação:**
+- O formulário de login exige e-mail e senha; campos em branco exibem mensagem de erro inline
+- Credenciais inválidas retornam mensagem de erro genérica sem indicar qual campo está errado (segurança)
+- Login bem-sucedido redireciona o usuário para o painel correspondente ao seu papel: `ADMIN → /admin`, `SECRETARY → /secretary`
+- O token JWT retornado contém os campos `sub`, `role` e `exp`
+- O token expira em 8 horas; após expiração, o usuário é redirecionado para `/login`
+
+---
+
+### RF10 — Autorização por Papel (RBAC)
+
+> Como **sistema**, devo garantir que cada role acesse apenas as funcionalidades permitidas, para evitar acessos não autorizados.
+
+**Critérios de Aceitação:**
+- Um usuário com role `SECRETARY` não consegue acessar endpoints de CRUD de nós ou documentos (retorno `403 Forbidden`)
+- Um usuário com role `ADMIN` consegue acessar todos os recursos protegidos
+- Tentativas de acesso a rotas fora do papel do usuário são registradas e retornam `403` com mensagem descritiva
+- O controle de acesso é aplicado no backend via middleware, independentemente do que o frontend exibe
+
+---
+
+### RF11 — Proteção de Rotas
+
+> Como **desenvolvedor**, quero que todas as rotas administrativas estejam protegidas por middleware JWT, para garantir que nenhuma rota sensível fique exposta.
+
+**Critérios de Aceitação:**
+- Qualquer requisição a rotas sob `/api/v1/admin/*` e `/api/v1/secretary/*` sem header `Authorization: Bearer <token>` retorna `401 Unauthorized`
+- Token malformado ou com assinatura inválida retorna `401` com mensagem "Token inválido"
+- Token expirado retorna `401` com mensagem "Token expirado"
+- O endpoint público do chatbot (`GET /api/v1/nodes/*`) e o de envio de perguntas (`POST /api/v1/questions`) não exigem autenticação
+- O middleware de autenticação é aplicado globalmente nas rotas sensíveis, sem necessidade de anotação por handler
 
 ---
 
 ## 📋 Backlog do Produto <a id="backlog"></a>
 
+### Processo de Estimativa
+
+As estimativas de esforço foram definidas pela equipe em sessão de **Planning Poker**, utilizando a escala Fibonacci (1 · 2 · 3 · 5 · 8 · 13). Itens considerados grandes ou pouco claros foram refinados e subdivididos pelo Product Owner antes de entrarem na sprint. O processo segue o fluxo definido pela disciplina:
+
+1. Mapeamento de necessidades pelo PO → definição das Backlogs
+2. Apresentação para o time → reunião de estimativa (Planning Poker)
+3. Subdivisão de itens grandes → definição e hierarquização das Sprints
+4. Refinamento contínuo a cada ciclo
+
 ### Sprints
 
-| Sprint | Objetivos                                           | Documentação                              | Período   | Status       |
-| ------ | --------------------------------------------------- | ----------------------------------------- | --------- | ------------ |
+| Sprint | Objetivos                                           | Documentação                              | Período    | Status       |
+| ------ | --------------------------------------------------- | ----------------------------------------- | ---------- | ------------ |
 | 1      | Estrutura base, autenticação, navegação do chatbot  | [Sprint 1 Docs](./docs/sprint1/README.md) | Iteração 1 | 🔵 Planejado |
 | 2      | Painel Admin (CRUD nós + documentos), RBAC          | [Sprint 2 Docs](./docs/sprint2/README.md) | Iteração 2 | 🔵 Planejado |
 | 3      | Painel Secretária, logs, satisfação, ajustes finais | [Sprint 3 Docs](./docs/sprint3/README.md) | Iteração 3 | 🔵 Planejado |
@@ -203,7 +340,7 @@ Um item está **concluído** quando:
 | **Testes**         | Vitest + Testing Library          | Cobertura unitária e de componentes para sustentação do MVP                                                    |
 | **Linting**        | ESLint + Prettier                 | Padronização e qualidade contínua do código                                                                    |
 
-
+---
 
 ## ⚡ Primeiros Passos <a id="primeiros-passos"></a>
 
@@ -361,7 +498,7 @@ fatecbot/
       <td>Scrum Master</td>
       <td><a href="https://github.com/LucasCobraFatec"><img src="https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white"></a></td>
       <td><a href="#"><img src="https://img.shields.io/badge/LinkedIn-0077B5?style=for-the-badge&logo=linkedin&logoColor=white"></a></td>
-          </tr>
+    </tr>
     <tr>
       <td>Allan Ramos</td>
       <td>Desenvolvedor</td>

@@ -14,6 +14,8 @@
 | `[FE]` | Task de frontend (`apps/frontend/`) |
 | `[INFRA]` | Task de infraestrutura (raiz do monorepo) |
 | `[FIGMA]` | Task de design de interface (Figma — sem arquivos de código) |
+| `[UML]`   | Task de modelagem UML com Astah (`docs/uml/`) |
+| `[DB]`    | Task de modelagem de banco de dados com dbdesigner (`docs/database/`) |
 | **Entrada** | O que deve existir/estar pronto antes de iniciar |
 | **Saída** | O que a task entrega como artefato testável |
 | **Peso** | Story points estimados (escala Fibonacci: 1 · 2 · 3 · 5 · 8 · 13) |
@@ -24,14 +26,6 @@
 
 ---
 
-## 🗂️ SPRINT 1 — Fundação, Autenticação e Chatbot Público
-
-> 🎯 **Total de pontos nesta sprint: 112 pts** · 43 tasks · Acumulado até aqui: 112 pts
-
-
-> Objetivo: sistema funcional do ponto de vista do aluno (chatbot + envio de pergunta) e infraestrutura base.
-
----
 
 ### 🏗️ Infraestrutura — Backend
 
@@ -42,6 +36,8 @@
 **Módulo:** Infra / `src/`
 **Prioridade:** 🔴 Crítica (bloqueante para todas as tasks BE)
 **Peso:** `2 pts`
+**Rastreabilidade RF:** —
+**Rastreabilidade RNF:** RNF05 · RNF06
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/server.ts`
@@ -71,6 +67,8 @@ GET /api/v1/health
 **Módulo:** Infra / `src/config/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** —
+**Rastreabilidade RNF:** RNF05 · RNF09
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/config/env.ts`
@@ -108,6 +106,8 @@ export const db: PrismaClient
 **Módulo:** Infra / `src/errors/` + `src/middlewares/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF11
+**Rastreabilidade RNF:** RNF02 · RNF09
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/errors/AppError.ts`
@@ -143,6 +143,8 @@ export const errorMiddleware: ErrorRequestHandler
 **Módulo:** Infra / `prisma/`
 **Prioridade:** 🔴 Crítica (bloqueante para todos os services)
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF01 · RF02 · RF03 · RF05 · RF07 · RF08 · RF09
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/prisma/schema.prisma`
@@ -174,6 +176,8 @@ model Question    { id String @id @default(uuid()), text String, email String, s
 **Módulo:** Infra / `prisma/`
 **Prioridade:** 🟡 Alta
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF02 · RF03 · RF09
+**Rastreabilidade RNF:** RNF09
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/prisma/seed.ts`
@@ -194,6 +198,8 @@ model Question    { id String @id @default(uuid()), text String, email String, s
 **Módulo:** Infra / `src/utils/`
 **Prioridade:** 🔴 Crítica (bloqueante para auth.service)
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF09
+**Rastreabilidade RNF:** RNF08 · RNF09
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/utils/hash.utils.ts`
@@ -234,6 +240,8 @@ export function paginate(page: number, limit: number): { skip: number; take: num
 **Módulo:** Design / Figma
 **Prioridade:** 🟡 Alta (bloqueante para todos os demais frames Figma)
 **Peso:** `5 pts`
+**Rastreabilidade RF:** —
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `[Figma] Página "Design System"` — frames: Cores, Tipografia, Espaçamentos, Componentes Base
@@ -256,6 +264,8 @@ export function paginate(page: number, limit: number): { skip: number; take: num
 **Módulo:** Design / Figma — Sprint 1 / Auth
 **Prioridade:** 🟡 Alta
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF03 · RF09
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `[Figma] Página "Sprint 1 / Auth"` — frames: Login, Login-Erro, Login-Loading
@@ -268,7 +278,7 @@ export function paginate(page: number, limit: number): { skip: number; take: num
 - Variante "Login-Erro" com mensagem de erro inline abaixo dos campos
 - Variante "Login-Loading" com spinner no botão e campos desabilitados
 - Anotações de comportamento documentadas no frame (ex.: redirecionamento por role após sucesso)
-- Handoff referenciado por `TASK-027` (LoginForm.tsx)
+- Handoff referenciado por `TASK-029` (LoginForm.tsx)
 
 ---
 
@@ -277,6 +287,8 @@ export function paginate(page: number, limit: number): { skip: number; take: num
 **Módulo:** Design / Figma — Sprint 1 / Chatbot
 **Prioridade:** 🔴 Crítica
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF01 · RF02 · RF05 · RF07
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `[Figma] Página "Sprint 1 / Chatbot"` — frames: ChatWindow, MessageBubble, OptionButton, EvidenceCard, SatisfactionRating, QuestionForm
@@ -292,7 +304,58 @@ export function paginate(page: number, limit: number): { skip: number; take: num
 - Frame "EvidenceCard" com trecho de documento destacado, nome do documento, página e seção
 - Frame "SatisfactionRating" nos estados: neutro (sem seleção), gostei selecionado, não gostei selecionado, confirmação enviada
 - Frame "QuestionForm" nos estados: vazio, preenchido e enviado com sucesso
-- Handoff referenciado pelas tasks `TASK-035`, `TASK-036`, `TASK-037`, `TASK-038` e `TASK-042`
+- Handoff referenciado pelas tasks `TASK-037`, `TASK-038`, `TASK-039`, `TASK-040` e `TASK-044`
+
+---
+
+### 📐 Modelagem — UML e Banco de Dados
+
+---
+
+#### TASK-010 · [UML] Diagrama de Casos de Uso — Astah
+
+**Módulo:** Modelagem / Astah
+**Prioridade:** 🟡 Alta
+**Peso:** `3 pts`
+**Rastreabilidade RF:** RF01 · RF02 · RF03 · RF04 · RF05 · RF06 · RF07 · RF08 · RF09 · RF10 · RF11
+**Rastreabilidade RNF:** —
+
+**Arquivos exclusivos desta task:**
+- `docs/uml/casos-de-uso.asta`
+- `docs/uml/casos-de-uso.png`
+
+**Entrada:**
+- Requisitos funcionais e não funcionais levantados e aprovados pelo time
+- User stories definidas e revisadas pelo Product Owner
+
+**Saída:**
+- Diagrama de Casos de Uso exportado em `.asta` e `.png`
+- Atores identificados: **Aluno** (público, sem autenticação), **Admin** e **Secretária** (autenticados)
+- Casos de uso mapeados para todos os RFs (RF01–RF11)
+- Relacionamentos `<<include>>` e `<<extend>>` documentados onde aplicável
+
+---
+
+#### TASK-011 · [DB] Modelagem do Banco de Dados — dbdesigner
+
+**Módulo:** Modelagem / dbdesigner
+**Prioridade:** 🔴 Crítica
+**Peso:** `3 pts`
+**Rastreabilidade RF:** RF01 · RF02 · RF03 · RF04 · RF05 · RF07 · RF08 · RF09
+**Rastreabilidade RNF:** RNF09
+
+**Arquivos exclusivos desta task:**
+- `docs/database/modelo-relacional.xml`
+- `docs/database/modelo-relacional.png`
+
+**Entrada:**
+- `TASK-004` concluída (schema Prisma com todas as entidades e relacionamentos definidos)
+
+**Saída:**
+- Modelo relacional completo exportado do dbdesigner (`.xml` + `.png`)
+- Entidades: `User`, `ChatNode`, `Document`, `DocumentChunk`, `NodeDocument`, `SessionLog`, `Question`
+- Chaves primárias (UUID), chaves estrangeiras e índices documentados em cada tabela
+- Relacionamentos 1:N e N:M (tabela pivô `NodeDocument`) representados graficamente com cardinalidades
 
 ---
 
@@ -300,11 +363,13 @@ export function paginate(page: number, limit: number): { skip: number; take: num
 
 ---
 
-#### TASK-010 · [FE] Bootstrap do projeto Vite + TypeScript
+#### TASK-012 · [FE] Bootstrap do projeto Vite + TypeScript
 
 **Módulo:** Infra / raiz do frontend
 **Prioridade:** 🔴 Crítica (bloqueante para todas as tasks FE)
 **Peso:** `2 pts`
+**Rastreabilidade RF:** —
+**Rastreabilidade RNF:** RNF01 · RNF05
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/vite.config.ts`
@@ -328,18 +393,20 @@ export function paginate(page: number, limit: number): { skip: number; take: num
 
 ---
 
-#### TASK-011 · [FE] Tipos globais compartilhados
+#### TASK-013 · [FE] Tipos globais compartilhados
 
 **Módulo:** Infra / `src/types/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF01 · RF03 · RF07
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/types/api.types.ts`
 - `apps/frontend/src/types/common.types.ts`
 
 **Entrada:**
-- `TASK-010` concluída
+- `TASK-012` concluída
 
 **Saída:**
 - `api.types.ts` define `ApiResponse<T>`, `PaginatedResponse<T>`, `ApiError`, `FieldError`
@@ -363,11 +430,13 @@ export type NodeType = 'MENU' | 'ANSWER'
 
 ---
 
-#### TASK-012 · [FE] Instância Axios e React Query client
+#### TASK-014 · [FE] Instância Axios e React Query client
 
 **Módulo:** Infra / `src/lib/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF09 · RF11
+**Rastreabilidade RNF:** RNF02 · RNF08
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/lib/axios.ts`
@@ -375,8 +444,8 @@ export type NodeType = 'MENU' | 'ANSWER'
 - `apps/frontend/src/config/env.ts`
 
 **Entrada:**
-- `TASK-010` concluída
-- `TASK-011` concluída (tipos disponíveis)
+- `TASK-012` concluída
+- `TASK-013` concluída (tipos disponíveis)
 - Dependências: `axios`, `@tanstack/react-query`
 
 **Saída:**
@@ -398,11 +467,13 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 
 ---
 
-#### TASK-013 · [FE] Provider global e Router
+#### TASK-015 · [FE] Provider global e Router
 
 **Módulo:** Infra / `src/app/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF03 · RF09 · RF10 · RF11
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/app/provider.tsx`
@@ -410,7 +481,7 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 - `apps/frontend/src/main.tsx`
 
 **Entrada:**
-- `TASK-012` concluída
+- `TASK-014` concluída
 - Dependências: `react-router-dom`, `@tanstack/react-query`
 
 **Saída:**
@@ -420,11 +491,13 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 
 ---
 
-#### TASK-014 · [FE] Utils frontend
+#### TASK-016 · [FE] Utils frontend
 
 **Módulo:** Infra / `src/utils/`
 **Prioridade:** 🟡 Alta
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF09
+**Rastreabilidade RNF:** RNF01 · RNF08
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/utils/date.utils.ts`
@@ -432,7 +505,7 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 - `apps/frontend/src/utils/token.utils.ts`
 
 **Entrada:**
-- `TASK-010` concluída
+- `TASK-012` concluída
 
 **Saída:**
 - `date.utils.ts` exporta `formatDate(iso: string): string` em pt-BR e `formatRelative(iso: string): string`
@@ -441,18 +514,20 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 
 ---
 
-#### TASK-015 · [FE] Componentes compartilhados base
+#### TASK-017 · [FE] Componentes compartilhados base
 
 **Módulo:** Infra / `src/components/shared/`
 **Prioridade:** 🟡 Alta
 **Peso:** `2 pts`
+**Rastreabilidade RF:** —
+**Rastreabilidade RNF:** RNF01 · RNF02
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/components/shared/LoadingSpinner.tsx`
 - `apps/frontend/src/components/shared/ErrorBoundary.tsx`
 
 **Entrada:**
-- `TASK-010` concluída (Tailwind disponível)
+- `TASK-012` concluída (Tailwind disponível)
 
 **Saída:**
 - `LoadingSpinner` é componente React que aceita `size?: 'sm' | 'md' | 'lg'`
@@ -460,18 +535,20 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 
 ---
 
-#### TASK-016 · [FE] Hooks globais utilitários
+#### TASK-018 · [FE] Hooks globais utilitários
 
 **Módulo:** Infra / `src/hooks/`
 **Prioridade:** 🟢 Média
 **Peso:** `2 pts`
+**Rastreabilidade RF:** —
+**Rastreabilidade RNF:** RNF01 · RNF02
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/hooks/useDebounce.ts`
 - `apps/frontend/src/hooks/usePagination.ts`
 
 **Entrada:**
-- `TASK-010` concluída
+- `TASK-012` concluída
 
 **Saída:**
 - `useDebounce<T>(value: T, delay: number): T`
@@ -483,11 +560,13 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 
 ---
 
-#### TASK-017 · [INFRA] Docker Compose e Dockerfiles
+#### TASK-019 · [INFRA] Docker Compose e Dockerfiles
 
 **Módulo:** Raiz do monorepo
 **Prioridade:** 🔴 Crítica
 **Peso:** `3 pts`
+**Rastreabilidade RF:** —
+**Rastreabilidade RNF:** RNF05 · RNF06
 
 **Arquivos exclusivos desta task:**
 - `docker-compose.yml`
@@ -497,7 +576,7 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 - `pnpm-workspace.yaml`
 
 **Entrada:**
-- `TASK-001` e `TASK-010` concluídas (apps existem)
+- `TASK-001` e `TASK-012` concluídas (apps existem)
 
 **Saída:**
 - `docker compose up --build` sobe os 3 containers: `postgres:16-alpine`, `backend:node20-alpine` em `:3333`, `frontend:node20-alpine` em `:5173`
@@ -510,11 +589,13 @@ export const env: { VITE_API_URL: string; VITE_ENABLE_DEVTOOLS: boolean }
 
 ---
 
-#### TASK-018 · [BE] auth.types.ts — DTOs e contratos de autenticação
+#### TASK-020 · [BE] auth.types.ts — DTOs e contratos de autenticação
 
 **Módulo:** `src/modules/auth/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `1 pts`
+**Rastreabilidade RF:** RF03 · RF09
+**Rastreabilidade RNF:** RNF08
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/auth/auth.types.ts`
@@ -548,17 +629,19 @@ export interface AuthUserResponse {
 
 ---
 
-#### TASK-019 · [BE] auth.service.ts — lógica de autenticação
+#### TASK-021 · [BE] auth.service.ts — lógica de autenticação
 
 **Módulo:** `src/modules/auth/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF03 · RF09
+**Rastreabilidade RNF:** RNF08 · RNF09
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/auth/auth.service.ts`
 
 **Entrada:**
-- `TASK-018` concluída (tipos disponíveis)
+- `TASK-020` concluída (tipos disponíveis)
 - `TASK-006` concluída (`comparePassword`, `generateToken` disponíveis)
 - `TASK-002` concluída (`db` disponível)
 - `TASK-003` concluída (`AppError` disponível)
@@ -578,18 +661,20 @@ export class AuthService {
 
 ---
 
-#### TASK-020 · [BE] auth.controller.ts + auth.routes.ts
+#### TASK-022 · [BE] auth.controller.ts + auth.routes.ts
 
 **Módulo:** `src/modules/auth/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF09 · RF11
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/auth/auth.controller.ts`
 - `apps/backend/src/modules/auth/auth.routes.ts`
 
 **Entrada:**
-- `TASK-019` concluída (`AuthService` disponível)
+- `TASK-021` concluída (`AuthService` disponível)
 - `TASK-003` concluída (error handler global)
 - Dependência: `zod` (validação de schema)
 
@@ -608,11 +693,13 @@ Body: { "email": string, "password": string }
 
 ---
 
-#### TASK-021 · [BE] auth.middleware.ts — validação JWT
+#### TASK-023 · [BE] auth.middleware.ts — validação JWT
 
 **Módulo:** `src/middlewares/`
 **Prioridade:** 🔴 Crítica (bloqueante para todas as rotas protegidas)
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF09 · RF11
+**Rastreabilidade RNF:** RNF08
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/middlewares/auth.middleware.ts`
@@ -638,17 +725,19 @@ export const authenticate: RequestHandler
 
 ---
 
-#### TASK-022 · [BE] rbac.middleware.ts — autorização por role
+#### TASK-024 · [BE] rbac.middleware.ts — autorização por role
 
 **Módulo:** `src/middlewares/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF03 · RF10 · RF11
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/middlewares/rbac.middleware.ts`
 
 **Entrada:**
-- `TASK-021` concluída (`req.user` disponível)
+- `TASK-023` concluída (`req.user` disponível)
 - `TASK-003` concluída (`AppError` disponível)
 
 **Saída:**
@@ -663,17 +752,19 @@ export function authorize(...roles: Array<'ADMIN' | 'SECRETARY'>): RequestHandle
 
 ---
 
-#### TASK-023 · [FE] auth.types.ts — tipos de autenticação
+#### TASK-025 · [FE] auth.types.ts — tipos de autenticação
 
 **Módulo:** `src/features/auth/types/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `1 pts`
+**Rastreabilidade RF:** RF03 · RF09
+**Rastreabilidade RNF:** RNF08
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/auth/types/auth.types.ts`
 
 **Entrada:**
-- `TASK-011` concluída (tipos `Role`, `UUID` disponíveis)
+- `TASK-013` concluída (tipos `Role`, `UUID` disponíveis)
 
 **Saída:**
 ```ts
@@ -698,22 +789,24 @@ export interface JWTPayload {
 
 ---
 
-#### TASK-024 · [FE] auth.store.ts — estado global de autenticação (Zustand)
+#### TASK-026 · [FE] auth.store.ts — estado global de autenticação (Zustand)
 
 **Módulo:** `src/features/auth/stores/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF09 · RF10 · RF11
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/auth/stores/auth.store.ts`
 
 **Entrada:**
-- `TASK-023` concluída (tipos `AuthUser` disponíveis)
+- `TASK-025` concluída (tipos `AuthUser` disponíveis)
 - Dependência: `zustand`
 
 **Saída:**
 - Store Zustand com: `token: string | null`, `user: AuthUser | null`, `setAuth(token, user)`, `clearAuth()`
-- Usado pelo interceptor Axios (`TASK-012`) via `useAuthStore.getState().token`
+- Usado pelo interceptor Axios (`TASK-014`) via `useAuthStore.getState().token`
 
 **Contrato de saída (módulo):**
 ```ts
@@ -728,18 +821,20 @@ export const useAuthStore: UseBoundStore<StoreApi<AuthStore>>
 
 ---
 
-#### TASK-025 · [FE] auth.api.ts — chamadas de autenticação
+#### TASK-027 · [FE] auth.api.ts — chamadas de autenticação
 
 **Módulo:** `src/features/auth/api/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `1 pts`
+**Rastreabilidade RF:** RF09
+**Rastreabilidade RNF:** RNF08
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/auth/api/auth.api.ts`
 
 **Entrada:**
-- `TASK-012` concluída (instância `api` disponível)
-- `TASK-023` concluída (tipos disponíveis)
+- `TASK-014` concluída (instância `api` disponível)
+- `TASK-025` concluída (tipos disponíveis)
 
 **Saída:**
 ```ts
@@ -750,18 +845,20 @@ export const authApi = {
 
 ---
 
-#### TASK-026 · [FE] useLogin.ts — hook de login
+#### TASK-028 · [FE] useLogin.ts — hook de login
 
 **Módulo:** `src/features/auth/hooks/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF03 · RF09 · RF10
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/auth/hooks/useLogin.ts`
 
 **Entrada:**
-- `TASK-025` concluída (`authApi` disponível)
-- `TASK-024` concluída (`useAuthStore` disponível)
+- `TASK-027` concluída (`authApi` disponível)
+- `TASK-026` concluída (`useAuthStore` disponível)
 
 **Saída:**
 - Hook que usa `useMutation` do TanStack Query
@@ -779,17 +876,19 @@ export function useLogin(): {
 
 ---
 
-#### TASK-027 · [FE] LoginForm.tsx — componente de formulário
+#### TASK-029 · [FE] LoginForm.tsx — componente de formulário
 
 **Módulo:** `src/features/auth/components/`
 **Prioridade:** 🟡 Alta
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF09
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/auth/components/LoginForm.tsx`
 
 **Entrada:**
-- `TASK-026` concluída (`useLogin` disponível)
+- `TASK-028` concluída (`useLogin` disponível)
 - shadcn/ui instalado (componentes `Input`, `Button`, `Label`)
 - `TASK-008` concluída (wireframe de referência disponível no Figma)
 
@@ -800,18 +899,20 @@ export function useLogin(): {
 
 ---
 
-#### TASK-028 · [FE] ProtectedRoute.tsx + RoleGuard.tsx
+#### TASK-030 · [FE] ProtectedRoute.tsx + RoleGuard.tsx
 
 **Módulo:** `src/components/shared/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF03 · RF10 · RF11
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/components/shared/ProtectedRoute.tsx`
 - `apps/frontend/src/components/shared/RoleGuard.tsx`
 
 **Entrada:**
-- `TASK-024` concluída (`useAuthStore` disponível)
+- `TASK-026` concluída (`useAuthStore` disponível)
 
 **Saída:**
 - `ProtectedRoute`: redireciona para `/login` se `token === null`
@@ -832,11 +933,13 @@ export function useLogin(): {
 
 ---
 
-#### TASK-029 · [BE] chatbot.types.ts — DTOs de navegação
+#### TASK-031 · [BE] chatbot.types.ts — DTOs de navegação
 
 **Módulo:** `src/modules/chatbot/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF01 · RF02 · RF07 · RF08
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/chatbot/chatbot.types.ts`
@@ -880,17 +983,19 @@ export interface CreateSessionLogDTO {
 
 ---
 
-#### TASK-030 · [BE] chatbot.service.ts — lógica de navegação
+#### TASK-032 · [BE] chatbot.service.ts — lógica de navegação
 
 **Módulo:** `src/modules/chatbot/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF01 · RF02 · RF07 · RF08
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/chatbot/chatbot.service.ts`
 
 **Entrada:**
-- `TASK-029` concluída (tipos disponíveis)
+- `TASK-031` concluída (tipos disponíveis)
 - `TASK-002` concluída (`db` disponível)
 - `TASK-003` concluída (`AppError` disponível)
 
@@ -906,18 +1011,20 @@ export class ChatbotService {
 
 ---
 
-#### TASK-031 · [BE] chatbot.controller.ts + chatbot.routes.ts
+#### TASK-033 · [BE] chatbot.controller.ts + chatbot.routes.ts
 
 **Módulo:** `src/modules/chatbot/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF01 · RF07 · RF08
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/chatbot/chatbot.controller.ts`
 - `apps/backend/src/modules/chatbot/chatbot.routes.ts`
 
 **Entrada:**
-- `TASK-030` concluída (`ChatbotService` disponível)
+- `TASK-032` concluída (`ChatbotService` disponível)
 
 **Saída:**
 - `GET /nodes/root` → `ChatbotService.getRootNode()`
@@ -935,17 +1042,19 @@ POST /api/v1/sessions/rating → 201: { success: true, data: { sessionLogId: str
 
 ---
 
-#### TASK-032 · [FE] chatbot.types.ts — tipos de navegação
+#### TASK-034 · [FE] chatbot.types.ts — tipos de navegação
 
 **Módulo:** `src/features/chatbot/types/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF01 · RF02 · RF07 · RF08
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/types/chatbot.types.ts`
 
 **Entrada:**
-- `TASK-011` concluída (tipos base disponíveis)
+- `TASK-013` concluída (tipos base disponíveis)
 
 **Saída:**
 ```ts
@@ -979,18 +1088,20 @@ export interface SessionRatingPayload {
 
 ---
 
-#### TASK-033 · [FE] chatbot.api.ts — chamadas de navegação
+#### TASK-035 · [FE] chatbot.api.ts — chamadas de navegação
 
 **Módulo:** `src/features/chatbot/api/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF01 · RF07 · RF08
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/api/chatbot.api.ts`
 
 **Entrada:**
-- `TASK-012` concluída (instância `api`)
-- `TASK-032` concluída (tipos disponíveis)
+- `TASK-014` concluída (instância `api`)
+- `TASK-034` concluída (tipos disponíveis)
 
 **Saída:**
 ```ts
@@ -1003,18 +1114,20 @@ export const chatbotApi = {
 
 ---
 
-#### TASK-034 · [FE] useChatNavigation.ts — hook de estado da sessão
+#### TASK-036 · [FE] useChatNavigation.ts — hook de estado da sessão
 
 **Módulo:** `src/features/chatbot/hooks/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF01 · RF07 · RF08
+**Rastreabilidade RNF:** RNF02
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/hooks/useChatNavigation.ts`
 
 **Entrada:**
-- `TASK-033` concluída (`chatbotApi` disponível)
-- `TASK-012` concluída (`queryClient` disponível)
+- `TASK-035` concluída (`chatbotApi` disponível)
+- `TASK-014` concluída (`queryClient` disponível)
 
 **Saída:**
 - Hook que gerencia: nó atual, histórico de mensagens, caminho de navegação, timestamps de sessão
@@ -1035,18 +1148,20 @@ export function useChatNavigation(): {
 
 ---
 
-#### TASK-035 · [FE] MessageBubble.tsx + OptionButton.tsx
+#### TASK-037 · [FE] MessageBubble.tsx + OptionButton.tsx
 
 **Módulo:** `src/features/chatbot/components/`
 **Prioridade:** 🟡 Alta
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF01
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/components/MessageBubble.tsx`
 - `apps/frontend/src/features/chatbot/components/OptionButton.tsx`
 
 **Entrada:**
-- `TASK-032` concluída (tipos `ChatMessage`, `ChatNodeChild`)
+- `TASK-034` concluída (tipos `ChatMessage`, `ChatNodeChild`)
 - Tailwind disponível
 - `TASK-009` concluída (wireframes de referência disponíveis no Figma)
 
@@ -1056,17 +1171,19 @@ export function useChatNavigation(): {
 
 ---
 
-#### TASK-036 · [FE] EvidenceCard.tsx
+#### TASK-038 · [FE] EvidenceCard.tsx
 
 **Módulo:** `src/features/chatbot/components/`
 **Prioridade:** 🟡 Alta
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF02
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/components/EvidenceCard.tsx`
 
 **Entrada:**
-- `TASK-032` concluída (tipo `ChunkWithDocument`)
+- `TASK-034` concluída (tipo `ChunkWithDocument`)
 - `TASK-009` concluída (wireframe de referência disponível no Figma)
 
 **Saída:**
@@ -1074,18 +1191,20 @@ export function useChatNavigation(): {
 
 ---
 
-#### TASK-037 · [FE] SatisfactionRating.tsx
+#### TASK-039 · [FE] SatisfactionRating.tsx
 
 **Módulo:** `src/features/chatbot/components/`
 **Prioridade:** 🟡 Alta
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF07 · RF08
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/components/SatisfactionRating.tsx`
 
 **Entrada:**
-- `TASK-032` concluída (tipo `Satisfaction`)
-- `TASK-033` concluída (`chatbotApi.submitRating`)
+- `TASK-034` concluída (tipo `Satisfaction`)
+- `TASK-035` concluída (`chatbotApi.submitRating`)
 - `TASK-009` concluída (wireframe de referência disponível no Figma)
 
 **Saída:**
@@ -1095,20 +1214,22 @@ export function useChatNavigation(): {
 
 ---
 
-#### TASK-038 · [FE] ChatWindow.tsx — orquestrador do chatbot
+#### TASK-040 · [FE] ChatWindow.tsx — orquestrador do chatbot
 
 **Módulo:** `src/features/chatbot/components/`
 **Prioridade:** 🟡 Alta
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF01 · RF02 · RF07
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/components/ChatWindow.tsx`
 
 **Entrada:**
-- `TASK-034` concluída (`useChatNavigation`)
-- `TASK-035` concluída (`MessageBubble`, `OptionButton`)
-- `TASK-036` concluída (`EvidenceCard`)
-- `TASK-037` concluída (`SatisfactionRating`)
+- `TASK-036` concluída (`useChatNavigation`)
+- `TASK-037` concluída (`MessageBubble`, `OptionButton`)
+- `TASK-038` concluída (`EvidenceCard`)
+- `TASK-039` concluída (`SatisfactionRating`)
 - `TASK-009` concluída (wireframe de referência disponível no Figma)
 
 **Saída:**
@@ -1123,11 +1244,13 @@ export function useChatNavigation(): {
 
 ---
 
-#### TASK-039 · [BE] questions.types.ts — DTOs
+#### TASK-041 · [BE] questions.types.ts — DTOs
 
 **Módulo:** `src/modules/questions/`
 **Prioridade:** 🟡 Alta
 **Peso:** `1 pts`
+**Rastreabilidade RF:** RF05 · RF08
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/questions/questions.types.ts`
@@ -1155,17 +1278,19 @@ export interface QuestionResponseDTO {
 
 ---
 
-#### TASK-040 · [BE] questions.service.ts — criação de pergunta
+#### TASK-042 · [BE] questions.service.ts — criação de pergunta
 
 **Módulo:** `src/modules/questions/`
 **Prioridade:** 🟡 Alta
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF05 · RF08
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/questions/questions.service.ts`
 
 **Entrada:**
-- `TASK-039` concluída
+- `TASK-041` concluída
 - `TASK-002` concluída (`db`)
 
 **Saída:**
@@ -1181,18 +1306,20 @@ export class QuestionsService {
 
 ---
 
-#### TASK-041 · [BE] questions.controller.ts + questions.routes.ts (POST público)
+#### TASK-043 · [BE] questions.controller.ts + questions.routes.ts (POST público)
 
 **Módulo:** `src/modules/questions/`
 **Prioridade:** 🟡 Alta
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF05 · RF11
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/questions/questions.controller.ts`
 - `apps/backend/src/modules/questions/questions.routes.ts`
 
 **Entrada:**
-- `TASK-040` concluída
+- `TASK-042` concluída
 
 **Saída:**
 - `POST /questions` público, valida com Zod, chama `QuestionsService.createQuestion()`
@@ -1207,17 +1334,19 @@ Body: { "text": string, "email": string, "sessionLogId"?: string }
 
 ---
 
-#### TASK-042 · [FE] QuestionForm.tsx — formulário de envio de pergunta
+#### TASK-044 · [FE] QuestionForm.tsx — formulário de envio de pergunta
 
 **Módulo:** `src/features/chatbot/components/`
 **Prioridade:** 🟡 Alta
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF05 · RF08
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/chatbot/components/QuestionForm.tsx`
 
 **Entrada:**
-- `TASK-033` concluída (`chatbotApi`) — ou criar função inline em `chatbot.api.ts`
+- `TASK-035` concluída (`chatbotApi`) — ou criar função inline em `chatbot.api.ts`
 - shadcn/ui instalado
 - `TASK-009` concluída (wireframe de referência disponível no Figma)
 
@@ -1232,17 +1361,19 @@ Body: { "text": string, "email": string, "sessionLogId"?: string }
 
 ---
 
-#### TASK-043 · [BE] routes/index.ts — composição global de rotas
+#### TASK-045 · [BE] routes/index.ts — composição global de rotas
 
 **Módulo:** `src/routes/`
 **Prioridade:** 🔴 Crítica (deve ser atualizado a cada novo módulo)
 **Peso:** `1 pts`
+**Rastreabilidade RF:** RF01 · RF05 · RF09 · RF11
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/routes/index.ts`
 
 **Entrada:**
-- `TASK-020`, `TASK-031`, `TASK-041` concluídas (módulos com `.routes.ts`)
+- `TASK-022`, `TASK-033`, `TASK-043` concluídas (módulos com `.routes.ts`)
 
 **Saída:**
 - Router Express que monta todos os módulos com prefixo `/api/v1`
@@ -1253,10 +1384,33 @@ Body: { "text": string, "email": string, "sessionLogId"?: string }
 
 ---
 
-## 🗂️ SPRINT 2 — Painel Admin (CRUD Nós + Documentos + Usuários + RBAC)
+### 📐 Modelagem — UML
 
-> 🎯 **Total de pontos nesta sprint: 60 pts** · 15 tasks · Acumulado até aqui: 172 pts
+---
 
+#### TASK-046 · [UML] Diagrama de Classes — Astah
+
+**Módulo:** Modelagem / Astah
+**Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
+**Rastreabilidade RF:** RF01 · RF02 · RF03 · RF04 · RF05 · RF07 · RF08 · RF09 · RF10 · RF11
+**Rastreabilidade RNF:** —
+
+**Arquivos exclusivos desta task:**
+- `docs/uml/diagrama-de-classes.asta`
+- `docs/uml/diagrama-de-classes.png`
+
+**Entrada:**
+- `TASK-010` concluída (Diagrama de Casos de Uso como base de rastreabilidade)
+- Sprint 1 concluída (estrutura de módulos do backend estabilizada)
+- `TASK-047`, `TASK-054`, `TASK-057` concluídas ou em andamento (DTOs e models definidos)
+
+**Saída:**
+- Diagrama de Classes exportado em `.asta` e `.png`
+- Classes de domínio: `User`, `ChatNode`, `Document`, `DocumentChunk`, `NodeDocument`, `SessionLog`, `Question`
+- Services e Controllers representados com seus métodos públicos e assinaturas
+- Visibilidades (`+`, `-`, `#`), tipos de atributos e retornos documentados
+- Relacionamentos: associação, composição e dependência com multiplicidades
 
 ---
 
@@ -1264,11 +1418,13 @@ Body: { "text": string, "email": string, "sessionLogId"?: string }
 
 ---
 
-#### TASK-044 · [BE] nodes.types.ts — DTOs de nós
+#### TASK-047 · [BE] nodes.types.ts — DTOs de nós
 
 **Módulo:** `src/modules/nodes/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF04 · RF02
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/nodes/nodes.types.ts`
@@ -1299,17 +1455,19 @@ export interface NodeListItemDTO {
 
 ---
 
-#### TASK-045 · [BE] nodes.service.ts — CRUD de nós
+#### TASK-048 · [BE] nodes.service.ts — CRUD de nós
 
 **Módulo:** `src/modules/nodes/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF04 · RF02
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/nodes/nodes.service.ts`
 
 **Entrada:**
-- `TASK-044` concluída
+- `TASK-047` concluída
 - `TASK-002` concluída (`db`)
 - `TASK-003` concluída (`AppError`)
 
@@ -1327,19 +1485,21 @@ export class NodesService {
 
 ---
 
-#### TASK-046 · [BE] nodes.controller.ts + nodes.routes.ts
+#### TASK-049 · [BE] nodes.controller.ts + nodes.routes.ts
 
 **Módulo:** `src/modules/nodes/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF04 · RF10 · RF11
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/nodes/nodes.controller.ts`
 - `apps/backend/src/modules/nodes/nodes.routes.ts`
 
 **Entrada:**
-- `TASK-045` concluída
-- `TASK-021`, `TASK-022` concluídas (`authenticate`, `authorize`)
+- `TASK-048` concluída
+- `TASK-023`, `TASK-024` concluídas (`authenticate`, `authorize`)
 
 **Saída:**
 - Todas as rotas protegidas com `authenticate + authorize('ADMIN')`
@@ -1355,17 +1515,19 @@ DELETE /api/v1/nodes/:id        → 200: { success: true }
 
 ---
 
-#### TASK-047 · [FE] nodes.api.ts — chamadas CRUD
+#### TASK-050 · [FE] nodes.api.ts — chamadas CRUD
 
 **Módulo:** `src/features/admin/api/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF04 · RF02
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/api/nodes.api.ts`
 
 **Entrada:**
-- `TASK-012` concluída (`api`)
+- `TASK-014` concluída (`api`)
 
 **Saída:**
 ```ts
@@ -1380,17 +1542,19 @@ export const nodesApi = {
 
 ---
 
-#### TASK-048 · [FE] useNodes.ts — hook de gerenciamento de nós
+#### TASK-051 · [FE] useNodes.ts — hook de gerenciamento de nós
 
 **Módulo:** `src/features/admin/hooks/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF04 · RF02
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/hooks/useNodes.ts`
 
 **Entrada:**
-- `TASK-047` concluída
+- `TASK-050` concluída
 
 **Saída:**
 ```ts
@@ -1405,17 +1569,19 @@ export function useNodes(): {
 
 ---
 
-#### TASK-049 · [FE] NodeTree.tsx — visualização hierárquica
+#### TASK-052 · [FE] NodeTree.tsx — visualização hierárquica
 
 **Módulo:** `src/features/admin/components/`
 **Prioridade:** 🟡 Alta
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF04 · RF02
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/components/NodeTree.tsx`
 
 **Entrada:**
-- `TASK-048` concluída (`useNodes`)
+- `TASK-051` concluída (`useNodes`)
 
 **Saída:**
 - Componente que renderiza a árvore de nós com indentação visual
@@ -1424,17 +1590,19 @@ export function useNodes(): {
 
 ---
 
-#### TASK-050 · [FE] NodeEditor.tsx — formulário de criação/edição
+#### TASK-053 · [FE] NodeEditor.tsx — formulário de criação/edição
 
 **Módulo:** `src/features/admin/components/`
 **Prioridade:** 🟡 Alta
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF04 · RF02
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/components/NodeEditor.tsx`
 
 **Entrada:**
-- `TASK-048` concluída (`createNode`, `updateNode`)
+- `TASK-051` concluída (`createNode`, `updateNode`)
 - shadcn/ui (Dialog, Form, Select)
 
 **Saída:**
@@ -1448,11 +1616,13 @@ export function useNodes(): {
 
 ---
 
-#### TASK-051 · [BE] documents.types.ts
+#### TASK-054 · [BE] documents.types.ts
 
 **Módulo:** `src/modules/documents/`
 **Prioridade:** 🟡 Alta
 **Peso:** `1 pts`
+**Rastreabilidade RF:** RF04 · RF02
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/documents/documents.types.ts`
@@ -1473,11 +1643,13 @@ export interface DocumentResponseDTO {
 
 ---
 
-#### TASK-052 · [BE] documents.service.ts + documents.controller.ts + documents.routes.ts
+#### TASK-055 · [BE] documents.service.ts + documents.controller.ts + documents.routes.ts
 
 **Módulo:** `src/modules/documents/`
 **Prioridade:** 🟡 Alta
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF04 · RF02 · RF10 · RF11
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/documents/documents.service.ts`
@@ -1485,8 +1657,8 @@ export interface DocumentResponseDTO {
 - `apps/backend/src/modules/documents/documents.routes.ts`
 
 **Entrada:**
-- `TASK-051` concluída
-- `TASK-002`, `TASK-003`, `TASK-021`, `TASK-022` concluídas
+- `TASK-054` concluída
+- `TASK-002`, `TASK-003`, `TASK-023`, `TASK-024` concluídas
 
 **Contrato de saída (HTTP):**
 ```
@@ -1498,11 +1670,13 @@ DELETE /api/v1/documents/:id → 200: { success: true }
 
 ---
 
-#### TASK-053 · [FE] documents.api.ts + useDocuments.ts + DocumentList.tsx
+#### TASK-056 · [FE] documents.api.ts + useDocuments.ts + DocumentList.tsx
 
 **Módulo:** `src/features/admin/`
 **Prioridade:** 🟡 Alta
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF04 · RF02
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/api/documents.api.ts`
@@ -1510,7 +1684,7 @@ DELETE /api/v1/documents/:id → 200: { success: true }
 - `apps/frontend/src/features/admin/components/DocumentList.tsx`
 
 **Entrada:**
-- `TASK-052` concluída (endpoints disponíveis)
+- `TASK-055` concluída (endpoints disponíveis)
 
 **Saída:**
 - `documents.api.ts`: `list()`, `create(dto)`, `remove(id)`
@@ -1523,11 +1697,13 @@ DELETE /api/v1/documents/:id → 200: { success: true }
 
 ---
 
-#### TASK-054 · [BE] users.types.ts + users.service.ts + users.controller.ts + users.routes.ts
+#### TASK-057 · [BE] users.types.ts + users.service.ts + users.controller.ts + users.routes.ts
 
 **Módulo:** `src/modules/users/`
 **Prioridade:** 🟡 Alta
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF03 · RF04 · RF10 · RF11
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/users/users.types.ts`
@@ -1537,7 +1713,7 @@ DELETE /api/v1/documents/:id → 200: { success: true }
 
 **Entrada:**
 - `TASK-004`, `TASK-006` concluídas (`db`, `hashPassword`)
-- `TASK-021`, `TASK-022` concluídas
+- `TASK-023`, `TASK-024` concluídas
 
 **Contrato de saída (HTTP):**
 ```
@@ -1550,11 +1726,13 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 ---
 
-#### TASK-055 · [FE] users.api.ts + UserList.tsx
+#### TASK-058 · [FE] users.api.ts + UserList.tsx
 
 **Módulo:** `src/features/admin/`
 **Prioridade:** 🟡 Alta
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF03 · RF04
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/api/users.api.ts`
@@ -1570,11 +1748,13 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 ---
 
-#### TASK-056 · [FIGMA] Mockups do painel Admin
+#### TASK-059 · [FIGMA] Mockups do painel Admin
 
 **Módulo:** Design / Figma — Sprint 2 / Admin
 **Prioridade:** 🟡 Alta
 **Peso:** `8 pts`
+**Rastreabilidade RF:** RF04
+**Rastreabilidade RNF:** RNF01 · RNF04
 
 **Arquivos exclusivos desta task:**
 - `[Figma] Página "Sprint 2 / Admin"` — frames: AdminLayout, Dashboard, Nodes, Documents, Users
@@ -1589,7 +1769,7 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 - Frame "Nodes" com árvore hierárquica de nós, ações de editar/excluir por item e modal de criação/edição (campos: título, conteúdo, tipo, nó pai, ordem)
 - Frame "Documents" com tabela listando nome, tipo e data, botão de excluir e formulário inline de cadastro com array de chunks
 - Frame "Users" com tabela listando nome, e-mail e role, botão de excluir e modal de criação de usuário secretária
-- Handoff referenciado pelas tasks `TASK-057` (AdminLayout) e `TASK-058` (Páginas Admin)
+- Handoff referenciado pelas tasks `TASK-060` (AdminLayout) e `TASK-061` (Páginas Admin)
 
 ---
 
@@ -1597,19 +1777,21 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 ---
 
-#### TASK-057 · [FE] AdminLayout.tsx + PublicLayout.tsx
+#### TASK-060 · [FE] AdminLayout.tsx + PublicLayout.tsx
 
 **Módulo:** `src/components/layout/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF03 · RF04
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/components/layout/AdminLayout.tsx`
 - `apps/frontend/src/components/layout/PublicLayout.tsx`
 
 **Entrada:**
-- `TASK-024` concluída (`useAuthStore` para dados do usuário logado)
-- `TASK-056` concluída (mockups de referência disponíveis no Figma)
+- `TASK-026` concluída (`useAuthStore` para dados do usuário logado)
+- `TASK-059` concluída (mockups de referência disponíveis no Figma)
 
 **Saída:**
 - `AdminLayout`: sidebar com links para `/admin/nodes`, `/admin/documents`, `/admin/users`, `/admin/logs` + topbar com nome do usuário e botão logout
@@ -1617,11 +1799,13 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 ---
 
-#### TASK-058 · [FE] Páginas do painel Admin
+#### TASK-061 · [FE] Páginas do painel Admin
 
 **Módulo:** `src/app/routes/admin/`
 **Prioridade:** 🟡 Alta
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF03 · RF04
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/app/routes/admin/dashboard.tsx`
@@ -1630,10 +1814,10 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 - `apps/frontend/src/app/routes/admin/users.tsx`
 
 **Entrada:**
-- `TASK-057` concluída (`AdminLayout`)
-- `TASK-049`, `TASK-050` concluídas (componentes de nós)
-- `TASK-053`, `TASK-055` concluídas (componentes de documentos e usuários)
-- `TASK-056` concluída (mockups de referência disponíveis no Figma)
+- `TASK-060` concluída (`AdminLayout`)
+- `TASK-052`, `TASK-053` concluídas (componentes de nós)
+- `TASK-056`, `TASK-058` concluídas (componentes de documentos e usuários)
+- `TASK-059` concluída (mockups de referência disponíveis no Figma)
 
 **Saída:**
 - Cada página é um componente que envolve `AdminLayout` e o componente de feature correspondente
@@ -1644,10 +1828,144 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 ---
 
-## 🗂️ SPRINT 3 — Painel Secretária, Logs, Satisfação e Ajustes Finais
+---
 
-> 🎯 **Total de pontos nesta sprint: 30 pts** · 9 tasks · Acumulado até aqui: 202 pts
+### 🔗 Módulo Node-Documents — Vinculação Nó ↔ Documento
 
+---
+
+#### TASK-062 · [BE] node-documents.service.ts + controller + routes
+
+**Módulo:** `src/modules/node-documents/`
+**Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
+**Rastreabilidade RF:** RF04 · RF02
+**Rastreabilidade RNF:** —
+
+**Arquivos exclusivos desta task:**
+- `apps/backend/src/modules/node-documents/node-documents.service.ts`
+- `apps/backend/src/modules/node-documents/node-documents.controller.ts`
+- `apps/backend/src/modules/node-documents/node-documents.routes.ts`
+
+**Entrada:**
+- `TASK-004` concluída (modelo `NodeDocument` existe no schema Prisma)
+- `TASK-023`, `TASK-024` concluídas (`authenticate`, `authorize`)
+
+**Saída:**
+```ts
+export class NodeDocumentsService {
+  async listByNode(nodeId: string): Promise<DocumentResponseDTO[]>
+  async associate(nodeId: string, documentId: string): Promise<void>
+  // lança AppError(404) se nodeId ou documentId inexistente
+  // lança AppError(409) se associação já existe
+  async dissociate(nodeId: string, documentId: string): Promise<void>
+  // lança AppError(404) se associação não encontrada
+}
+```
+
+**Contrato de saída (HTTP):**
+```
+GET    /api/v1/nodes/:nodeId/documents
+       Authorization: Bearer <ADMIN>
+→ 200: { success: true, data: DocumentResponseDTO[] }
+
+POST   /api/v1/nodes/:nodeId/documents
+       Authorization: Bearer <ADMIN>
+       Body: { "documentId": string }
+→ 201: { success: true }
+→ 404: { success: false, message: "Nó ou documento não encontrado" }
+→ 409: { success: false, message: "Associação já existe" }
+
+DELETE /api/v1/nodes/:nodeId/documents/:documentId
+       Authorization: Bearer <ADMIN>
+→ 200: { success: true }
+→ 404: { success: false, message: "Associação não encontrada" }
+```
+
+> **Impacto em tasks existentes:** `chatbot.service.getNodeById()` (TASK-032) deve ser atualizado
+> para buscar chunks via `NodeDocument`: `node → NodeDocument[] → Document[] → DocumentChunk[]`.
+> Esse ajuste é feito na mesma TASK-062 como parte do refinamento da query.
+
+---
+
+#### TASK-063 · [FE] NodeDocumentAssociator.tsx
+
+**Módulo:** `src/features/admin/components/`
+**Prioridade:** 🟡 Alta
+**Peso:** `5 pts`
+**Rastreabilidade RF:** RF04 · RF02
+**Rastreabilidade RNF:** RNF01
+
+**Arquivos exclusivos desta task:**
+- `apps/frontend/src/features/admin/api/node-documents.api.ts`
+- `apps/frontend/src/features/admin/hooks/useNodeDocuments.ts`
+- `apps/frontend/src/features/admin/components/NodeDocumentAssociator.tsx`
+
+**Entrada:**
+- `TASK-062` concluída (endpoints disponíveis)
+- `TASK-053` concluída (`NodeEditor` — local onde o associador será embutido)
+- shadcn/ui (Select, Badge, Button)
+
+**Saída:**
+- `node-documents.api.ts`: `listByNode(nodeId)`, `associate(nodeId, docId)`, `dissociate(nodeId, docId)`
+- `useNodeDocuments(nodeId)`: hook com `useQuery` + `useMutation` para listar e gerenciar associações
+- `NodeDocumentAssociator`: componente exibido na aba "Documentos" do `NodeEditor`
+  - Lista os documentos atualmente associados ao nó com botão "Remover"
+  - Select para escolher um documento existente e botão "Associar"
+  - Só é exibido quando `nodeType === 'ANSWER'` (nós do tipo MENU não exibem chunks)
+
+---
+
+### 📐 Modelagem — UML (Finalização)
+
+---
+
+#### TASK-064 · [UML] Diagrama de Sequência — Astah
+
+**Módulo:** Modelagem / Astah
+**Prioridade:** 🟡 Alta
+**Peso:** `3 pts`
+**Rastreabilidade RF:** RF01 · RF03 · RF05 · RF07 · RF09
+**Rastreabilidade RNF:** —
+
+**Arquivos exclusivos desta task:**
+- `docs/uml/diagrama-de-sequencia.asta`
+- `docs/uml/diagrama-de-sequencia.png`
+
+**Entrada:**
+- `TASK-046` concluída (Diagrama de Classes como referência estrutural)
+- Fluxos principais implementados e validados (Sprints 1 e 2 concluídas)
+
+**Saída:**
+- Diagramas de Sequência exportados em `.asta` e `.png` cobrindo os fluxos:
+  1. **Navegação no Chatbot** — Aluno → ChatWindow → chatbotApi → Backend → DB
+  2. **Autenticação** — Usuário → LoginForm → useLogin → AuthService → JWT → redirect
+  3. **Envio de Pergunta** — Aluno → QuestionForm → QuestionsService → DB → confirmação
+- Lifelines, mensagens síncronas/assíncronas e retornos documentados em cada diagrama
+
+---
+
+#### TASK-065 · [UML] Diagrama de Atividades — Astah
+
+**Módulo:** Modelagem / Astah
+**Prioridade:** 🟡 Alta
+**Peso:** `3 pts`
+**Rastreabilidade RF:** RF01 · RF05 · RF06 · RF07 · RF08
+**Rastreabilidade RNF:** —
+
+**Arquivos exclusivos desta task:**
+- `docs/uml/diagrama-de-atividades.asta`
+- `docs/uml/diagrama-de-atividades.png`
+
+**Entrada:**
+- `TASK-064` concluída (Diagrama de Sequência como referência de fluxo)
+
+**Saída:**
+- Diagramas de Atividades exportados em `.asta` e `.png` para os processos:
+  1. **Fluxo de atendimento do Chatbot** — do primeiro acesso até a avaliação de satisfação (RF01–RF08)
+  2. **Gestão de Perguntas pela Secretária** — recebimento, triagem e marcação como respondida (RF05–RF06)
+- Swimlanes separando responsabilidades por ator (Aluno, Sistema, Secretária)
+- Nós de decisão, bifurcação e junção documentados com condições de guarda
 
 ---
 
@@ -1655,17 +1973,19 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 ---
 
-#### TASK-059 · [BE] questions.service.ts — extensão para listagem e status
+#### TASK-066 · [BE] questions.service.ts — extensão para listagem e status
 
-**Módulo:** `src/modules/questions/` (extensão de `TASK-040`)
+**Módulo:** `src/modules/questions/` (extensão de `TASK-042`)
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF05 · RF08
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/questions/questions.service.ts` *(adicionar métodos `listQuestions` e `updateStatus`)*
 
 **Entrada:**
-- `TASK-040` concluída (service com `createQuestion` já existe)
+- `TASK-042` concluída (service com `createQuestion` já existe)
 
 **Saída:**
 - `listQuestions(filters)`: filtra por `status`, suporta paginação `?page&limit`
@@ -1673,19 +1993,21 @@ DELETE /api/v1/users/:id   → 200: { success: true }
 
 ---
 
-#### TASK-060 · [BE] questions.controller.ts + questions.routes.ts — rotas protegidas
+#### TASK-067 · [BE] questions.controller.ts + questions.routes.ts — rotas protegidas
 
-**Módulo:** `src/modules/questions/` (extensão de `TASK-041`)
+**Módulo:** `src/modules/questions/` (extensão de `TASK-043`)
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF05 · RF11
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/questions/questions.controller.ts` *(adicionar handlers GET e PATCH)*
 - `apps/backend/src/modules/questions/questions.routes.ts` *(adicionar rotas protegidas)*
 
 **Entrada:**
-- `TASK-059` concluída
-- `TASK-021`, `TASK-022` concluídas
+- `TASK-066` concluída
+- `TASK-023`, `TASK-024` concluídas
 
 **Contrato de saída (HTTP):**
 ```
@@ -1702,18 +2024,20 @@ PATCH /api/v1/questions/:id
 
 ---
 
-#### TASK-061 · [FE] questions.api.ts — chamadas para secretária
+#### TASK-068 · [FE] questions.api.ts — chamadas para secretária
 
 **Módulo:** `src/features/secretary/api/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `2 pts`
+**Rastreabilidade RF:** RF06
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/secretary/api/questions.api.ts`
 
 **Entrada:**
-- `TASK-012` concluída
-- `TASK-060` concluída (endpoints disponíveis)
+- `TASK-014` concluída
+- `TASK-067` concluída (endpoints disponíveis)
 
 **Saída:**
 ```ts
@@ -1725,18 +2049,20 @@ export const questionsApi = {
 
 ---
 
-#### TASK-062 · [FE] useQuestions.ts — hook de perguntas
+#### TASK-069 · [FE] useQuestions.ts — hook de perguntas
 
 **Módulo:** `src/features/secretary/hooks/`
 **Prioridade:** 🔴 Crítica
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF06
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/secretary/hooks/useQuestions.ts`
 
 **Entrada:**
-- `TASK-061` concluída
-- `TASK-016` concluída (`usePagination`)
+- `TASK-068` concluída
+- `TASK-018` concluída (`usePagination`)
 
 **Saída:**
 ```ts
@@ -1751,18 +2077,20 @@ export function useQuestions(statusFilter?: QuestionStatus): {
 
 ---
 
-#### TASK-063 · [FE] QuestionsTable.tsx + StatusBadge.tsx
+#### TASK-070 · [FE] QuestionsTable.tsx + StatusBadge.tsx
 
 **Módulo:** `src/features/secretary/components/`
 **Prioridade:** 🟡 Alta
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF06
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/secretary/components/QuestionsTable.tsx`
 - `apps/frontend/src/features/secretary/components/StatusBadge.tsx`
 
 **Entrada:**
-- `TASK-062` concluída (`useQuestions`)
+- `TASK-069` concluída (`useQuestions`)
 
 **Saída:**
 - `StatusBadge`: chip visual com cor distinta para `OPEN` (amarelo) e `ANSWERED` (verde)
@@ -1774,11 +2102,13 @@ export function useQuestions(statusFilter?: QuestionStatus): {
 
 ---
 
-#### TASK-064 · [BE] logs.types.ts + logs.service.ts + logs.controller.ts + logs.routes.ts
+#### TASK-071 · [BE] logs.types.ts + logs.service.ts + logs.controller.ts + logs.routes.ts
 
 **Módulo:** `src/modules/logs/`
 **Prioridade:** 🟡 Alta
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF04 · RF08 · RF10 · RF11
+**Rastreabilidade RNF:** —
 
 **Arquivos exclusivos desta task:**
 - `apps/backend/src/modules/logs/logs.types.ts`
@@ -1787,7 +2117,7 @@ export function useQuestions(statusFilter?: QuestionStatus): {
 - `apps/backend/src/modules/logs/logs.routes.ts`
 
 **Entrada:**
-- `TASK-002`, `TASK-003`, `TASK-021`, `TASK-022` concluídas
+- `TASK-002`, `TASK-003`, `TASK-023`, `TASK-024` concluídas
 
 **Contrato de saída (HTTP):**
 ```
@@ -1802,11 +2132,13 @@ GET /api/v1/logs?satisfaction=DISLIKED&from=ISO&to=ISO&page=1&limit=20
 
 ---
 
-#### TASK-065 · [FE] logs.api.ts + useLogs.ts + LogTable.tsx
+#### TASK-072 · [FE] logs.api.ts + useLogs.ts + LogTable.tsx
 
 **Módulo:** `src/features/admin/`
 **Prioridade:** 🟡 Alta
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF04 · RF08
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/features/admin/api/logs.api.ts`
@@ -1814,8 +2146,8 @@ GET /api/v1/logs?satisfaction=DISLIKED&from=ISO&to=ISO&page=1&limit=20
 - `apps/frontend/src/features/admin/components/LogTable.tsx`
 
 **Entrada:**
-- `TASK-064` concluída
-- `TASK-014` concluída (`date.utils.ts`)
+- `TASK-071` concluída
+- `TASK-016` concluída (`date.utils.ts`)
 
 **Saída:**
 - `logs.api.ts`: `list(params)` com filtros de satisfação, intervalo de datas e paginação
@@ -1828,24 +2160,26 @@ GET /api/v1/logs?satisfaction=DISLIKED&from=ISO&to=ISO&page=1&limit=20
 
 ---
 
-#### TASK-066 · [FIGMA] Mockups do painel Secretária
+#### TASK-073 · [FIGMA] Mockups do painel Secretária
 
 **Módulo:** Design / Figma — Sprint 3 / Secretary
 **Prioridade:** 🟡 Alta
 **Peso:** `5 pts`
+**Rastreabilidade RF:** RF06 · RF08
+**Rastreabilidade RNF:** RNF01 · RNF04
 
 **Arquivos exclusivos desta task:**
 - `[Figma] Página "Sprint 3 / Secretary"` — frames: SecretaryDashboard, Questions, LogsAdmin
 
 **Entrada:**
 - `TASK-007` concluída (Design System disponível)
-- `TASK-056` concluída (padrões visuais do painel admin reutilizáveis no Figma)
+- `TASK-059` concluída (padrões visuais do painel admin reutilizáveis no Figma)
 
 **Saída:**
 - Frame "SecretaryDashboard" com cards de contadores: total de perguntas abertas e total de perguntas respondidas
 - Frame "Questions" com tabela filtrável por status (OPEN/ANSWERED), incluindo componente StatusBadge em suas variantes de cor e ação "Marcar como respondida" por linha
 - Frame "LogsAdmin" com tabela de sessões exibindo caminho de navegação resumido, ícone de satisfação, duração e perguntas vinculadas; filtros de data e satisfação no topo
-- Handoff referenciado pela task `TASK-067` (Páginas Secretária + Logs)
+- Handoff referenciado pela task `TASK-074` (Páginas Secretária + Logs)
 
 ---
 
@@ -1853,11 +2187,13 @@ GET /api/v1/logs?satisfaction=DISLIKED&from=ISO&to=ISO&page=1&limit=20
 
 ---
 
-#### TASK-067 · [FE] Páginas do painel Secretária + Logs Admin
+#### TASK-074 · [FE] Páginas do painel Secretária + Logs Admin
 
 **Módulo:** `src/app/routes/`
 **Prioridade:** 🟡 Alta
 **Peso:** `3 pts`
+**Rastreabilidade RF:** RF06 · RF08
+**Rastreabilidade RNF:** RNF01
 
 **Arquivos exclusivos desta task:**
 - `apps/frontend/src/app/routes/secretary/dashboard.tsx`
@@ -1865,10 +2201,10 @@ GET /api/v1/logs?satisfaction=DISLIKED&from=ISO&to=ISO&page=1&limit=20
 - `apps/frontend/src/app/routes/admin/logs.tsx`
 
 **Entrada:**
-- `TASK-057` concluída (`AdminLayout`)
-- `TASK-063` concluída (`QuestionsTable`)
-- `TASK-065` concluída (`LogTable`)
-- `TASK-066` concluída (mockups de referência disponíveis no Figma)
+- `TASK-060` concluída (`AdminLayout`)
+- `TASK-070` concluída (`QuestionsTable`)
+- `TASK-072` concluída (`LogTable`)
+- `TASK-073` concluída (mockups de referência disponíveis no Figma)
 
 **Saída:**
 - `secretary/dashboard.tsx`: cards com total de perguntas abertas e respondidas
@@ -1876,172 +2212,3 @@ GET /api/v1/logs?satisfaction=DISLIKED&from=ISO&to=ISO&page=1&limit=20
 - `admin/logs.tsx`: `LogTable` com filtros de data e satisfação
 
 ---
-
-## 📋 Resumo — Mapa de Dependências Críticas
-
-```
-TASK-001 (Bootstrap BE)
-  └─► TASK-002 (Config)
-        └─► TASK-004 (Schema Prisma)
-              ├─► TASK-005 (Seed)
-              ├─► TASK-018 (auth.types)
-              │     └─► TASK-019 (auth.service)
-              │           └─► TASK-020 (auth.controller/routes) ──► TASK-043 (routes/index)
-              ├─► TASK-029 (chatbot.types)
-              │     └─► TASK-030 (chatbot.service)
-              │           └─► TASK-031 (chatbot.controller/routes) ──► TASK-043
-              └─► TASK-039 (questions.types)
-                    └─► TASK-040 (questions.service)
-                          └─► TASK-041 (questions.controller/routes) ──► TASK-043
-
-TASK-006 (utils: hash/jwt) ──► TASK-019 (auth.service)
-
-TASK-007 (Design System Figma)
-  ├─► TASK-008 (Wireframes Login)      ──► TASK-027 (LoginForm)
-  ├─► TASK-009 (Wireframes Chatbot)    ──► TASK-035, TASK-036, TASK-037, TASK-038, TASK-042
-  ├─► TASK-056 (Mockups Admin)         ──► TASK-057, TASK-058
-  └─► TASK-066 (Mockups Secretária)    ──► TASK-067
-
-TASK-010 (Bootstrap FE)
-  └─► TASK-011 (tipos globais)
-        └─► TASK-012 (axios + queryClient)
-              ├─► TASK-023 (auth.types FE) ──► TASK-024 (auth.store)
-              │     └─► TASK-025 (auth.api) ──► TASK-026 (useLogin) ──► TASK-027 (LoginForm)
-              └─► TASK-032 (chatbot.types) ──► TASK-033 (chatbot.api)
-                    └─► TASK-034 (useChatNavigation)
-                          └─► TASK-038 (ChatWindow)
-```
-
----
-
-## 🔒 Tabela de Propriedade de Arquivos por Task
-
-| Task | Arquivos exclusivos | Pode ser desenvolvida em paralelo com |
-|------|---------------------|---------------------------------------|
-| TASK-007 | Figma — Design System | TASK-001, TASK-004, TASK-010 |
-| TASK-008 | Figma — Wireframes Login | TASK-009, TASK-018, TASK-023 |
-| TASK-009 | Figma — Wireframes Chatbot | TASK-008, TASK-029, TASK-032 |
-| TASK-018 | `auth.types.ts` [BE] | TASK-029, TASK-039, TASK-011 |
-| TASK-019 | `auth.service.ts` [BE] | TASK-030, TASK-040 |
-| TASK-020 | `auth.controller.ts`, `auth.routes.ts` [BE] | TASK-031, TASK-041 |
-| TASK-023 | `auth.types.ts` [FE] | TASK-032, TASK-044 |
-| TASK-024 | `auth.store.ts` [FE] | TASK-033, TASK-047 |
-| TASK-025 | `auth.api.ts` [FE] | TASK-033, TASK-047 |
-| TASK-026 | `useLogin.ts` [FE] | TASK-034, TASK-048 |
-| TASK-027 | `LoginForm.tsx` [FE] | TASK-035, TASK-049 |
-| TASK-029 | `chatbot.types.ts` [BE] | TASK-018, TASK-039 |
-| TASK-030 | `chatbot.service.ts` [BE] | TASK-019, TASK-040 |
-| TASK-031 | `chatbot.controller.ts`, `chatbot.routes.ts` [BE] | TASK-020, TASK-041 |
-| TASK-032 | `chatbot.types.ts` [FE] | TASK-023, TASK-011 |
-| TASK-033 | `chatbot.api.ts` [FE] | TASK-025, TASK-047 |
-| TASK-034 | `useChatNavigation.ts` [FE] | TASK-026, TASK-048 |
-| TASK-056 | Figma — Mockups Admin | TASK-051, TASK-052, TASK-054, TASK-055 |
-| TASK-066 | Figma — Mockups Secretária | TASK-059, TASK-060, TASK-064 |
-
----
-
-> **Convenção de commits:** `feat(task-001): bootstrap Express app`
-> Cada commit deve referenciar o ID da task para rastreabilidade no backlog.
-
----
-
-## 📉 Referência de Pesos para Burndown Chart
-
-> Escala Fibonacci adotada: **1** (só tipos/config) · **2** (arquivo simples) · **3** (lógica média) · **5** (múltiplos arquivos / lógica complexa) · **8** (feature grande integrada)
-
-### Sprint 1 — 112 pts
-
-| Task | Nome | Pts | Pts Restantes (ideal) |
-|------|------|-----|-----------------------|
-| TASK-001 | Bootstrap do servidor Express | 2 | 112 |
-| TASK-002 | Configuração de ambiente e banco de dados | 2 | 110 |
-| TASK-003 | Classe AppError e middleware de erros | 3 | 108 |
-| TASK-004 | Schema Prisma e migration inicial | 5 | 105 |
-| TASK-005 | Seed de dados iniciais | 2 | 100 |
-| TASK-006 | Utils: hash e JWT | 3 | 98 |
-| TASK-007 | [FIGMA] Design System e tokens visuais | 5 | 95 |
-| TASK-008 | [FIGMA] Wireframes — Login e autenticação | 3 | 90 |
-| TASK-009 | [FIGMA] Wireframes — Interface do Chatbot público | 5 | 87 |
-| TASK-010 | Bootstrap do projeto Vite + TypeScript | 2 | 82 |
-| TASK-011 | Tipos globais compartilhados | 2 | 80 |
-| TASK-012 | Instância Axios e React Query client | 3 | 78 |
-| TASK-013 | Provider global e Router | 2 | 75 |
-| TASK-014 | Utils frontend | 2 | 73 |
-| TASK-015 | Componentes compartilhados base | 2 | 71 |
-| TASK-016 | Hooks globais utilitários | 2 | 69 |
-| TASK-017 | Docker Compose e Dockerfiles | 3 | 67 |
-| TASK-018 | auth.types.ts [BE] | 1 | 64 |
-| TASK-019 | auth.service.ts | 3 | 63 |
-| TASK-020 | auth.controller.ts + auth.routes.ts | 3 | 60 |
-| TASK-021 | auth.middleware.ts | 2 | 57 |
-| TASK-022 | rbac.middleware.ts | 2 | 55 |
-| TASK-023 | auth.types.ts [FE] | 1 | 53 |
-| TASK-024 | auth.store.ts | 2 | 52 |
-| TASK-025 | auth.api.ts | 1 | 50 |
-| TASK-026 | useLogin.ts | 3 | 49 |
-| TASK-027 | LoginForm.tsx | 3 | 46 |
-| TASK-028 | ProtectedRoute.tsx + RoleGuard.tsx | 2 | 43 |
-| TASK-029 | chatbot.types.ts [BE] | 2 | 41 |
-| TASK-030 | chatbot.service.ts | 5 | 39 |
-| TASK-031 | chatbot.controller.ts + routes | 3 | 34 |
-| TASK-032 | chatbot.types.ts [FE] | 2 | 31 |
-| TASK-033 | chatbot.api.ts | 2 | 29 |
-| TASK-034 | useChatNavigation.ts | 5 | 27 |
-| TASK-035 | MessageBubble.tsx + OptionButton.tsx | 3 | 22 |
-| TASK-036 | EvidenceCard.tsx | 2 | 19 |
-| TASK-037 | SatisfactionRating.tsx | 3 | 17 |
-| TASK-038 | ChatWindow.tsx | 5 | 14 |
-| TASK-039 | questions.types.ts [BE] | 1 | 9 |
-| TASK-040 | questions.service.ts | 2 | 8 |
-| TASK-041 | questions.controller.ts + routes | 2 | 6 |
-| TASK-042 | QuestionForm.tsx | 3 | 4 |
-| TASK-043 | routes/index.ts | 1 | 1 |
-
-> **Total Sprint 1:** 112 pts · Acumulado geral: 112 pts
-
-### Sprint 2 — 60 pts
-
-| Task | Nome | Pts | Pts Restantes (ideal) |
-|------|------|-----|-----------------------|
-| TASK-044 | nodes.types.ts | 2 | 60 |
-| TASK-045 | nodes.service.ts | 5 | 58 |
-| TASK-046 | nodes.controller.ts + routes | 3 | 53 |
-| TASK-047 | nodes.api.ts | 2 | 50 |
-| TASK-048 | useNodes.ts | 3 | 48 |
-| TASK-049 | NodeTree.tsx | 5 | 45 |
-| TASK-050 | NodeEditor.tsx | 5 | 40 |
-| TASK-051 | documents.types.ts | 1 | 35 |
-| TASK-052 | documents service + controller + routes | 5 | 34 |
-| TASK-053 | documents.api + useDocuments + DocumentList | 5 | 29 |
-| TASK-054 | users (types + service + controller + routes) | 5 | 24 |
-| TASK-055 | users.api.ts + UserList.tsx | 3 | 19 |
-| TASK-056 | [FIGMA] Mockups do painel Admin | 8 | 16 |
-| TASK-057 | AdminLayout.tsx + PublicLayout.tsx | 3 | 8 |
-| TASK-058 | Páginas do painel Admin (4 páginas) | 5 | 5 |
-
-> **Total Sprint 2:** 60 pts · Acumulado geral: 172 pts
-
-### Sprint 3 — 30 pts
-
-| Task | Nome | Pts | Pts Restantes (ideal) |
-|------|------|-----|-----------------------|
-| TASK-059 | questions.service.ts — extensão | 2 | 30 |
-| TASK-060 | questions.controller.ts — extensão | 2 | 28 |
-| TASK-061 | questions.api.ts [secretária] | 2 | 26 |
-| TASK-062 | useQuestions.ts | 3 | 24 |
-| TASK-063 | QuestionsTable.tsx + StatusBadge.tsx | 3 | 21 |
-| TASK-064 | logs (types + service + controller + routes) | 5 | 18 |
-| TASK-065 | logs.api + useLogs + LogTable | 5 | 13 |
-| TASK-066 | [FIGMA] Mockups do painel Secretária | 5 | 8 |
-| TASK-067 | Páginas Secretária + Logs Admin | 3 | 3 |
-
-> **Total Sprint 3:** 30 pts · Acumulado geral: 202 pts
-
-### Resumo Geral
-
-| Sprint | Tasks | Pontos | % do Total |
-|--------|-------|--------|------------|
-| Sprint 1 | 43 | 112 | 55% |
-| Sprint 2 | 15 | 60 | 30% |
-| Sprint 3 | 9 | 30 | 15% |
-| **Total** | **67** | **202** | **100%** |

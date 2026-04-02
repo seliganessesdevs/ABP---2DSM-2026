@@ -41,7 +41,7 @@ O frontend nunca se conecta diretamente ao PostgreSQL.
 | ----------------------------------- | ------------------------------------------------------------------------------------------- |
 | Exposição de endpoints HTTP REST    | Express                                                                                     |
 | Validação de schema dos requests    | Zod                                                                                         |
-| Autenticação com JWT                | jsonwebtoken + Argon2id (memory-hard, 64 MiB/hash; PHC 2015; melhor resistência a GPU/ASIC) |
+| Autenticação com JWT                | jsonwebtoken + Argon2id |
 | Controle de acesso por papel (RBAC) | Middleware customizado                                                                      |
 | Comunicação com o banco de dados    | Prisma Client                                                                               |
 | Persistência dos dados              | PostgreSQL 16                                                                               |

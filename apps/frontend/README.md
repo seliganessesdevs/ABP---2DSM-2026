@@ -4,7 +4,7 @@
 > conversacional de autoatendimento e os painéis administrativos da Secretaria Acadêmica
 > da Fatec Jacareí.
 
----
+***
 
 <p align="center">
   <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
@@ -15,7 +15,7 @@
   <img src="https://img.shields.io/badge/TanStack_Query-FF4154?style=for-the-badge&logo=reactquery&logoColor=white" />
 </p>
 
----
+***
 
 ## 📑 Índice
 
@@ -29,7 +29,7 @@
 - [Arquitetura e Decisões Técnicas](#arquitetura-e-decisões-técnicas)
 - [Componentes e Features](#componentes-e-features)
 
----
+***
 
 ## 🎯 Responsabilidades <a id="responsabilidades"></a>
 
@@ -48,7 +48,7 @@ interface do usuário. Toda lógica de negócio, segurança e persistência vive
 | Proteção de rotas por autenticação      | React Router v6 + Guards     |
 | Build e desenvolvimento                 | Vite                         |
 
----
+***
 
 ## 📁 Estrutura de Pastas <a id="estrutura-de-pastas"></a>
 
@@ -64,7 +64,7 @@ Resumo da estrutura do frontend:
 Documentação canônica da árvore completa e responsabilidades por pasta:
 [`docs/project-structure.md`](../../docs/project-structure.md).
 
----
+***
 
 ## ⚡ Primeiros Passos <a id="primeiros-passos"></a>
 
@@ -112,7 +112,7 @@ Acesse `http://localhost:5173`.
 > ⚠️ Estas credenciais existem apenas no ambiente de desenvolvimento após `pnpm db:seed`.
 > **Nunca use em produção.**
 
----
+***
 
 ## ✅ Checklist de Implementação Inicial <a id="checklist-de-implementacao-inicial"></a>
 
@@ -127,7 +127,7 @@ Antes de qualquer feature de domínio, o frontend deve ter estes arquivos-base:
 Essa fundação garante roteamento, acesso à API, providers globais e validação de
 ambiente antes do crescimento das features.
 
----
+***
 
 ## 📜 Scripts Disponíveis <a id="scripts-disponíveis"></a>
 
@@ -145,7 +145,7 @@ ambiente antes do crescimento das features.
 | Typecheck       | `pnpm typecheck`      | Valida TypeScript sem compilar (`tsc --noEmit`)        |
 | Shadcn          | `pnpm ui:add`         | Adiciona novo componente shadcn/ui ao projeto          |
 
----
+***
 
 ## 🔐 Variáveis de Ambiente <a id="variáveis-de-ambiente"></a>
 
@@ -165,26 +165,25 @@ VITE_ENABLE_DEVTOOLS=true
 > elas ficam no bundle JavaScript enviado ao browser.
 > **Nunca coloque segredos (JWT_SECRET, senhas) em variáveis VITE_*.**
 
----
+***
 
 ## 🗺️ Rotas da Aplicação <a id="rotas-da-aplicação"></a>
 
-| Rota                        | Acesso       | Componente de página         | Descrição                             |
-|-----------------------------|:------------:|------------------------------|---------------------------------------|
-| `/`                         | Público      | `routes/index.tsx`           | Chatbot conversacional                |
-| `/login`                    | Público      | `routes/login.tsx`           | Formulário de autenticação            |
-| `/admin`                    | 🔒 ADMIN     | `routes/admin/dashboard.tsx` | Dashboard do administrador            |
-| `/admin/nodes`              | 🔒 ADMIN     | `routes/admin/nodes.tsx`     | CRUD de nós de navegação              |
-| `/admin/documents`          | 🔒 ADMIN     | `routes/admin/documents.tsx` | Gestão de documentos oficiais         |
-| `/admin/users`              | 🔒 ADMIN     | `routes/admin/users.tsx`     | Gestão de usuários da secretaria      |
-| `/admin/logs`               | 🔒 ADMIN     | `routes/admin/logs.tsx`      | Logs de atendimento                   |
-| `/secretary`                | 🔒 SECRETARY | `routes/secretary/dashboard.tsx` | Dashboard da secretária           |
-| `/secretary/questions`      | 🔒 SECRETARY | `routes/secretary/questions.tsx` | Gestão de perguntas recebidas     |
+| Rota                        | Acesso       | Componente de página             | Descrição                          |
+|-----------------------------|:------------:|----------------------------------|------------------------------------|
+| `/`                         | Público      | `routes/index.tsx`               | Chatbot conversacional             |
+| `/login`                    | Público      | `routes/login.tsx`               | Formulário de autenticação         |
+| `/admin`                    | 🔒 ADMIN     | `routes/admin/dashboard.tsx`     | Dashboard do administrador         |
+| `/admin/nodes`              | 🔒 ADMIN     | `routes/admin/nodes.tsx`         | CRUD de nós de navegação           |
+| `/admin/users`              | 🔒 ADMIN     | `routes/admin/users.tsx`         | Gestão de usuários da secretaria   |
+| `/admin/logs`               | 🔒 ADMIN     | `routes/admin/logs.tsx`          | Logs de atendimento                |
+| `/secretary`                | 🔒 SECRETARY | `routes/secretary/dashboard.tsx` | Dashboard da secretária            |
+| `/secretary/questions`      | 🔒 SECRETARY | `routes/secretary/questions.tsx` | Gestão de perguntas recebidas      |
 
 > Rotas com 🔒 redirecionam para `/login` se o usuário não estiver autenticado
 > (`ProtectedRoute`) e retornam 403 se o role não tiver permissão (`RoleGuard`).
 
----
+***
 
 ## 🏗️ Arquitetura e Decisões Técnicas <a id="arquitetura-e-decisões-técnicas"></a>
 
@@ -257,7 +256,7 @@ export const DangerButton = (props: ButtonProps) => (
 )
 ```
 
----
+***
 
 ## 🧩 Componentes e Features <a id="componentes-e-features"></a>
 
@@ -268,14 +267,14 @@ lógica de navegação na árvore de nós e o histórico da sessão.
 
 Componentes principais:
 
-| Componente            | Função                                                    |
-|-----------------------|-----------------------------------------------------------|
-| `ChatWindow`          | Container da conversa — orquestra todos os outros         |
-| `MessageBubble`       | Renderiza uma mensagem do bot ou do usuário               |
-| `OptionButton`        | Botão de opção navegável (filhos de um nó MENU)           |
-| `EvidenceCard`        | Exibe chunk de documento oficial com fonte e página       |
-| `SatisfactionRating`  | Botões "Gostei / Não gostei" com submit para a API        |
-| `QuestionForm`        | Formulário de envio de pergunta à secretaria              |
+| Componente           | Função                                                             |
+|----------------------|--------------------------------------------------------------------|
+| `ChatWindow`         | Container da conversa — orquestra todos os outros                  |
+| `MessageBubble`      | Renderiza uma mensagem do bot ou do usuário                        |
+| `OptionButton`       | Botão de opção navegável (filhos de um nó MENU)                    |
+| `EvidenceCard`       | Exibe evidência inline do nó com resumo e trecho de referência     |
+| `SatisfactionRating` | Botões "Gostei / Não gostei" com submit para a API                 |
+| `QuestionForm`       | Formulário de envio de pergunta com nome, e-mail e anexo opcional  |
 
 ### `features/auth` — RF09
 
@@ -284,13 +283,13 @@ O `auth.store.ts` (Zustand) é a fonte de verdade para o estado de autenticaçã
 
 ### `features/admin` — RF04
 
-Painel do administrador com CRUD completo de nós, documentos, usuários e visualização de logs.
+Painel do administrador com CRUD completo de nós, usuários e visualização de logs.
 
 ### `features/secretary` — RF06
 
 Painel da secretária com listagem e atualização de status das perguntas recebidas.
 
----
+***
 
 > _Este README deve ser atualizado sempre que novas rotas, scripts ou variáveis
 > de ambiente forem adicionados ao projeto._

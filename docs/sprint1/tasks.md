@@ -5,7 +5,7 @@
 >
 > **Objetivo:** sistema funcional do ponto de vista do aluno — chatbot navegável, envio de pergunta e infraestrutura base autenticada.
 
----
+***
 
 ## Princípios de Leitura
 
@@ -15,13 +15,13 @@
 | `[FE]` | Task de frontend (`apps/frontend/`) |
 | `[INFRA]` | Task de infraestrutura (raiz do monorepo) |
 | `[FIGMA]` | Task de design de interface |
-| `[UML]`   | Task de modelagem UML com Astah (`docs/uml/`) |
-| `[DB]`    | Task de modelagem de banco de dados com dbdesigner (`docs/database/`) |
+| `[UML]` | Task de modelagem UML com Astah (`docs/uml/`) |
+| `[DB]` | Task de modelagem de banco de dados com dbdesigner (`docs/database/`) |
 
 > Este documento funciona como visão operacional da sprint.
 > Para o detalhamento completo de contratos de cada task, use `docs/fatecbot-backlog.md` como fonte canônica.
 
----
+***
 
 ## Legenda de Requisitos
 
@@ -53,9 +53,7 @@
 > RF04 e RF06 (painel admin/secretária) e RNF03/RNF04/RNF07 não são cobertos na Sprint 1.
 > RF08 é coberto na Sprint 1 para rastreamento de sessões e satisfação no fluxo público do chatbot.
 
----
-
----
+***
 
 ## 📖 User Stories — Sprint 1
 
@@ -65,14 +63,14 @@
 > Os Critérios de Aceitação detalham as condições que a funcionalidade deve atender para ser considerada concluída,
 > escritos na perspectiva do usuário, descrevendo o comportamento esperado do sistema de forma clara e verificável na Sprint Review.
 
----
+***
 
 ### US-01 · RF01 — Navegação Conversacional
 
 > **Tasks:** TASK-009 · TASK-031 · TASK-032 · TASK-033 · TASK-034 · TASK-035 · TASK-036 · TASK-037 · TASK-040
 
-**Como** aluno  
-**Quero** navegar por menus e submenus do chatbot  
+**Como** aluno
+**Quero** navegar por menus e submenus do chatbot
 **Para que** eu encontre a informação que preciso sem precisar contatar a secretaria diretamente
 
 **Critérios de Aceitação:**
@@ -83,15 +81,14 @@
 - O sistema deve registrar todos os tópicos que o aluno visitou durante a conversa.
 - A interface deve funcionar corretamente tanto em celular quanto em computador.
 
-
----
+***
 
 ### US-02 · RF02 — Repositório de Conhecimento
 
 > **Tasks:** TASK-004 · TASK-031 · TASK-032 · TASK-038 · TASK-040
 
-**Como** administrador  
-**Quero** que as respostas do chatbot sejam baseadas em documentos oficiais com trechos rastreáveis  
+**Como** administrador
+**Quero** que as respostas do chatbot sejam baseadas em documentos oficiais com trechos rastreáveis
 **Para que** os alunos recebam informações verificáveis e a secretaria tenha credibilidade nas respostas
 
 **Critérios de Aceitação:**
@@ -101,15 +98,14 @@
 - Quando uma resposta não tiver documento associado, o chatbot ainda exibe a informação disponível normalmente.
 - O sistema deve armazenar os documentos e seus trechos de forma organizada para que possam ser consultados pelo chatbot.
 
-
----
+***
 
 ### US-03 · RF03 — Acesso Público sem Cadastro
 
 > **Tasks:** TASK-013 · TASK-015 · TASK-024 · TASK-028 · TASK-030
 
-**Como** visitante  
-**Quero** acessar o chatbot sem precisar criar uma conta  
+**Como** visitante
+**Quero** acessar o chatbot sem precisar criar uma conta
 **Para que** eu tire dúvidas de forma ágil e sem fricção
 
 **Critérios de Aceitação:**
@@ -119,33 +115,31 @@
 - Um usuário autenticado como secretária não deve conseguir acessar as funcionalidades exclusivas do administrador.
 - Após o login bem-sucedido, o sistema deve direcionar cada usuário automaticamente para o painel correspondente ao seu perfil.
 
-
----
+***
 
 ### US-04 · RF05 — Encaminhamento de Pergunta
 
 > **Tasks:** TASK-041 · TASK-042 · TASK-043 · TASK-044
 
-**Como** aluno  
-**Quero** enviar uma dúvida diretamente à secretaria ao final do atendimento  
+**Como** aluno
+**Quero** enviar uma dúvida diretamente à secretaria ao final do atendimento
 **Para que** eu receba suporte nos casos em que o bot não cobriu o que eu precisava
 
 **Critérios de Aceitação:**
 
-- O aluno deve poder enviar uma dúvida preenchendo apenas o texto da pergunta e seu e-mail institucional.
+- O aluno deve poder enviar uma dúvida preenchendo nome, texto da pergunta, e-mail institucional e, opcionalmente, um anexo (PDF/JPG/PNG · máx. 5 MB).
 - Se o aluno tentar enviar sem preencher o texto ou com um e-mail inválido, o sistema deve exibir uma mensagem de erro indicando o problema.
 - Após o envio bem-sucedido, o aluno deve ver uma confirmação de que a mensagem foi recebida pela secretaria.
 - A pergunta enviada fica automaticamente vinculada à sessão de atendimento que a originou, para facilitar o contexto para a secretaria.
 
-
----
+***
 
 ### US-05 · RF07 — Avaliação de Satisfação
 
 > **Tasks:** TASK-031 · TASK-032 · TASK-033 · TASK-036 · TASK-039
 
-**Como** aluno  
-**Quero** avaliar se o atendimento foi satisfatório ao final da conversa  
+**Como** aluno
+**Quero** avaliar se o atendimento foi satisfatório ao final da conversa
 **Para que** o sistema melhore com base no meu feedback
 
 **Critérios de Aceitação:**
@@ -155,15 +149,14 @@
 - O aluno só deve conseguir avaliar uma vez por atendimento — após votar, os botões ficam desabilitados.
 - A avaliação deve ser registrada junto ao histórico da sessão para análise posterior.
 
-
----
+***
 
 ### US-06 · RF08 — Registro de Logs de Sessão
 
 > **Tasks:** TASK-004 · TASK-031 · TASK-032 · TASK-033 · TASK-036 · TASK-039 · TASK-041 · TASK-042
 
-**Como** administrador  
-**Quero** que o sistema registre o fluxo de navegação, a satisfação e os timestamps de cada sessão  
+**Como** administrador
+**Quero** que o sistema registre o fluxo de navegação, a satisfação e os timestamps de cada sessão
 **Para que** eu possa auditar o uso, identificar pontos de melhoria e analisar os temas mais consultados
 
 **Critérios de Aceitação:**
@@ -173,15 +166,14 @@
 - Se o aluno enviar uma dúvida ao final do atendimento, a pergunta deve ficar vinculada à sessão correspondente.
 - Toda pergunta recebida deve ser registrada como pendente de resposta, até que a secretaria a marque como respondida.
 
-
----
+***
 
 ### US-07 · RF09 — Autenticação por Login e Senha
 
 > **Tasks:** TASK-006 · TASK-020 · TASK-021 · TASK-022 · TASK-023 · TASK-025 · TASK-026 · TASK-027 · TASK-028 · TASK-029
 
-**Como** secretária acadêmica  
-**Quero** fazer login com e-mail institucional e senha  
+**Como** secretária acadêmica
+**Quero** fazer login com e-mail institucional e senha
 **Para que** eu acesse o painel de gestão com segurança
 
 **Critérios de Aceitação:**
@@ -191,15 +183,14 @@
 - As senhas devem ser armazenadas de forma segura no banco de dados, sem que o valor original possa ser recuperado.
 - Durante o carregamento do login, o botão de envio deve mostrar um indicador de espera e, em caso de falha, a mensagem de erro deve aparecer sem recarregar a página.
 
-
----
+***
 
 ### US-08 · RF10 — Autorização por Papel (RBAC)
 
 > **Tasks:** TASK-024 · TASK-026 · TASK-028 · TASK-030
 
-**Como** sistema  
-**Quero** garantir que cada role acesse apenas as funcionalidades permitidas  
+**Como** sistema
+**Quero** garantir que cada role acesse apenas as funcionalidades permitidas
 **Para que** nenhum usuário execute ações além do seu nível de autorização
 
 **Critérios de Aceitação:**
@@ -209,15 +200,14 @@
 - O sistema deve controlar o acesso a cada área do painel com base no papel do usuário autenticado.
 - As restrições de acesso devem ser verificadas tanto no servidor quanto no frontend, garantindo proteção em ambas as camadas.
 
-
----
+***
 
 ### US-09 · RF11 — Proteção de Rotas por JWT
 
 > **Tasks:** TASK-003 · TASK-014 · TASK-023 · TASK-026 · TASK-030 · TASK-043 · TASK-045
 
-**Como** desenvolvedor  
-**Quero** que todas as rotas administrativas estejam protegidas por middleware JWT  
+**Como** desenvolvedor
+**Quero** que todas as rotas administrativas estejam protegidas por middleware JWT
 **Para que** nenhuma rota sensível seja acessível sem autenticação válida
 
 **Critérios de Aceitação:**
@@ -227,7 +217,7 @@
 - O chatbot público deve permanecer acessível para qualquer visitante, sem necessidade de autenticação.
 - As áreas restritas só devem ser exibidas após confirmação de identidade válida pelo sistema.
 
----
+***
 
 ## Tabela de Rastreabilidade — Sprint 1
 
@@ -244,8 +234,8 @@
 | TASK-007 | `[FIGMA]` | Design | Design System e tokens visuais | — | RNF01 | 🟡 Alta | **5** |
 | TASK-008 | `[FIGMA]` | Design | Wireframes — Login e fluxo de autenticação | RF03 · RF09 | RNF01 | 🟡 Alta | **3** |
 | TASK-009 | `[FIGMA]` | Design | Wireframes — Interface do Chatbot público | RF01 · RF02 · RF05 · RF07 | RNF01 | 🔴 Crítica | **5** |
-| TASK-010 | `[UML]`  | Modelagem | Diagrama de Casos de Uso — Astah | RF01 · RF02 · RF03 · RF04 · RF05 · RF06 · RF07 · RF08 · RF09 · RF10 · RF11 | — | 🟡 Alta | **3** |
-| TASK-011 | `[DB]`   | Modelagem | Modelagem do Banco de Dados — dbdesigner | RF01 · RF02 · RF03 · RF04 · RF05 · RF07 · RF08 · RF09 | RNF09 | 🔴 Crítica | **3** |
+| TASK-010 | `[UML]` | Modelagem | Diagrama de Casos de Uso — Astah | RF01 · RF02 · RF03 · RF04 · RF05 · RF06 · RF07 · RF08 · RF09 · RF10 · RF11 | — | 🟡 Alta | **3** |
+| TASK-011 | `[DB]` | Modelagem | Modelagem do Banco de Dados — dbdesigner | RF01 · RF02 · RF03 · RF04 · RF05 · RF07 · RF08 · RF09 | RNF09 | 🔴 Crítica | **3** |
 | TASK-012 | `[FE]` | Infra | Bootstrap do projeto Vite + TypeScript | — | RNF01 · RNF05 | 🔴 Crítica | **2** |
 | TASK-013 | `[FE]` | Infra | Tipos globais compartilhados | RF01 · RF03 · RF07 | — | 🔴 Crítica | **2** |
 | TASK-014 | `[FE]` | Infra | Instância Axios e React Query client | RF09 · RF11 | RNF02 · RNF08 | 🔴 Crítica | **3** |
@@ -281,7 +271,7 @@
 | TASK-044 | `[FE]` | Questions | QuestionForm.tsx — formulário de envio | RF05 · RF08 | RNF01 | 🟡 Alta | **3** |
 | TASK-045 | `[BE]` | Infra | routes/index.ts — composição global de rotas | RF01 · RF05 · RF09 · RF11 | — | 🔴 Crítica | **1** |
 
----
+***
 
 ## 📉 Burndown de Referência — Sprint 1
 
@@ -338,5 +328,3 @@
 
 > **Total Sprint 1:** 118 pts · 45 tasks
 > Escala Fibonacci: **1** tipo/config · **2** arquivo simples · **3** lógica média · **5** múltiplos arquivos ou lógica complexa
-
----

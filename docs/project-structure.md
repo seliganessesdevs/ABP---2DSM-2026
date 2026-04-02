@@ -13,7 +13,7 @@ fatecbot/
 └── README.md                   # README principal do projeto
 ```
 
----
+***
 
 ## 🖥️ Frontend — `apps/frontend/`
 
@@ -32,7 +32,6 @@ apps/frontend/
 │   │       ├── admin/              # Rotas protegidas: painel do administrador
 │   │       │   ├── dashboard.tsx
 │   │       │   ├── nodes.tsx       # CRUD de nós de navegação
-│   │       │   ├── documents.tsx   # Gestão de documentos oficiais
 │   │       │   ├── users.tsx       # Gestão de usuários da secretaria
 │   │       │   └── logs.tsx        # Visualização de logs de atendimento
 │   │       └── secretary/          # Rotas protegidas: painel da secretária
@@ -68,8 +67,8 @@ apps/frontend/
 │   │   │   │   ├── ChatWindow.tsx  # Container principal da conversa
 │   │   │   │   ├── MessageBubble.tsx
 │   │   │   │   ├── OptionButton.tsx
-│   │   │   │   ├── EvidenceCard.tsx  # Exibe trecho de documento oficial
-│   │   │   │   └── SatisfactionRating.tsx  # "Gostei / Não gostei" (RF07)
+│   │   │   │   ├── EvidenceCard.tsx  # Exibe trecho de evidência inline do nó
+│   │   │   │   └── SatisfactionRating.tsx  # "Atendeu / Não atendeu" (RF07)
 │   │   │   ├── hooks/
 │   │   │   │   └── useChatNavigation.ts  # Lógica de navegação na árvore de nós
 │   │   │   └── types/
@@ -90,18 +89,15 @@ apps/frontend/
 │   │   ├── admin/                  # Domínio: painel do administrador (RF04)
 │   │   │   ├── api/
 │   │   │   │   ├── nodes.api.ts    # CRUD de nós de navegação
-│   │   │   │   ├── documents.api.ts
 │   │   │   │   ├── users.api.ts
 │   │   │   │   └── logs.api.ts
 │   │   │   ├── components/
 │   │   │   │   ├── NodeEditor.tsx  # Formulário de criação/edição de nó
 │   │   │   │   ├── NodeTree.tsx    # Visualização hierárquica da árvore
-│   │   │   │   ├── DocumentList.tsx
 │   │   │   │   ├── UserList.tsx
 │   │   │   │   └── LogTable.tsx
 │   │   │   └── hooks/
 │   │   │       ├── useNodes.ts
-│   │   │       ├── useDocuments.ts
 │   │   │       └── useLogs.ts
 │   │   │
 │   │   └── secretary/              # Domínio: painel da secretária (RF06)
@@ -123,7 +119,7 @@ apps/frontend/
 │   │
 │   ├── types/                      # Types TypeScript globais compartilhados
 │   │   ├── api.types.ts            # ApiResponse<T>, PaginatedResponse<T>, ApiError
-│   │   └── common.types.ts         # Role, Status, UUID
+│   │   └── common.types.ts         # Role (ADMIN, SECRETARIA), Status (ABERTA, RESPONDIDA)
 │   │
 │   └── utils/                      # Funções puras utilitárias
 │       ├── date.utils.ts           # Formatação de datas (pt-BR)
@@ -139,7 +135,7 @@ apps/frontend/
 └── README.md                       # README específico do frontend
 ```
 
----
+***
 
 ## ⚙️ Backend — `apps/backend/`
 
@@ -151,7 +147,7 @@ apps/backend/
 ├── prisma/
 │   ├── schema.prisma               # Definição do modelo de dados (DDL via Prisma)
 │   ├── migrations/                 # Histórico de migrations geradas automaticamente
-│   └── seed.ts                     # Seed inicial: nós do chatbot, admin padrão
+│   └── seed.ts                     # Seed inicial executado via Docker (01_schema.sql + 02_seed.sql)
 │
 ├── src/
 │   ├── server.ts                   # Entry point: cria e exporta o app Express
@@ -163,7 +159,7 @@ apps/backend/
 │   │
 │   ├── middlewares/                # Middlewares Express globais
 │   │   ├── auth.middleware.ts      # Valida JWT Bearer, popula req.user
-│   │   ├── rbac.middleware.ts      # Verifica role: authorize('ADMIN') | authorize('SECRETARY')
+│   │   ├── rbac.middleware.ts      # Verifica role: authorize('ADMIN') | authorize('SECRETARIA')
 │   │   ├── error.middleware.ts     # Handler global de erros (AppError → JSON)
 │   │   └── logger.middleware.ts    # Log de requisições HTTP
 │   │
@@ -176,28 +172,22 @@ apps/backend/
 │   │   │   └── auth.types.ts       # LoginDTO, TokenPayload
 │   │   │
 │   │   ├── chatbot/                # Navegação conversacional (RF01, RF02, RF07, RF08)
-│   │   │   ├── chatbot.controller.ts  # GET /nodes/:id, POST /sessions/rating
+│   │   │   ├── chatbot.controller.ts  # GET /nodes/:id, POST /sessions/log
 │   │   │   ├── chatbot.service.ts     # Busca nó, registra log, registra satisfação
 │   │   │   ├── chatbot.routes.ts
-│   │   │   └── chatbot.types.ts       # ChatNodeResponse, SessionLogDTO
+│   │   │   └── chatbot.types.ts       # ChatNodeResponse, InteractionLogDTO
 │   │   │
 │   │   ├── questions/              # Perguntas à secretaria (RF05, RF06)
 │   │   │   ├── questions.controller.ts  # POST /questions, GET /questions, PATCH /questions/:id
 │   │   │   ├── questions.service.ts
 │   │   │   ├── questions.routes.ts
-│   │   │   └── questions.types.ts       # CreateQuestionDTO, UpdateStatusDTO
+│   │   │   └── questions.types.ts       # CreateInquiryDTO, UpdateStatusDTO
 │   │   │
 │   │   ├── nodes/                  # CRUD de nós de navegação (RF04 — Admin)
 │   │   │   ├── nodes.controller.ts
 │   │   │   ├── nodes.service.ts
 │   │   │   ├── nodes.routes.ts
 │   │   │   └── nodes.types.ts           # CreateNodeDTO, UpdateNodeDTO
-│   │   │
-│   │   ├── documents/              # Gestão de documentos oficiais (RF04 — Admin)
-│   │   │   ├── documents.controller.ts  # CRUD + upload de chunks indexados
-│   │   │   ├── documents.service.ts
-│   │   │   ├── documents.routes.ts
-│   │   │   └── documents.types.ts       # DocumentDTO, ChunkDTO
 │   │   │
 │   │   ├── users/                  # Gestão de usuários da secretaria (RF04 — Admin)
 │   │   │   ├── users.controller.ts
@@ -206,7 +196,7 @@ apps/backend/
 │   │   │   └── users.types.ts           # CreateUserDTO, UserResponse
 │   │   │
 │   │   └── logs/                   # Logs de atendimento (RF08 — Admin)
-│   │       ├── logs.controller.ts   # GET /logs (filtros: satisfaction, from, to)
+│   │       ├── logs.controller.ts   # GET /logs (filtros: flag, from, to)
 │   │       ├── logs.service.ts
 │   │       ├── logs.routes.ts
 │   │       └── logs.types.ts
@@ -228,7 +218,7 @@ apps/backend/
 └── README.md                       # README específico do backend
 ```
 
----
+***
 
 ## 📚 Documentação — `docs/`
 
@@ -263,7 +253,7 @@ docs/
     └── README.md                   # ADR-001 a ADR-003 centralizados em um único documento
 ```
 
----
+***
 
 ## 📐 Princípios de Organização
 
@@ -306,6 +296,6 @@ import { useLogin } from "@/features/auth/hooks/useLogin";
 Os arquivos em `components/ui/` são gerados pelo shadcn/ui e **não devem ser editados diretamente**.
 Crie wrappers em `components/shared/` ou dentro da feature correspondente quando precisar de customização.
 
----
+***
 
 > _Próximo documento: [`project-standards.md`](./project-standards.md)_

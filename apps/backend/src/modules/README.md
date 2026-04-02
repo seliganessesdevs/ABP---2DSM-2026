@@ -2,7 +2,7 @@
 
 O coração da aplicação. Cada módulo representa um **domínio de negócio** — um conjunto de funcionalidades relacionadas. Toda lógica de negócio, validação de entrada e acesso ao banco vive aqui.
 
----
+***
 
 ## Estrutura
 
@@ -12,7 +12,6 @@ modules/
 ├── chatbot/
 ├── questions/
 ├── nodes/
-├── documents/
 ├── users/
 └── logs/
 ```
@@ -27,7 +26,7 @@ Cada módulo segue a mesma estrutura interna:
 └── <modulo>.types.ts       # Tipos, interfaces e DTOs do módulo
 ```
 
----
+***
 
 ## Responsabilidade de Cada Camada
 
@@ -75,7 +74,7 @@ Toda a lógica de negócio vive aqui. Valida regras, fala com o Prisma, lança `
 
 Tipos TypeScript e DTOs do módulo. Gerados com `z.infer` a partir dos schemas Zod quando possível — sem duplicação.
 
----
+***
 
 ## Os Módulos
 
@@ -85,7 +84,7 @@ Responsável pelo login. Recebe email e senha, valida com Argon2id, retorna o JW
 
 **Endpoint:** `POST /auth/login`
 
----
+***
 
 ### `chatbot/`
 
@@ -94,14 +93,14 @@ Navega na árvore de `ChatNode` e registra sessões. É o módulo mais acessado 
 **Endpoints:**
 
 - `GET /nodes/root` — retorna o nó raiz para iniciar a navegação
-- `GET /nodes/:id` — retorna um nó com filhos e chunks
+- `GET /nodes/:id` — retorna um nó com filhos e evidência
 - `POST /sessions/rating` — registra log de sessão e satisfação
 
----
+***
 
 ### `questions/`
 
-Gerencia as perguntas enviadas pelos alunos à secretaria. Criação é pública — qualquer aluno pode enviar. Listagem e atualização exigem autenticação.
+Gerencia as perguntas enviadas pelos alunos à secretaria. Criação é pública — qualquer aluno pode enviar nome, texto, e-mail institucional e anexo opcional (PDF/JPG/PNG · máx. 5 MB). Listagem e atualização exigem autenticação.
 
 **Endpoints:**
 
@@ -109,7 +108,7 @@ Gerencia as perguntas enviadas pelos alunos à secretaria. Criação é pública
 - `GET /questions` — ADMIN ou SECRETARY
 - `PATCH /questions/:id` — ADMIN ou SECRETARY
 
----
+***
 
 ### `nodes/`
 
@@ -117,15 +116,7 @@ CRUD completo dos nós de navegação do chatbot. Exclusivo para administradores
 
 **Endpoints:** `GET`, `POST`, `PATCH`, `DELETE` em `/nodes` — todos ADMIN.
 
----
-
-### `documents/`
-
-Gerencia os documentos oficiais (regulamentos, manuais) e seus chunks indexados. Os chunks são os trechos que o chatbot usa para responder perguntas específicas.
-
-**Endpoints:** `GET`, `POST` em `/documents` — todos ADMIN.
-
----
+***
 
 ### `users/`
 
@@ -133,7 +124,7 @@ Gerencia os usuários da secretaria (ADMIN e SECRETARY). O admin cria, lista e r
 
 **Endpoints:** `GET`, `POST`, `DELETE` em `/users` — todos ADMIN.
 
----
+***
 
 ### `logs/`
 
@@ -141,7 +132,7 @@ Somente leitura. Expõe os registros de sessão gerados pelo módulo `chatbot` p
 
 **Endpoint:** `GET /logs` — ADMIN.
 
----
+***
 
 ## Regras de contribuição
 

@@ -4,7 +4,7 @@
 > adotadas no **FatecBot**. Todos os membros da equipe devem seguir estes padrões
 > para garantir consistência, rastreabilidade e qualidade ao longo das sprints.
 
----
+***
 
 ## 📑 Índice
 
@@ -18,13 +18,11 @@
 - [Estilização](#estilização)
 - [Variáveis de Ambiente](#variáveis-de-ambiente)
 
----
+***
 
 ## 🌿 Branches <a id="branches"></a>
 
-
 ### Estratégia: GitHub Flow simplificado
-
 
 | Branch          | Finalidade                                               |
 |-----------------|----------------------------------------------------------|
@@ -36,20 +34,15 @@
 | `chore/*`       | Configuração de ferramentas, CI, dependências            |
 | `refactor/*`    | Reestruturação de código sem mudança de comportamento    |
 
-
 ### Nomenclatura de branches
 
-
 O nome da branch sempre referencia o **ID da task** do backlog, garantindo rastreabilidade direta com o item de trabalho.
-
 
 ```
 <tipo>/TASK-NNN-descricao-curta
 ```
 
-
 **Exemplos:**
-
 
 ```bash
 feature/TASK-022-auth-controller-routes
@@ -60,19 +53,15 @@ chore/TASK-019-docker-compose-setup
 refactor/TASK-036-extract-session-hook
 ```
 
-
 > **Regra:** Uma branch por task. Se a task cobre múltiplos RFs, isso já está mapeado no backlog — não é necessário repetir no nome da branch.
 
 ***
 
 ## ✍️ Commits <a id="commits"></a>
 
-
 ### Padrão: Conventional Commits por módulo
 
-
 A branch já identifica a task. O commit deve descrever **o que foi alterado tecnicamente**, usando o módulo ou feature como escopo.
-
 
 ```
 <tipo>(<modulo>): <descricao curta no imperativo>
@@ -80,13 +69,10 @@ A branch já identifica a task. O commit deve descrever **o que foi alterado tec
 [rodape opcional — referencia a issue ou PR: Closes #42]
 ```
 
-
 > ⚠️ Não use acentos, cedilha ou caracteres especiais na mensagem de commit.
 > Risco real de corrompimento de encoding em diferentes terminais e ferramentas de CI.
 
-
 ### Tipos permitidos
-
 
 | Tipo       | Quando usar                                                   |
 |------------|---------------------------------------------------------------|
@@ -99,26 +85,20 @@ A branch já identifica a task. O commit deve descrever **o que foi alterado tec
 | `chore`    | Atualização de dependências, configurações de build/CI        |
 | `perf`     | Melhoria de desempenho                                        |
 
-
 ### Escopos recomendados
 
-
 ```
-chatbot | auth | admin | secretary | nodes | documents | logs | questions | db | docker | ci
+chatbot | auth | admin | secretary | nodes | logs | questions | db | docker | ci
 ```
-
 
 ### Como branch e commit se complementam
-
 
 | Camada | Responde a | Exemplo |
 |--------|-----------|---------|
 | **Branch** | *Qual item do backlog isso resolve?* | `feature/TASK-022-auth-controller-routes` |
 | **Commit** | *O que foi alterado tecnicamente?* | `feat(auth): adiciona controller e rotas de autenticacao` |
 
-
 ### Exemplos corretos
-
 
 ```bash
 # Branch: feature/TASK-022-auth-controller-routes
@@ -128,39 +108,33 @@ test(auth): adiciona teste de integracao do endpoint POST /login
 
 # Branch: feature/TASK-032-chatbot-navigation-service
 feat(chatbot): adiciona servico de navegacao hierarquica
-refactor(chatbot): extrai query de chunks para metodo privado
+refactor(chatbot): extrai query de nos para metodo privado
 
 # Branch: chore/TASK-019-docker-compose-setup
 chore(docker): adiciona healthcheck ao container do postgres
 chore(docker): configura variaveis de ambiente no compose
 ```
 
-
 ### Exemplos incorretos
-
 
 ```bash
 # ❌ Sem tipo
 atualiza chatbot
 
-
 # ❌ Verbo no passado
 feat(auth): adicionou formulario de login
-
 
 # ❌ Genérico demais
 fix: corrigindo bugs
 
-
 # ❌ Sem escopo quando aplicável
 feat: criar painel do admin
 
-
 # ❌ Com acento (risco de encoding)
-feat(chatbot): adiciona navegação por nós
+feat(chatbot): adiciona navegacao por nos
 ```
 
----
+***
 
 ## 🔀 Pull Requests <a id="pull-requests"></a>
 
@@ -194,7 +168,7 @@ RF:
 <!-- Antes / Depois -->
 ```
 
----
+***
 
 ## 🏷️ Nomenclatura de Código <a id="nomenclatura-de-código"></a>
 
@@ -205,11 +179,11 @@ RF:
 | Componente React          | `PascalCase`      | `ChatWindow`, `NodeEditor`                |
 | Hook customizado          | `camelCase` + `use` | `useChatNavigation`, `useAuth`          |
 | Função utilitária         | `camelCase`       | `formatDate`, `hashPassword`              |
-| Constante global          | `UPPER_SNAKE_CASE`| `JWT_EXPIRES_IN`, `MAX_CHUNK_LENGTH`      |
+| Constante global          | `UPPER_SNAKE_CASE`| `JWT_EXPIRES_IN`, `MAX_EVIDENCE_LENGTH`   |
 | Variável/parâmetro local  | `camelCase`       | `chatNode`, `userId`                      |
 | Interface TypeScript      | `PascalCase` + `I` prefixo opcional | `ChatNode`, `AuthUser`  |
-| Type alias                | `PascalCase`      | `UserRole`, `NodeStatus`                  |
-| Enum                      | `PascalCase`      | `Role`, `QuestionStatus`                  |
+| Type alias                | `PascalCase`      | `UserRole`, `InquiryStatus`               |
+| Enum                      | `PascalCase`      | `Role`, `InquiryStatus`                   |
 | Arquivo de componente     | `PascalCase.tsx`  | `ChatWindow.tsx`                          |
 | Arquivo de hook/util/api  | `camelCase.ts`    | `useChatNavigation.ts`, `auth.api.ts`     |
 | Arquivo de types          | `kebab-case.types.ts` | `chatbot.types.ts`, `auth.types.ts`   |
@@ -230,10 +204,10 @@ GET    /api/v1/questions          → listar perguntas (secretária)
 PATCH  /api/v1/questions/:id      → atualizar status da pergunta
 
 GET    /api/v1/logs               → listar logs (admin)
-POST   /api/v1/sessions/rating    → registrar satisfação
+POST   /api/v1/sessions/log       → registrar log de sessão e satisfação
 ```
 
----
+***
 
 ## 🔷 TypeScript <a id="typescript"></a>
 
@@ -297,17 +271,17 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
 // types/common.types.ts
 export enum Role {
   ADMIN = 'ADMIN',
-  SECRETARY = 'SECRETARY',
+  SECRETARIA = 'SECRETARIA',
   // Aluno não tem role — acesso público
 }
 
-export enum QuestionStatus {
-  OPEN = 'OPEN',
-  ANSWERED = 'ANSWERED',
+export enum InquiryStatus {
+  ABERTA = 'ABERTA',
+  RESPONDIDA = 'RESPONDIDA',
 }
 ```
 
----
+***
 
 ## 🔍 ESLint e Prettier <a id="eslint-e-prettier"></a>
 
@@ -352,7 +326,7 @@ pnpm typecheck     # tsc --noEmit sem compilar
 > 💡 Configure o VS Code para formatar ao salvar:
 > `"editor.formatOnSave": true` e `"editor.defaultFormatter": "esbenp.prettier-vscode"`
 
----
+***
 
 ## ⚛️ Estrutura de Componentes React <a id="estrutura-de-componentes-react"></a>
 
@@ -370,7 +344,7 @@ import type { ChatNode } from '@/features/chatbot/types/chatbot.types'
 
 // 3. Interface de props (sempre nomeada e exportada)
 export interface ChatWindowProps {
-  initialNodeId: string
+  initialNodeId: number
   onSessionEnd: () => void
 }
 
@@ -383,7 +357,7 @@ const ChatWindow = ({ initialNodeId, onSessionEnd }: ChatWindowProps) => {
   const { navigate, isLoading } = useChatNavigation(initialNodeId)
 
   // 4c. Handlers
-  const handleOptionSelect = (nodeId: string) => {
+  const handleOptionSelect = (nodeId: number) => {
     navigate(nodeId)
   }
 
@@ -402,7 +376,7 @@ const ChatWindow = ({ initialNodeId, onSessionEnd }: ChatWindowProps) => {
 export default ChatWindow
 ```
 
----
+***
 
 ## 🎨 Estilização <a id="estilização"></a>
 
@@ -440,7 +414,7 @@ import { cn } from '@/lib/utils'
 > CSS inline é permitido **apenas** para valores dinâmicos que não existem como classe Tailwind
 > (ex: posicionamento calculado em pixels via JS).
 
----
+***
 
 ## 🔐 Variáveis de Ambiente <a id="variáveis-de-ambiente"></a>
 
@@ -481,6 +455,6 @@ const envSchema = z.object({
 export const env = envSchema.parse(process.env)
 ```
 
----
+***
 
 > _Próximo documento: [`application-overview.md`](./application-overview.md)_

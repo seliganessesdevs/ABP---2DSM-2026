@@ -4,7 +4,7 @@
 > adotadas no **FatecBot**. Todos os membros da equipe devem seguir estes padrões
 > para garantir consistência, rastreabilidade e qualidade ao longo das sprints.
 
-***
+---
 
 ## 📑 Índice
 
@@ -18,21 +18,21 @@
 - [Estilização](#estilização)
 - [Variáveis de Ambiente](#variáveis-de-ambiente)
 
-***
+---
 
 ## 🌿 Branches <a id="branches"></a>
 
 ### Estratégia: GitHub Flow simplificado
 
-| Branch          | Finalidade                                               |
-|-----------------|----------------------------------------------------------|
-| `main`          | Código estável e entregável — **nunca commitar diretamente** |
-| `develop`       | Integração contínua entre features da sprint atual       |
-| `feature/*`     | Nova funcionalidade mapeada em um RF ou tarefa           |
-| `fix/*`         | Correção de bug identificado em revisão ou teste         |
-| `docs/*`        | Atualização exclusiva de documentação                    |
-| `chore/*`       | Configuração de ferramentas, CI, dependências            |
-| `refactor/*`    | Reestruturação de código sem mudança de comportamento    |
+| Branch       | Finalidade                                                   |
+| ------------ | ------------------------------------------------------------ |
+| `main`       | Código estável e entregável — **nunca commitar diretamente** |
+| `develop`    | Integração contínua entre features da sprint atual           |
+| `feature/*`  | Nova funcionalidade mapeada em um RF ou tarefa               |
+| `fix/*`      | Correção de bug identificado em revisão ou teste             |
+| `docs/*`     | Atualização exclusiva de documentação                        |
+| `chore/*`    | Configuração de ferramentas, CI, dependências                |
+| `refactor/*` | Reestruturação de código sem mudança de comportamento        |
 
 ### Nomenclatura de branches
 
@@ -55,7 +55,7 @@ refactor/TASK-036-extract-session-hook
 
 > **Regra:** Uma branch por task. Se a task cobre múltiplos RFs, isso já está mapeado no backlog — não é necessário repetir no nome da branch.
 
-***
+---
 
 ## ✍️ Commits <a id="commits"></a>
 
@@ -74,16 +74,16 @@ A branch já identifica a task. O commit deve descrever **o que foi alterado tec
 
 ### Tipos permitidos
 
-| Tipo       | Quando usar                                                   |
-|------------|---------------------------------------------------------------|
-| `feat`     | Nova funcionalidade (ex: implementar RF01)                    |
-| `fix`      | Correção de bug                                               |
-| `refactor` | Reestruturação de código sem mudança de comportamento         |
-| `test`     | Adição ou correção de testes                                  |
-| `docs`     | Alteração exclusiva em documentação                           |
-| `style`    | Formatação, espaçamento — sem mudança de lógica               |
-| `chore`    | Atualização de dependências, configurações de build/CI        |
-| `perf`     | Melhoria de desempenho                                        |
+| Tipo       | Quando usar                                            |
+| ---------- | ------------------------------------------------------ |
+| `feat`     | Nova funcionalidade (ex: implementar RF01)             |
+| `fix`      | Correção de bug                                        |
+| `refactor` | Reestruturação de código sem mudança de comportamento  |
+| `test`     | Adição ou correção de testes                           |
+| `docs`     | Alteração exclusiva em documentação                    |
+| `style`    | Formatação, espaçamento — sem mudança de lógica        |
+| `chore`    | Atualização de dependências, configurações de build/CI |
+| `perf`     | Melhoria de desempenho                                 |
 
 ### Escopos recomendados
 
@@ -93,10 +93,10 @@ chatbot | auth | admin | secretary | nodes | logs | questions | db | docker | ci
 
 ### Como branch e commit se complementam
 
-| Camada | Responde a | Exemplo |
-|--------|-----------|---------|
-| **Branch** | *Qual item do backlog isso resolve?* | `feature/TASK-022-auth-controller-routes` |
-| **Commit** | *O que foi alterado tecnicamente?* | `feat(auth): adiciona controller e rotas de autenticacao` |
+| Camada     | Responde a                           | Exemplo                                                   |
+| ---------- | ------------------------------------ | --------------------------------------------------------- |
+| **Branch** | _Qual item do backlog isso resolve?_ | `feature/TASK-022-auth-controller-routes`                 |
+| **Commit** | _O que foi alterado tecnicamente?_   | `feat(auth): adiciona controller e rotas de autenticacao` |
 
 ### Exemplos corretos
 
@@ -134,7 +134,7 @@ feat: criar painel do admin
 feat(chatbot): adiciona navegacao por nos
 ```
 
-***
+---
 
 ## 🔀 Pull Requests <a id="pull-requests"></a>
 
@@ -151,13 +151,17 @@ Todo PR deve preencher o seguinte template (`.github/pull_request_template.md`):
 
 ```markdown
 ## 📋 Descrição
+
 <!-- O que foi feito e por quê? -->
 
 ## 🔗 Requisito relacionado
+
 <!-- RF ou RNF que este PR implementa/corrige -->
+
 RF:
 
 ## ✅ Checklist
+
 - [ ] Código segue os padrões do projeto (`pnpm lint` passou)
 - [ ] Build sem erros (`pnpm build` passou)
 - [ ] Testes escritos e passando (`pnpm test` passou)
@@ -165,29 +169,30 @@ RF:
 - [ ] Testado localmente com Docker (`docker compose up --build`)
 
 ## 📸 Screenshots (se alteração de UI)
+
 <!-- Antes / Depois -->
 ```
 
-***
+---
 
 ## 🏷️ Nomenclatura de Código <a id="nomenclatura-de-código"></a>
 
 ### Geral
 
-| Elemento                  | Convenção         | Exemplo                                   |
-|---------------------------|-------------------|-------------------------------------------|
-| Componente React          | `PascalCase`      | `ChatWindow`, `NodeEditor`                |
-| Hook customizado          | `camelCase` + `use` | `useChatNavigation`, `useAuth`          |
-| Função utilitária         | `camelCase`       | `formatDate`, `hashPassword`              |
-| Constante global          | `UPPER_SNAKE_CASE`| `JWT_EXPIRES_IN`, `MAX_EVIDENCE_LENGTH`   |
-| Variável/parâmetro local  | `camelCase`       | `chatNode`, `userId`                      |
-| Interface TypeScript      | `PascalCase` + `I` prefixo opcional | `ChatNode`, `AuthUser`  |
-| Type alias                | `PascalCase`      | `UserRole`, `InquiryStatus`               |
-| Enum                      | `PascalCase`      | `Role`, `InquiryStatus`                   |
-| Arquivo de componente     | `PascalCase.tsx`  | `ChatWindow.tsx`                          |
-| Arquivo de hook/util/api  | `camelCase.ts`    | `useChatNavigation.ts`, `auth.api.ts`     |
-| Arquivo de types          | `kebab-case.types.ts` | `chatbot.types.ts`, `auth.types.ts`   |
-| Pasta de feature          | `kebab-case`      | `chatbot/`, `admin/`                      |
+| Elemento                 | Convenção                           | Exemplo                                 |
+| ------------------------ | ----------------------------------- | --------------------------------------- |
+| Componente React         | `PascalCase`                        | `ChatWindow`, `NodeEditor`              |
+| Hook customizado         | `camelCase` + `use`                 | `useChatNavigation`, `useAuth`          |
+| Função utilitária        | `camelCase`                         | `formatDate`, `hashPassword`            |
+| Constante global         | `UPPER_SNAKE_CASE`                  | `JWT_EXPIRES_IN`, `MAX_EVIDENCE_LENGTH` |
+| Variável/parâmetro local | `camelCase`                         | `chatNode`, `userId`                    |
+| Interface TypeScript     | `PascalCase` + `I` prefixo opcional | `ChatNode`, `AuthUser`                  |
+| Type alias               | `PascalCase`                        | `UserRole`, `InquiryStatus`             |
+| Enum                     | `PascalCase`                        | `Role`, `InquiryStatus`                 |
+| Arquivo de componente    | `PascalCase.tsx`                    | `ChatWindow.tsx`                        |
+| Arquivo de hook/util/api | `camelCase.ts`                      | `useChatNavigation.ts`, `auth.api.ts`   |
+| Arquivo de types         | `kebab-case.types.ts`               | `chatbot.types.ts`, `auth.types.ts`     |
+| Pasta de feature         | `kebab-case`                        | `chatbot/`, `admin/`                    |
 
 ### Nomenclatura de rotas da API
 
@@ -207,7 +212,15 @@ GET    /api/v1/logs               → listar logs (admin)
 POST   /api/v1/sessions/log       → registrar log de sessão e satisfação
 ```
 
-***
+### Vocabulário canônico de domínio
+
+- Papel da secretária no backend/API: `SECRETARIA`
+- Status de pergunta: `ABERTA` e `RESPONDIDA`
+- Flag de satisfação/log: `ATENDEU` e `NAO_ATENDEU`
+
+READMEs locais podem usar exemplos explicativos em inglês, desde que o contrato canônico da API permaneça em português conforme `docs/api-layer.md`.
+
+---
 
 ## 🔷 TypeScript <a id="typescript"></a>
 
@@ -237,11 +250,11 @@ export const Button = ({ label, onClick }: ButtonProps) => ...
 
 ```ts
 // ❌ Evitar — asserção forçada sem verificação
-const user = getUser() as AuthUser
+const user = getUser() as AuthUser;
 
 // ✅ Prefira type guard
 function isAuthUser(obj: unknown): obj is AuthUser {
-  return typeof obj === 'object' && obj !== null && 'role' in obj
+  return typeof obj === "object" && obj !== null && "role" in obj;
 }
 ```
 
@@ -252,16 +265,16 @@ Use um wrapper genérico para todas as respostas:
 ```ts
 // types/api.types.ts
 export interface ApiResponse<T> {
-  data: T
-  success: boolean
+  data: T;
+  success: boolean;
 }
 
 export interface PaginatedResponse<T> extends ApiResponse<T[]> {
   meta: {
-    total: number
-    page: number
-    limit: number
-  }
+    total: number;
+    page: number;
+    limit: number;
+  };
 }
 ```
 
@@ -270,18 +283,18 @@ export interface PaginatedResponse<T> extends ApiResponse<T[]> {
 ```ts
 // types/common.types.ts
 export enum Role {
-  ADMIN = 'ADMIN',
-  SECRETARIA = 'SECRETARIA',
+  ADMIN = "ADMIN",
+  SECRETARIA = "SECRETARIA",
   // Aluno não tem role — acesso público
 }
 
 export enum InquiryStatus {
-  ABERTA = 'ABERTA',
-  RESPONDIDA = 'RESPONDIDA',
+  ABERTA = "ABERTA",
+  RESPONDIDA = "RESPONDIDA",
 }
 ```
 
-***
+---
 
 ## 🔍 ESLint e Prettier <a id="eslint-e-prettier"></a>
 
@@ -326,7 +339,7 @@ pnpm typecheck     # tsc --noEmit sem compilar
 > 💡 Configure o VS Code para formatar ao salvar:
 > `"editor.formatOnSave": true` e `"editor.defaultFormatter": "esbenp.prettier-vscode"`
 
-***
+---
 
 ## ⚛️ Estrutura de Componentes React <a id="estrutura-de-componentes-react"></a>
 
@@ -334,49 +347,45 @@ Todo componente deve seguir esta ordem interna:
 
 ```tsx
 // 1. Imports externos (React, bibliotecas)
-import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
+import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 // 2. Imports internos (sempre via alias @/)
-import { Button } from '@/components/ui/button'
-import { useChatNavigation } from '@/features/chatbot/hooks/useChatNavigation'
-import type { ChatNode } from '@/features/chatbot/types/chatbot.types'
+import { Button } from "@/components/ui/button";
+import { useChatNavigation } from "@/features/chatbot/hooks/useChatNavigation";
+import type { ChatNode } from "@/features/chatbot/types/chatbot.types";
 
 // 3. Interface de props (sempre nomeada e exportada)
 export interface ChatWindowProps {
-  initialNodeId: number
-  onSessionEnd: () => void
+  initialNodeId: number;
+  onSessionEnd: () => void;
 }
 
 // 4. Componente (arrow function nomeada, exportação no final)
 const ChatWindow = ({ initialNodeId, onSessionEnd }: ChatWindowProps) => {
   // 4a. Hooks de estado
-  const [currentNode, setCurrentNode] = useState<ChatNode | null>(null)
+  const [currentNode, setCurrentNode] = useState<ChatNode | null>(null);
 
   // 4b. Hooks de efeito e queries
-  const { navigate, isLoading } = useChatNavigation(initialNodeId)
+  const { navigate, isLoading } = useChatNavigation(initialNodeId);
 
   // 4c. Handlers
   const handleOptionSelect = (nodeId: number) => {
-    navigate(nodeId)
-  }
+    navigate(nodeId);
+  };
 
   // 4d. Render condicional (loading/error antes do JSX principal)
-  if (isLoading) return <LoadingSpinner />
+  if (isLoading) return <LoadingSpinner />;
 
   // 4e. JSX principal
-  return (
-    <div className="flex flex-col gap-4">
-      {/* ... */}
-    </div>
-  )
-}
+  return <div className="flex flex-col gap-4">{/* ... */}</div>;
+};
 
 // 5. Exportação no final (facilita re-exports e mocking em testes)
-export default ChatWindow
+export default ChatWindow;
 ```
 
-***
+---
 
 ## 🎨 Estilização <a id="estilização"></a>
 
@@ -414,7 +423,7 @@ import { cn } from '@/lib/utils'
 > CSS inline é permitido **apenas** para valores dinâmicos que não existem como classe Tailwind
 > (ex: posicionamento calculado em pixels via JS).
 
-***
+---
 
 ## 🔐 Variáveis de Ambiente <a id="variáveis-de-ambiente"></a>
 
@@ -426,14 +435,14 @@ import { cn } from '@/lib/utils'
 
 ```ts
 // config/env.ts
-import { z } from 'zod'
+import { z } from "zod";
 
 const envSchema = z.object({
   VITE_API_URL: z.string().url(),
-  VITE_ENABLE_DEVTOOLS: z.string().default('false'),
-})
+  VITE_ENABLE_DEVTOOLS: z.string().default("false"),
+});
 
-export const env = envSchema.parse(import.meta.env)
+export const env = envSchema.parse(import.meta.env);
 ```
 
 ### Backend (Node.js)
@@ -442,19 +451,21 @@ export const env = envSchema.parse(import.meta.env)
 
 ```ts
 // config/env.ts
-import { z } from 'zod'
+import { z } from "zod";
 
 const envSchema = z.object({
   DATABASE_URL: z.string().url(),
-  JWT_SECRET: z.string().min(32, 'JWT_SECRET deve ter no mínimo 32 caracteres'),
-  JWT_EXPIRES_IN: z.string().default('8h'),
+  JWT_SECRET: z.string().min(32, "JWT_SECRET deve ter no mínimo 32 caracteres"),
+  JWT_EXPIRES_IN: z.string().default("8h"),
   PORT: z.coerce.number().default(3333),
-  NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
-})
+  NODE_ENV: z
+    .enum(["development", "production", "test"])
+    .default("development"),
+});
 
-export const env = envSchema.parse(process.env)
+export const env = envSchema.parse(process.env);
 ```
 
-***
+---
 
 > _Próximo documento: [`application-overview.md`](./application-overview.md)_

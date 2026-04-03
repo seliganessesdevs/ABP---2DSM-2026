@@ -4,7 +4,7 @@
 > controle de acesso e persistência de dados do sistema de autoatendimento da
 > Secretaria Acadêmica da Fatec Jacareí.
 
-***
+---
 
 <p align="center">
   <img src="https://img.shields.io/badge/Node.js-20-5FA04E?style=for-the-badge&logo=node.js&logoColor=white" />
@@ -16,7 +16,7 @@
   <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
 </p>
 
-***
+---
 
 ## 📑 Índice
 
@@ -30,24 +30,24 @@
 - [Arquitetura e Decisões Técnicas](#arquitetura-e-decisões-técnicas)
 - [Banco de Dados](#banco-de-dados)
 
-***
+---
 
 ## 🎯 Responsabilidades <a id="responsabilidades"></a>
 
 Este serviço é o **único ponto de acesso ao banco de dados**.
 O frontend nunca se conecta diretamente ao PostgreSQL.
 
-| Responsabilidade                    | Tecnologia                          |
-| ----------------------------------- | ----------------------------------- |
-| Exposição de endpoints HTTP REST    | Express                             |
-| Validação de schema dos requests    | Zod                                 |
-| Autenticação com JWT                | jsonwebtoken + Argon2id             |
-| Controle de acesso por papel (RBAC) | Middleware customizado              |
-| Comunicação com o banco de dados    | Prisma Client                       |
-| Persistência dos dados              | PostgreSQL 16                       |
-| Execução containerizada             | Docker                              |
+| Responsabilidade                    | Tecnologia              |
+| ----------------------------------- | ----------------------- |
+| Exposição de endpoints HTTP REST    | Express                 |
+| Validação de schema dos requests    | Zod                     |
+| Autenticação com JWT                | jsonwebtoken + Argon2id |
+| Controle de acesso por papel (RBAC) | Middleware customizado  |
+| Comunicação com o banco de dados    | Prisma Client           |
+| Persistência dos dados              | PostgreSQL 16           |
+| Execução containerizada             | Docker                  |
 
-***
+---
 
 ## 📁 Estrutura de Pastas <a id="estrutura-de-pastas"></a>
 
@@ -66,7 +66,7 @@ Documentação canônica da árvore completa e responsabilidades por pasta:
 Cada módulo em `src/modules/` segue a estrutura:
 `<modulo>.controller.ts` · `<modulo>.service.ts` · `<modulo>.routes.ts` · `<modulo>.types.ts`.
 
-***
+---
 
 ## ⚡ Primeiros Passos <a id="primeiros-passos"></a>
 
@@ -80,6 +80,8 @@ docker compose up --build
 ```
 
 A API estará disponível em `http://localhost:3333`.
+
+> O setup completo e canônico do monorepo está em [`../../docs/first-steps.md`](../../docs/first-steps.md).
 
 ### Execução local (sem Docker)
 
@@ -111,7 +113,7 @@ curl http://localhost:3333/api/v1/health
 # → { "success": true }
 ```
 
-***
+---
 
 ## ✅ Checklist de Implementação Inicial <a id="checklist-de-implementacao-inicial"></a>
 
@@ -128,27 +130,19 @@ Antes de qualquer feature de domínio, o backend deve ter estes artefatos mínim
 Sem essa base, qualquer módulo futuro passa a duplicar infraestrutura ou esconder
 erros de ambiente que deveriam falhar cedo.
 
-***
+---
 
 ## 📜 Scripts Disponíveis <a id="scripts-disponíveis"></a>
 
-| Script          | Comando              | Descrição                                          |
-| --------------- | -------------------- | -------------------------------------------------- |
-| Desenvolvimento | `pnpm dev`           | Inicia com hot reload via `ts-node-dev`            |
-| Build           | `pnpm build`         | Compila TypeScript para `dist/`                    |
-| Produção        | `pnpm start`         | Executa o build compilado                          |
-| Testes          | `pnpm test`          | Executa todos os testes com Vitest                 |
-| Testes (watch)  | `pnpm test:watch`    | Modo watch — reexecuta ao salvar                   |
-| Cobertura       | `pnpm test:coverage` | Gera relatório HTML em `coverage/`                 |
-| Lint            | `pnpm lint`          | ESLint em todo o projeto                           |
-| Lint (fix)      | `pnpm lint:fix`      | Corrige automaticamente o que for possível         |
-| Typecheck       | `pnpm typecheck`     | Valida TypeScript sem compilar (`tsc --noEmit`)    |
-| Migrations      | `pnpm db:migrate`    | Executa migrations pendentes com Prisma            |
-| Seed            | `pnpm db:seed`       | Popula o banco com dados iniciais do chatbot       |
-| Prisma Studio   | `pnpm db:studio`     | Abre UI visual do banco em `http://localhost:5555` |
-| Reset do banco  | `pnpm db:reset`      | ⚠️ Apaga tudo e reaplica seed (só em dev)          |
+| Script          | Comando      | Descrição                             |
+| --------------- | ------------ | ------------------------------------- |
+| Desenvolvimento | `pnpm dev`   | Inicia em modo watch com `tsx`        |
+| Build           | `pnpm build` | Gera bundle ESM com `tsup` em `dist/` |
+| Produção        | `pnpm start` | Executa o build compilado             |
 
-***
+> Scripts de lint/test no monorepo são executados pela raiz (`pnpm lint`, `pnpm test`).
+
+---
 
 ## 🔐 Variáveis de Ambiente <a id="variáveis-de-ambiente"></a>
 
@@ -174,7 +168,7 @@ NODE_ENV=development
 > Se uma variável obrigatória estiver faltando ou inválida, o processo **encerrará imediatamente**
 > com uma mensagem de erro descritiva — antes de qualquer requisição ser aceita.
 
-***
+---
 
 ## 🔌 Endpoints <a id="endpoints"></a>
 
@@ -182,26 +176,26 @@ Documentação completa com exemplos de request/response em [`docs/api-layer.md`
 
 ### Resumo rápido
 
-| Método   | Rota               |    Acesso    | Descrição                                                        |
-| -------- | ------------------ | :----------: | ---------------------------------------------------------------- |
-| `POST`   | `/auth/login`      |   Público    | Autentica e retorna JWT                                          |
-| `GET`    | `/nodes/root`      |   Público    | Retorna nó raiz do chatbot                                       |
-| `GET`    | `/nodes/:id`       |   Público    | Retorna nó com filhos e evidência                                |
-| `POST`   | `/sessions/rating` |   Público    | Registra log de sessão e satisfação                              |
-| `POST`   | `/questions`       |   Público    | Envia pergunta com nome, e-mail e anexo opcional (PDF/JPG/PNG · máx. 5 MB) |
-| `GET`    | `/questions`       | 🔒 SEC/ADMIN | Lista perguntas recebidas                                        |
-| `PATCH`  | `/questions/:id`   | 🔒 SEC/ADMIN | Atualiza status da pergunta                                      |
-| `GET`    | `/nodes`           |   🔒 ADMIN   | Lista todos os nós                                               |
-| `POST`   | `/nodes`           |   🔒 ADMIN   | Cria novo nó de navegação                                        |
-| `PATCH`  | `/nodes/:id`       |   🔒 ADMIN   | Atualiza nó existente                                            |
-| `DELETE` | `/nodes/:id`       |   🔒 ADMIN   | Remove nó (bloqueado se tiver filhos)                            |
-| `GET`    | `/users`           |   🔒 ADMIN   | Lista usuários da secretaria                                     |
-| `POST`   | `/users`           |   🔒 ADMIN   | Cria usuário da secretaria                                       |
-| `DELETE` | `/users/:id`       |   🔒 ADMIN   | Remove usuário                                                   |
-| `GET`    | `/logs`            |   🔒 ADMIN   | Lista logs de atendimento                                        |
-| `GET`    | `/health`          |   Público    | Health check da API                                              |
+| Método   | Rota             |    Acesso    | Descrição                                                                  |
+| -------- | ---------------- | :----------: | -------------------------------------------------------------------------- |
+| `POST`   | `/auth/login`    |   Público    | Autentica e retorna JWT                                                    |
+| `GET`    | `/nodes/root`    |   Público    | Retorna nó raiz do chatbot                                                 |
+| `GET`    | `/nodes/:id`     |   Público    | Retorna nó com filhos e evidência                                          |
+| `POST`   | `/sessions/log`  |   Público    | Registra log de sessão e satisfação                                        |
+| `POST`   | `/questions`     |   Público    | Envia pergunta com nome, e-mail e anexo opcional (PDF/JPG/PNG · máx. 5 MB) |
+| `GET`    | `/questions`     | 🔒 SEC/ADMIN | Lista perguntas recebidas                                                  |
+| `PATCH`  | `/questions/:id` | 🔒 SEC/ADMIN | Atualiza status da pergunta                                                |
+| `GET`    | `/nodes`         |   🔒 ADMIN   | Lista todos os nós                                                         |
+| `POST`   | `/nodes`         |   🔒 ADMIN   | Cria novo nó de navegação                                                  |
+| `PATCH`  | `/nodes/:id`     |   🔒 ADMIN   | Atualiza nó existente                                                      |
+| `DELETE` | `/nodes/:id`     |   🔒 ADMIN   | Remove nó (bloqueado se tiver filhos)                                      |
+| `GET`    | `/users`         |   🔒 ADMIN   | Lista usuários da secretaria                                               |
+| `POST`   | `/users`         |   🔒 ADMIN   | Cria usuário da secretaria                                                 |
+| `DELETE` | `/users/:id`     |   🔒 ADMIN   | Remove usuário                                                             |
+| `GET`    | `/logs`          |   🔒 ADMIN   | Lista logs de atendimento                                                  |
+| `GET`    | `/health`        |   Público    | Health check da API                                                        |
 
-***
+---
 
 ## 🏗️ Arquitetura e Decisões Técnicas <a id="arquitetura-e-decisões-técnicas"></a>
 
@@ -249,7 +243,7 @@ Requisição → authMiddleware (valida JWT) → authorize('ADMIN') (valida role
 O frontend esconde ou mostra elementos de UI baseado no role, mas **isso é apenas UX**.
 A segurança real está nos middlewares do backend (RF10, RF11).
 
-***
+---
 
 ## 🗄️ Banco de Dados <a id="banco-de-dados"></a>
 
@@ -276,14 +270,14 @@ Documentação completa do modelo ER em [`docs/application-overview.md`](../../d
 
 Entidades principais:
 
-| Entidade     | Descrição                                          |
-| ------------ | -------------------------------------------------- |
-| `User`       | Secretárias e administradores autenticados         |
+| Entidade     | Descrição                                                           |
+| ------------ | ------------------------------------------------------------------- |
+| `User`       | Secretárias e administradores autenticados                          |
 | `ChatNode`   | Nós da árvore de navegação (menus e respostas) com evidência inline |
-| `SessionLog` | Registro de cada sessão de atendimento             |
-| `Question`   | Perguntas enviadas pelos alunos à secretaria       |
+| `SessionLog` | Registro de cada sessão de atendimento                              |
+| `Question`   | Perguntas enviadas pelos alunos à secretaria                        |
 
-***
+---
 
 > _Este README deve ser atualizado sempre que novos endpoints, scripts ou variáveis
 > de ambiente forem adicionados ao projeto._

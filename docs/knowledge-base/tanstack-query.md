@@ -5,34 +5,34 @@ TanStack Query (antigo React Query) é uma biblioteca de gerenciamento de estado
 > A regra canônica de divisão entre estado de servidor e estado do cliente no FatecBot está em [`../state-management.md`](../state-management.md).
 > Este guia permanece como material de apoio para entender o "porquê" por trás dessa decisão.
 
-***
+---
 
 ## O Problema com `useEffect`
 
 Para buscar dados com `useEffect`, você escreve manualmente tudo que envolve o ciclo de vida de uma requisição: [dev](https://dev.to/akhildas675/stop-using-useeffect-for-data-fetching-try-tanstack-query-instead-5ejd)
 
 ```ts
-const [data, setData] = useState([])
-const [loading, setLoading] = useState(true)
-const [error, setError] = useState(null)
+const [data, setData] = useState([]);
+const [loading, setLoading] = useState(true);
+const [error, setError] = useState(null);
 
 useEffect(() => {
-  const controller = new AbortController()
-  
+  const controller = new AbortController();
+
   const fetchData = async () => {
     try {
-      const res = await fetch('/api/users', { signal: controller.signal })
-      setData(await res.json())
+      const res = await fetch("/api/users", { signal: controller.signal });
+      setData(await res.json());
     } catch (err) {
-      if (err.name !== 'AbortError') setError(err)
+      if (err.name !== "AbortError") setError(err);
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
-  fetchData()
-  return () => controller.abort() // cleanup manual
-}, [])
+  fetchData();
+  return () => controller.abort(); // cleanup manual
+}, []);
 ```
 
 Funciona em casos simples — mas escala mal. Ao crescer, você passa a lidar manualmente com: [dev](https://dev.to/akhildas675/stop-using-useeffect-for-data-fetching-try-tanstack-query-instead-5ejd)
@@ -43,7 +43,7 @@ Funciona em casos simples — mas escala mal. Ao crescer, você passa a lidar ma
 - Retry automático em caso de falha de rede
 - Sincronização de dados entre componentes
 
-***
+---
 
 ## A Abordagem com TanStack Query
 
@@ -73,39 +73,39 @@ const Users = () => {
 
 Sem `useState`, sem `useEffect`, sem `AbortController`, sem cleanup manual. [dev](https://dev.to/akhildas675/stop-using-useeffect-for-data-fetching-try-tanstack-query-instead-5ejd)
 
-***
+---
 
 ## O que você ganha automaticamente
 
-| Recurso | `useEffect` manual | TanStack Query |
-|---|---|---|
-| Cache entre componentes | ❌ Cada um busca de novo | ✅ Compartilhado pela `queryKey` |
-| Loading / error state | ❌ Manual com `useState` | ✅ `isLoading`, `error` prontos |
-| Refetch ao focar a aba | ❌ Não tem | ✅ Por padrão |
-| Retry em falha de rede | ❌ Manual | ✅ 3 tentativas automáticas |
-| Race condition | ❌ Você resolve | ✅ Resolvido internamente |
-| Cancelamento de requisição | ❌ `AbortController` manual | ✅ Automático |
-| Refetch por intervalo | ❌ `setInterval` manual | ✅ `refetchInterval` |
-| Paginação / infinite scroll | ❌ Complexo | ✅ `useInfiniteQuery` |
-| Devtools | ❌ Não tem | ✅ `@tanstack/react-query-devtools` |
+| Recurso                     | `useEffect` manual          | TanStack Query                      |
+| --------------------------- | --------------------------- | ----------------------------------- |
+| Cache entre componentes     | ❌ Cada um busca de novo    | ✅ Compartilhado pela `queryKey`    |
+| Loading / error state       | ❌ Manual com `useState`    | ✅ `isLoading`, `error` prontos     |
+| Refetch ao focar a aba      | ❌ Não tem                  | ✅ Por padrão                       |
+| Retry em falha de rede      | ❌ Manual                   | ✅ 3 tentativas automáticas         |
+| Race condition              | ❌ Você resolve             | ✅ Resolvido internamente           |
+| Cancelamento de requisição  | ❌ `AbortController` manual | ✅ Automático                       |
+| Refetch por intervalo       | ❌ `setInterval` manual     | ✅ `refetchInterval`                |
+| Paginação / infinite scroll | ❌ Complexo                 | ✅ `useInfiniteQuery`               |
+| Devtools                    | ❌ Não tem                  | ✅ `@tanstack/react-query-devtools` |
 
-***
+---
 
 ## `queryKey` — O Conceito Central
 
-A `queryKey` é o identificador único de um dado no cache. Quando dois componentes usam a mesma `queryKey`, eles compartilham o mesmo cache — só uma requisição é feita. [crazystack.com](https://www.crazystack.com.br/2025-3/o-segredo-do-data-fetching-no-)
+A `queryKey` é o identificador único de um dado no cache. Quando dois componentes usam a mesma `queryKey`, eles compartilham o mesmo cache — só uma requisição é feita.
 
 ```ts
 // Componente A e B usam a mesma key — uma requisição só
-useQuery({ queryKey: ['users'], queryFn: fetchUsers })
+useQuery({ queryKey: ["users"], queryFn: fetchUsers });
 
 // Query com parâmetro — cache separado por ID
-useQuery({ queryKey: ['user', userId], queryFn: () => fetchUser(userId) })
+useQuery({ queryKey: ["user", userId], queryFn: () => fetchUser(userId) });
 ```
 
-Quando você chama `queryClient.invalidateQueries({ queryKey: ['users'] })`, todos os componentes que usam essa key recebem os dados atualizados — sem prop drilling, sem Context manual. [crazystack.com](https://www.crazystack.com.br/2025-3/o-segredo-do-data-fetching-no-)
+Quando você chama `queryClient.invalidateQueries({ queryKey: ['users'] })`, todos os componentes que usam essa key recebem os dados atualizados — sem prop drilling, sem Context manual.
 
-***
+---
 
 ## Controlando Quando a Query Executa
 
@@ -114,13 +114,13 @@ O `useEffect` não tem um jeito limpo de condicionar a execução. O TanStack Qu
 ```ts
 // Só busca se userId existir
 useQuery({
-  queryKey: ['user', userId],
+  queryKey: ["user", userId],
   queryFn: () => fetchUser(userId),
   enabled: !!userId,
-})
+});
 ```
 
-***
+---
 
 ## Mutations — Para Criar, Editar e Deletar
 
@@ -128,17 +128,18 @@ Para operações de escrita, o TanStack Query oferece `useMutation`, que gerenci
 
 ```ts
 const mutation = useMutation({
-  mutationFn: (newUser) => fetch('/api/users', { method: 'POST', body: JSON.stringify(newUser) }),
+  mutationFn: (newUser) =>
+    fetch("/api/users", { method: "POST", body: JSON.stringify(newUser) }),
   onSuccess: () => {
     // Invalida o cache de 'users' — força refetch automático
-    queryClient.invalidateQueries({ queryKey: ['users'] })
+    queryClient.invalidateQueries({ queryKey: ["users"] });
   },
-})
+});
 
-mutation.mutate({ name: 'Gianluca', role: 'ADMIN' })
+mutation.mutate({ name: "Gianluca", role: "ADMIN" });
 ```
 
-***
+---
 
 ## Quando `useEffect` ainda faz sentido
 
@@ -151,7 +152,7 @@ TanStack Query resolve **estado de servidor** — dados que vêm de uma API. O `
 
 A regra prática: se você está fazendo `fetch`, use TanStack Query. Se você está reagindo a uma mudança de estado local ou sincronizando com o DOM, use `useEffect`.
 
-***
+---
 
 ## Setup mínimo
 
@@ -170,6 +171,6 @@ root.render(
 
 Em Next.js com App Router, o `QueryClientProvider` fica em um Client Component wrapper no `layout.tsx`.
 
-***
+---
 
 > _Próximo documento: [`zustand.md`](./zustand.md)_

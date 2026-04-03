@@ -2,7 +2,7 @@
 
 Coração da aplicação. Cada subpasta representa um **domínio de negócio isolado** e contém tudo que aquele domínio precisa: chamadas de API, componentes, hooks e tipos. Nenhuma lógica de negócio deve existir fora desta pasta.
 
-***
+---
 
 ## Estrutura
 
@@ -27,7 +27,7 @@ Cada feature segue a mesma estrutura interna:
 
 > Nem toda feature precisa de todas as pastas. Crie apenas o que for necessário.
 
-***
+---
 
 ## Responsabilidades por camada
 
@@ -65,7 +65,7 @@ Estado global Zustand para dados que não vêm do servidor e precisam ser acessa
 
 Interfaces e type aliases do domínio. Devem refletir fielmente os tipos retornados pela API — sem transformações ou adaptações aqui.
 
-***
+---
 
 ## Features do projeto
 
@@ -73,18 +73,18 @@ Interfaces e type aliases do domínio. Devem refletir fielmente os tipos retorna
 
 Domínio principal. Gerencia navegação na árvore de nós, exibição de respostas e evidências, avaliação de satisfação e envio de perguntas à secretaria.
 
-| Arquivo                             | Responsabilidade                                        |
-| ----------------------------------- | ------------------------------------------------------- |
-| `api/chatbot.api.ts`                | Endpoints: `/nodes/*`, `/sessions/rating`, `/questions` |
-| `hooks/useChatNavigation.ts`        | Navegar entre nós, histórico, goBack                    |
-| `hooks/useSubmitRating.ts`          | Mutation de satisfação com SessionLog                   |
-| `hooks/useSubmitQuestion.ts`        | Mutation de envio de pergunta                           |
-| `components/ChatWindow.tsx`         | Container orquestrador da conversa                      |
-| `components/MessageBubble.tsx`      | Renderiza mensagem do bot ou do usuário                 |
-| `components/OptionButton.tsx`       | Botão de opção navegável (filhos de MENU)               |
+| Arquivo                             | Responsabilidade                                               |
+| ----------------------------------- | -------------------------------------------------------------- |
+| `api/chatbot.api.ts`                | Endpoints: `/nodes/*`, `/sessions/log`, `/questions`           |
+| `hooks/useChatNavigation.ts`        | Navegar entre nós, histórico, goBack                           |
+| `hooks/useSubmitRating.ts`          | Mutation de satisfação com SessionLog                          |
+| `hooks/useSubmitQuestion.ts`        | Mutation de envio de pergunta                                  |
+| `components/ChatWindow.tsx`         | Container orquestrador da conversa                             |
+| `components/MessageBubble.tsx`      | Renderiza mensagem do bot ou do usuário                        |
+| `components/OptionButton.tsx`       | Botão de opção navegável (filhos de MENU)                      |
 | `components/EvidenceCard.tsx`       | Exibe evidência inline do nó com resumo e trecho de referência |
-| `components/SatisfactionRating.tsx` | Botões Gostei / Não gostei                              |
-| `components/QuestionForm.tsx`       | Formulário de envio de dúvida à secretaria              |
+| `components/SatisfactionRating.tsx` | Botões Gostei / Não gostei                                     |
+| `components/QuestionForm.tsx`       | Formulário de envio de dúvida à secretaria                     |
 
 ### `auth/` — RF09
 
@@ -122,9 +122,9 @@ Listagem de perguntas recebidas com filtro por status e atualização de status 
 | `hooks/useQuestions.ts`              | Query paginada com filtro de status      |
 | `hooks/useUpdateQuestion.ts`         | Mutation de atualização de status        |
 | `components/QuestionList.tsx`        | Tabela de perguntas com badge de status  |
-| `components/QuestionStatusBadge.tsx` | Badge OPEN / ANSWERED com cor            |
+| `components/QuestionStatusBadge.tsx` | Badge ABERTA / RESPONDIDA com cor        |
 
-***
+---
 
 ## Regras de contribuição
 
@@ -134,6 +134,6 @@ Listagem de perguntas recebidas com filtro por status e atualização de status 
 
 **Nova feature** — crie a pasta com as subpastas necessárias, adicione o RF correspondente no cabeçalho deste README e documente os arquivos principais nas tabelas acima.
 
-***
+---
 
 > _Próximo documento: [`./auth/README.md`](./auth/README.md)_

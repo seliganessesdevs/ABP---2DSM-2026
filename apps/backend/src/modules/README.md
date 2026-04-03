@@ -2,7 +2,7 @@
 
 O coração da aplicação. Cada módulo representa um **domínio de negócio** — um conjunto de funcionalidades relacionadas. Toda lógica de negócio, validação de entrada e acesso ao banco vive aqui.
 
-***
+---
 
 ## Estrutura
 
@@ -26,7 +26,7 @@ Cada módulo segue a mesma estrutura interna:
 └── <modulo>.types.ts       # Tipos, interfaces e DTOs do módulo
 ```
 
-***
+---
 
 ## Responsabilidade de Cada Camada
 
@@ -74,7 +74,7 @@ Toda a lógica de negócio vive aqui. Valida regras, fala com o Prisma, lança `
 
 Tipos TypeScript e DTOs do módulo. Gerados com `z.infer` a partir dos schemas Zod quando possível — sem duplicação.
 
-***
+---
 
 ## Os Módulos
 
@@ -84,7 +84,7 @@ Responsável pelo login. Recebe email e senha, valida com Argon2id, retorna o JW
 
 **Endpoint:** `POST /auth/login`
 
-***
+---
 
 ### `chatbot/`
 
@@ -94,9 +94,9 @@ Navega na árvore de `ChatNode` e registra sessões. É o módulo mais acessado 
 
 - `GET /nodes/root` — retorna o nó raiz para iniciar a navegação
 - `GET /nodes/:id` — retorna um nó com filhos e evidência
-- `POST /sessions/rating` — registra log de sessão e satisfação
+- `POST /sessions/log` — registra log de sessão e satisfação
 
-***
+---
 
 ### `questions/`
 
@@ -105,10 +105,10 @@ Gerencia as perguntas enviadas pelos alunos à secretaria. Criação é pública
 **Endpoints:**
 
 - `POST /questions` — público — aluno envia pergunta
-- `GET /questions` — ADMIN ou SECRETARY
-- `PATCH /questions/:id` — ADMIN ou SECRETARY
+- `GET /questions` — ADMIN ou SECRETARIA
+- `PATCH /questions/:id` — ADMIN ou SECRETARIA
 
-***
+---
 
 ### `nodes/`
 
@@ -116,15 +116,15 @@ CRUD completo dos nós de navegação do chatbot. Exclusivo para administradores
 
 **Endpoints:** `GET`, `POST`, `PATCH`, `DELETE` em `/nodes` — todos ADMIN.
 
-***
+---
 
 ### `users/`
 
-Gerencia os usuários da secretaria (ADMIN e SECRETARY). O admin cria, lista e remove usuários. Senhas são sempre armazenadas com hash — nunca em texto puro.
+Gerencia os usuários da secretaria (ADMIN e SECRETARIA). O admin cria, lista e remove usuários. Senhas são sempre armazenadas com hash — nunca em texto puro.
 
 **Endpoints:** `GET`, `POST`, `DELETE` em `/users` — todos ADMIN.
 
-***
+---
 
 ### `logs/`
 
@@ -132,7 +132,7 @@ Somente leitura. Expõe os registros de sessão gerados pelo módulo `chatbot` p
 
 **Endpoint:** `GET /logs` — ADMIN.
 
-***
+---
 
 ## Regras de contribuição
 
@@ -142,6 +142,6 @@ Somente leitura. Expõe os registros de sessão gerados pelo módulo `chatbot` p
 - Schemas Zod ficam no `routes.ts` ou em arquivo separado `<modulo>.schema.ts` se forem grandes
 - Erros de negócio sempre lançam `AppError` — nunca `res.status()` direto no service
 
-***
+---
 
 > _Próximo documento: [`./auth/README.md`](./auth/README.md)_

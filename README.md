@@ -7,7 +7,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/status-em%20desenvolvimento-yellow?style=for-the-badge" />
   <img src="https://img.shields.io/badge/node-%3E%3D20.x-brightgreen?style=for-the-badge&logo=node.js&logoColor=white" />
-  <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" />
   <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
   <img src="https://img.shields.io/badge/Docker-required-2496ED?style=for-the-badge&logo=docker&logoColor=white" />
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" />
@@ -319,7 +319,7 @@ Um item está **concluído** quando:
 ## 💻 Tecnologias <a id="tecnologias"></a>
 
 <p align="center">
-  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black" /></a>
+  <a href="https://react.dev/"><img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" /></a>
   <a href="https://www.typescriptlang.org/"><img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" /></a>
   <a href="https://vitejs.dev/"><img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white" /></a>
   <a href="https://tailwindcss.com/"><img src="https://img.shields.io/badge/Tailwind_CSS-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" /></a>
@@ -340,7 +340,7 @@ Um item está **concluído** quando:
 
 | Camada             | Tecnologia                        | Justificativa                                                                                                   |
 | ------------------ | --------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| **Frontend**       | React 18 + TypeScript             | Aderente ao escopo funcional da interface (RF01, RF05, RF07)                                                    |
+| **Frontend**       | React 19 + TypeScript             | Aderente ao escopo funcional da interface (RF01, RF05, RF07)                                                    |
 | **Build Tool**     | Vite                              | HMR rápido e integração nativa com React + TypeScript                                                           |
 | **Estilização**    | Tailwind CSS + shadcn/ui          | Componentização acessível e responsiva (RNF01)                                                                  |
 | **Backend**        | Node.js 20 + TypeScript + Express | API REST modular para requisitos de autenticação, autorização e regras de negócio (RF09, RF10, RF11)            |

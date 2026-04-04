@@ -8,7 +8,7 @@
 > Authorization: Bearer <token_jwt>
 > ```
 
----
+***
 
 ## 📑 Índice
 
@@ -18,12 +18,11 @@
 - [Chatbot](#chatbot)
 - [Perguntas](#perguntas)
 - [Nós de Navegação (Admin)](#nós-de-navegação-admin)
-- [Documentos (Admin)](#documentos-admin)
 - [Usuários (Admin)](#usuários-admin)
 - [Logs (Admin)](#logs-admin)
 - [Códigos de Status](#códigos-de-status)
 
----
+***
 
 ## 📐 Convenções <a id="convenções"></a>
 
@@ -87,10 +86,10 @@ E retornam metadados em `meta`:
 Os query params previstos neste documento são:
 
 - `GET /questions`: `status`, `page`, `limit`
-- `GET /logs`: `satisfaction`, `from`, `to`, `page`, `limit`
+- `GET /logs`: `flag`, `from`, `to`, `page`, `limit`
 - Endpoints sem query params documentados aqui não devem aceitar filtros implícitos sem atualização deste contrato
 
----
+***
 
 ## ❤️ Health Check <a id="health-check"></a>
 
@@ -116,7 +115,7 @@ GET /api/v1/health
 }
 ```
 
----
+***
 
 ## 🔐 Autenticação <a id="autenticação"></a>
 
@@ -149,10 +148,10 @@ Content-Type: application/json
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
     "user": {
-      "id": "a3f1c2d4-...",
+      "id": 1,
       "name": "Carolina Silva",
       "email": "secretaria@fatec.sp.gov.br",
-      "role": "SECRETARY"
+      "role": "SECRETARIA"
     }
   }
 }
@@ -167,13 +166,13 @@ Content-Type: application/json
 }
 ```
 
----
+***
 
 ## 🤖 Chatbot <a id="chatbot"></a>
 
 ### `GET /nodes/root`
 
-Retorna o nó raiz da árvore de navegação (pergunta inicial do chatbot).
+Retorna o nó raiz da árvore de navegação (prompt inicial do chatbot).
 
 - **Acesso:** Público
 - **Role exigida:** —
@@ -184,100 +183,93 @@ Retorna o nó raiz da árvore de navegação (pergunta inicial do chatbot).
 {
   "success": true,
   "data": {
-    "id": "node-root-uuid",
-    "title": "Bem-vindo ao autoatendimento da Secretaria Acadêmica da Fatec Jacareí.",
-    "content": "Para qual curso você deseja atendimento?",
-    "nodeType": "MENU",
+    "id": 1,
+    "title": "Início",
+    "slug": "root",
+    "prompt": "Para qual curso você deseja atendimento?",
     "children": [
-      { "id": "node-dsm-uuid",  "title": "Desenvolvimento de Software Multiplataforma", "order": 1 },
-      { "id": "node-geo-uuid",  "title": "Geoprocessamento", "order": 2 },
-      { "id": "node-marh-uuid", "title": "Meio Ambiente e Recursos Hídricos", "order": 3 },
-      { "id": "node-ext-uuid",  "title": "Não sou aluno", "order": 4 }
+      { "id": 2, "title": "Desenvolvimento de Software Multiplataforma", "slug": "dsm", "display_order": 1 },
+      { "id": 3, "title": "Geoprocessamento", "slug": "geo", "display_order": 2 },
+      { "id": 4, "title": "Meio Ambiente e Recursos Hídricos", "slug": "marh", "display_order": 3 },
+      { "id": 5, "title": "Não sou aluno", "slug": "externo", "display_order": 4 }
     ]
   }
 }
 ```
 
----
+***
 
 ### `GET /nodes/:id`
 
-Retorna um nó específico com seus filhos diretos (próximas opções) e chunks de evidência vinculados.
+Retorna um nó específico com seus filhos diretos. Nós folha (sem filhos) retornam `answer_summary` e evidência inline.
 
 - **Acesso:** Público
 - **Role exigida:** —
 
 **Parâmetros**
 
-| Parâmetro | Tipo   | Descrição             |
-|-----------|--------|-----------------------|
-| `id`      | UUID   | ID do nó de navegação |
+| Parâmetro | Tipo | Descrição             |
+|-----------|------|-----------------------|
+| `id`      | Int  | ID do nó de navegação |
 
-**Response `200 OK` — nó do tipo `MENU`**
+**Response `200 OK` — nó de menu (com filhos)**
 
 ```json
 {
   "success": true,
   "data": {
-    "id": "node-dsm-uuid",
+    "id": 2,
     "title": "Desenvolvimento de Software Multiplataforma",
-    "content": "Escolha o assunto:",
-    "nodeType": "MENU",
-    "parentId": "node-root-uuid",
+    "slug": "dsm",
+    "prompt": "Escolha o assunto:",
+    "answer_summary": null,
+    "evidence_excerpt": null,
+    "evidence_source": null,
+    "parent_id": 1,
     "children": [
-      { "id": "node-dsm-aacc-uuid",  "title": "Atividades Complementares (AACC)", "order": 1 },
-      { "id": "node-dsm-dates-uuid", "title": "Datas importantes do semestre", "order": 2 },
-      { "id": "node-dsm-ext-uuid",   "title": "Disciplinas com atividades de extensão", "order": 3 },
-      { "id": "node-dsm-estag-uuid", "title": "Estágio", "order": 4 }
-    ],
-    "chunks": []
-  }
-}
-```
-
-**Response `200 OK` — nó do tipo `ANSWER`**
-
-```json
-{
-  "success": true,
-  "data": {
-    "id": "node-dsm-aacc-uuid",
-    "title": "Atividades Complementares (AACC)",
-    "content": "O curso de Desenvolvimento de Software Multiplataforma não possui Atividades Acadêmico-Científico-Culturais (AACC) previstas em sua matriz curricular.",
-    "nodeType": "ANSWER",
-    "parentId": "node-dsm-uuid",
-    "children": [],
-    "chunks": []
-  }
-}
-```
-
-**Response `200 OK` — nó com evidência documental**
-
-```json
-{
-  "success": true,
-  "message": "OK",
-  "data": {
-    "id": "node-dsm-aproveita-uuid",
-    "title": "Aproveitamento de estudos",
-    "content": "A solicitação deve ser realizada pelo SIGA, anexando histórico escolar e ementas. Similaridade ≥ 70%: aprovação direta. Entre 50–70%: exame de proficiência.",
-    "nodeType": "ANSWER",
-    "parentId": "node-dsm-dispensa-uuid",
-    "children": [],
-    "chunks": [
-      {
-        "id": "chunk-uuid-1",
-        "content": "Art. 76 – O aproveitamento de estudos [...] similaridade mínima de 70% para aprovação direta.",
-        "page": 25,
-        "section": "Seção I",
-        "document": {
-          "id": "doc-uuid-1",
-          "name": "Regulamento Geral dos Cursos Superiores das Fatecs",
-          "type": "REGULAMENTO"
-        }
-      }
+      { "id": 6,  "title": "Atividades Complementares (AACC)", "slug": "dsm-aacc", "display_order": 1 },
+      { "id": 7,  "title": "Datas importantes do semestre", "slug": "dsm-datas", "display_order": 2 },
+      { "id": 8,  "title": "Disciplinas com atividades de extensão", "slug": "dsm-extensao", "display_order": 3 },
+      { "id": 9,  "title": "Estágio", "slug": "dsm-estagio", "display_order": 4 }
     ]
+  }
+}
+```
+
+**Response `200 OK` — nó folha sem evidência**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": 6,
+    "title": "Atividades Complementares (AACC)",
+    "slug": "dsm-aacc",
+    "prompt": null,
+    "answer_summary": "O curso de Desenvolvimento de Software Multiplataforma não possui Atividades Acadêmico-Científico-Culturais (AACC) previstas em sua matriz curricular.",
+    "evidence_excerpt": null,
+    "evidence_source": null,
+    "parent_id": 2,
+    "children": []
+  }
+}
+```
+
+**Response `200 OK` — nó folha com evidência**
+
+```json
+{
+  "success": true,
+  "data": {
+    "id": 14,
+    "title": "Aproveitamento de estudos",
+    "slug": "dsm-aproveitamento",
+    "prompt": null,
+    "answer_summary": "A solicitação deve ser realizada pelo SIGA, anexando histórico escolar e ementas. Similaridade ≥ 70%: aprovação direta. Entre 50–70%: exame de proficiência.",
+    "evidence_excerpt": "Art. 76 – O aproveitamento de estudos [...] similaridade mínima de 70% para aprovação direta.",
+    "evidence_source": "Regulamento Geral dos Cursos Superiores das Fatecs, Seção I, p. 25",
+    "parent_id": 13,
+    "children": []
   }
 }
 ```
@@ -291,9 +283,9 @@ Retorna um nó específico com seus filhos diretos (próximas opções) e chunks
 }
 ```
 
----
+***
 
-### `POST /sessions/rating`
+### `POST /sessions/log`
 
 Registra o log de atendimento e a avaliação de satisfação ao encerrar uma sessão.
 
@@ -304,15 +296,13 @@ Registra o log de atendimento e a avaliação de satisfação ao encerrar uma se
 
 ```json
 {
-  "navigationPath": [
-    "node-root-uuid",
-    "node-dsm-uuid",
-    "node-dsm-estag-uuid",
-    "node-dsm-estag-duracao-uuid"
+  "navigation_flow": [
+    "root",
+    "dsm",
+    "dsm-estagio",
+    "dsm-estagio-duracao"
   ],
-  "satisfaction": "LIKED",
-  "startedAt": "2026-03-27T20:15:00.000Z",
-  "endedAt": "2026-03-27T20:17:43.000Z"
+  "flag": "ATENDEU"
 }
 ```
 
@@ -322,12 +312,12 @@ Registra o log de atendimento e a avaliação de satisfação ao encerrar uma se
 {
   "success": true,
   "data": {
-    "sessionLogId": "session-uuid-1"
+    "interactionLogId": 1
   }
 }
 ```
 
----
+***
 
 ## ❓ Perguntas <a id="perguntas"></a>
 
@@ -338,14 +328,23 @@ Envia uma pergunta do aluno à Secretaria Acadêmica.
 - **Acesso:** Público
 - **Role exigida:** —
 
-**Request**
+**Request** — sem anexo
 
 ```json
 {
-  "text": "Posso solicitar aproveitamento de uma disciplina cursada em 2015?",
-  "email": "aluno@fatec.sp.gov.br",
-  "sessionLogId": "session-uuid-1"
+  "requester_name": "João Silva",
+  "question": "Posso solicitar aproveitamento de uma disciplina cursada em 2015?",
+  "requester_email": "joao.silva@fatec.sp.gov.br"
 }
+```
+
+**Request** — com anexo (multipart/form-data)
+
+```
+requester_name: João Silva
+question: Posso solicitar aproveitamento de uma disciplina cursada em 2015?
+requester_email: joao.silva@fatec.sp.gov.br
+attachment: [arquivo PDF/JPG/PNG — máx. 5MB]
 ```
 
 **Response `201 Created`**
@@ -354,9 +353,9 @@ Envia uma pergunta do aluno à Secretaria Acadêmica.
 {
   "success": true,
   "data": {
-    "id": "question-uuid-1",
-    "status": "OPEN",
-    "createdAt": "2026-03-27T20:18:00.000Z"
+    "id": 1,
+    "status": "ABERTA",
+    "created_at": "2026-03-27T20:18:00.000Z"
   }
 }
 ```
@@ -368,32 +367,32 @@ Envia uma pergunta do aluno à Secretaria Acadêmica.
   "success": false,
   "message": "Dados inválidos",
   "errors": [
-    { "field": "email", "message": "E-mail inválido" }
+    { "field": "requester_email", "message": "E-mail inválido" }
   ]
 }
 ```
 
----
+***
 
 ### `GET /questions`
 
 Lista todas as perguntas recebidas.
 
 - **Acesso:** 🔒 Protegido
-- **Role exigida:** `SECRETARY` ou `ADMIN`
+- **Role exigida:** `SECRETARIA` ou `ADMIN`
 
 **Query Params**
 
-| Param    | Tipo                      | Padrão | Descrição                 |
-|----------|---------------------------|--------|---------------------------|
-| `status` | `OPEN` \| `ANSWERED`      | —      | Filtrar por status        |
-| `page`   | number                    | `1`    | Página atual              |
-| `limit`  | number                    | `20`   | Itens por página          |
+| Param    | Tipo                          | Padrão | Descrição          |
+|----------|-------------------------------|--------|--------------------|
+| `status` | `ABERTA` \| `RESPONDIDA`      | —      | Filtrar por status |
+| `page`   | number                        | `1`    | Página atual       |
+| `limit`  | number                        | `20`   | Itens por página   |
 
 **Request**
 
 ```http
-GET /api/v1/questions?status=OPEN&page=1&limit=20
+GET /api/v1/questions?status=ABERTA&page=1&limit=20
 Authorization: Bearer <token>
 ```
 
@@ -404,12 +403,13 @@ Authorization: Bearer <token>
   "success": true,
   "data": [
     {
-      "id": "question-uuid-1",
-      "text": "Posso solicitar aproveitamento de uma disciplina cursada em 2015?",
-      "email": "aluno@fatec.sp.gov.br",
-      "status": "OPEN",
-      "createdAt": "2026-03-27T20:18:00.000Z",
-      "updatedAt": "2026-03-27T20:18:00.000Z"
+      "id": 1,
+      "requester_name": "João Silva",
+      "question": "Posso solicitar aproveitamento de uma disciplina cursada em 2015?",
+      "requester_email": "joao.silva@fatec.sp.gov.br",
+      "status": "ABERTA",
+      "created_at": "2026-03-27T20:18:00.000Z",
+      "updated_at": "2026-03-27T20:18:00.000Z"
     }
   ],
   "meta": {
@@ -420,29 +420,29 @@ Authorization: Bearer <token>
 }
 ```
 
----
+***
 
 ### `PATCH /questions/:id`
 
 Atualiza o status de uma pergunta.
 
 - **Acesso:** 🔒 Protegido
-- **Role exigida:** `SECRETARY` ou `ADMIN`
+- **Role exigida:** `SECRETARIA` ou `ADMIN`
 
-> A única transição válida para `Question` é `OPEN → ANSWERED`.
-> O endpoint não deve aceitar retorno para `OPEN` nem novos status sem atualização do contrato.
+> A única transição válida é `ABERTA → RESPONDIDA`.
+> O endpoint não deve aceitar retorno para `ABERTA` nem novos status sem atualização deste contrato.
 
 **Request**
 
 ```http
-PATCH /api/v1/questions/question-uuid-1
+PATCH /api/v1/questions/1
 Authorization: Bearer <token>
 Content-Type: application/json
 ```
 
 ```json
 {
-  "status": "ANSWERED"
+  "status": "RESPONDIDA"
 }
 ```
 
@@ -452,14 +452,14 @@ Content-Type: application/json
 {
   "success": true,
   "data": {
-    "id": "question-uuid-1",
-    "status": "ANSWERED",
-    "updatedAt": "2026-03-27T21:00:00.000Z"
+    "id": 1,
+    "status": "RESPONDIDA",
+    "updated_at": "2026-03-27T21:00:00.000Z"
   }
 }
 ```
 
----
+***
 
 ## 🌿 Nós de Navegação (Admin) <a id="nós-de-navegação-admin"></a>
 
@@ -474,11 +474,14 @@ Cria um novo nó na árvore de navegação.
 ```json
 {
   "title": "Novo tópico",
-  "content": "Resposta ou pergunta do bot.",
-  "nodeType": "ANSWER",
-  "parentId": "node-dsm-uuid",
-  "order": 5,
-  "isActive": true
+  "slug": "dsm-novo-topico",
+  "prompt": "Qual é sua dúvida sobre este tópico?",
+  "answer_summary": "Resposta objetiva do bot para este nó.",
+  "evidence_excerpt": null,
+  "evidence_source": null,
+  "parent_id": 2,
+  "display_order": 5,
+  "is_active": true
 }
 ```
 
@@ -488,18 +491,18 @@ Cria um novo nó na árvore de navegação.
 {
   "success": true,
   "data": {
-    "id": "node-novo-uuid",
+    "id": 20,
     "title": "Novo tópico",
-    "nodeType": "ANSWER",
-    "parentId": "node-dsm-uuid",
-    "order": 5,
-    "isActive": true,
-    "createdAt": "2026-03-28T10:00:00.000Z"
+    "slug": "dsm-novo-topico",
+    "parent_id": 2,
+    "display_order": 5,
+    "is_active": true,
+    "created_at": "2026-03-28T10:00:00.000Z"
   }
 }
 ```
 
----
+***
 
 ### `PATCH /nodes/:id`
 
@@ -509,8 +512,8 @@ Atualiza parcialmente um nó existente.
 
 ```json
 {
-  "content": "Conteúdo atualizado com novas informações do calendário.",
-  "isActive": true
+  "answer_summary": "Conteúdo atualizado com novas informações do calendário.",
+  "is_active": true
 }
 ```
 
@@ -519,11 +522,14 @@ Atualiza parcialmente um nó existente.
 ```json
 {
   "success": true,
-  "data": { "id": "node-novo-uuid", "content": "Conteúdo atualizado..." }
+  "data": {
+    "id": 20,
+    "answer_summary": "Conteúdo atualizado com novas informações do calendário."
+  }
 }
 ```
 
----
+***
 
 ### `DELETE /nodes/:id`
 
@@ -547,74 +553,7 @@ Remove um nó. Se o nó possuir filhos, a operação é bloqueada.
 }
 ```
 
----
-
-## 📄 Documentos (Admin) <a id="documentos-admin"></a>
-
-> Todas as rotas abaixo exigem `role: ADMIN`.
-
-### `GET /documents`
-
-Lista todos os documentos oficiais cadastrados.
-
-**Response `200 OK`**
-
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": "doc-uuid-1",
-      "name": "Regulamento Geral dos Cursos Superiores das Fatecs",
-      "type": "REGULAMENTO",
-      "fileUrl": "https://storage.../regulamento.pdf",
-      "createdAt": "2026-03-01T00:00:00.000Z",
-      "_count": { "chunks": 42 }
-    }
-  ],
-  "meta": {
-    "total": 4,
-    "page": 1,
-    "limit": 20
-  }
-}
-```
-
-### `POST /documents`
-
-Cadastra um novo documento e seus chunks indexados.
-
-**Request**
-
-```json
-{
-  "name": "Manual de Estágio",
-  "type": "MANUAL",
-  "fileUrl": "https://storage.../manual-estagio.pdf",
-  "chunks": [
-    {
-      "content": "Art. 12 – O estágio supervisionado tem duração mínima de 240 horas...",
-      "page": 8,
-      "section": "Capítulo II"
-    }
-  ]
-}
-```
-
-**Response `201 Created`**
-
-```json
-{
-  "success": true,
-  "data": {
-    "id": "doc-uuid-2",
-    "name": "Manual de Estágio",
-    "chunksCreated": 1
-  }
-}
-```
-
----
+***
 
 ## 👤 Usuários (Admin) <a id="usuários-admin"></a>
 
@@ -622,7 +561,7 @@ Cadastra um novo documento e seus chunks indexados.
 
 ### `GET /users`
 
-Lista os usuários com perfil `SECRETARY`.
+Lista os usuários com perfil `SECRETARIA`.
 
 **Response `200 OK`**
 
@@ -631,11 +570,11 @@ Lista os usuários com perfil `SECRETARY`.
   "success": true,
   "data": [
     {
-      "id": "user-uuid-1",
+      "id": 1,
       "name": "Carolina Silva",
       "email": "secretaria@fatec.sp.gov.br",
-      "role": "SECRETARY",
-      "createdAt": "2026-02-01T00:00:00.000Z"
+      "role": "SECRETARIA",
+      "created_at": "2026-02-01T00:00:00.000Z"
     }
   ],
   "meta": {
@@ -657,7 +596,7 @@ Cria um novo usuário da secretaria.
   "name": "Ana Paula",
   "email": "ana.paula@fatec.sp.gov.br",
   "password": "senhaTemporaria123",
-  "role": "SECRETARY"
+  "role": "SECRETARIA"
 }
 ```
 
@@ -667,10 +606,10 @@ Cria um novo usuário da secretaria.
 {
   "success": true,
   "data": {
-    "id": "user-uuid-2",
+    "id": 2,
     "name": "Ana Paula",
     "email": "ana.paula@fatec.sp.gov.br",
-    "role": "SECRETARY"
+    "role": "SECRETARIA"
   }
 }
 ```
@@ -688,7 +627,7 @@ Remove um usuário. Um administrador não pode remover a si próprio.
 }
 ```
 
----
+***
 
 ## 📊 Logs (Admin) <a id="logs-admin"></a>
 
@@ -700,18 +639,18 @@ Lista os logs de atendimento com filtros opcionais.
 
 **Query Params**
 
-| Param          | Tipo                        | Descrição                             |
-|----------------|-----------------------------|---------------------------------------|
-| `satisfaction` | `LIKED` \| `DISLIKED`       | Filtrar por avaliação                 |
-| `from`         | ISO 8601 date               | Data de início do intervalo           |
-| `to`           | ISO 8601 date               | Data de fim do intervalo              |
-| `page`         | number                      | Página atual (padrão: 1)              |
-| `limit`        | number                      | Itens por página (padrão: 20)         |
+| Param   | Tipo                              | Descrição                           |
+|---------|-----------------------------------|-------------------------------------|
+| `flag`  | `ATENDEU` \| `NAO_ATENDEU`        | Filtrar por avaliação               |
+| `from`  | ISO 8601 date                     | Data de início do intervalo         |
+| `to`    | ISO 8601 date                     | Data de fim do intervalo            |
+| `page`  | number                            | Página atual (padrão: 1)            |
+| `limit` | number                            | Itens por página (padrão: 20)       |
 
 **Request**
 
 ```http
-GET /api/v1/logs?from=2026-03-01&to=2026-03-31&satisfaction=DISLIKED
+GET /api/v1/logs?from=2026-03-01&to=2026-03-31&flag=NAO_ATENDEU
 Authorization: Bearer <token>
 ```
 
@@ -722,20 +661,21 @@ Authorization: Bearer <token>
   "success": true,
   "data": [
     {
-      "id": "session-uuid-1",
-      "navigationPath": [
-        "node-root-uuid",
-        "node-dsm-uuid",
-        "node-dsm-estag-uuid"
+      "id": 1,
+      "navigation_flow": [
+        "root",
+        "dsm",
+        "dsm-estagio"
       ],
-      "satisfaction": "DISLIKED",
-      "startedAt": "2026-03-27T20:15:00.000Z",
-      "endedAt": "2026-03-27T20:17:43.000Z",
-      "question": {
-        "id": "question-uuid-1",
-        "text": "Posso solicitar aproveitamento de uma disciplina cursada em 2015?",
-        "status": "OPEN"
-      }
+      "flag": "NAO_ATENDEU",
+      "created_at": "2026-03-27T20:17:43.000Z",
+      "inquiries": [
+        {
+          "id": 1,
+          "question": "Posso solicitar aproveitamento de uma disciplina cursada em 2015?",
+          "status": "ABERTA"
+        }
+      ]
     }
   ],
   "meta": {
@@ -746,22 +686,22 @@ Authorization: Bearer <token>
 }
 ```
 
----
+***
 
 ## 📋 Códigos de Status <a id="códigos-de-status"></a>
 
-| Código | Significado         | Quando ocorre                                                |
-|:------:|---------------------|--------------------------------------------------------------|
-| `200`  | OK                  | Requisição bem-sucedida (GET, PATCH, DELETE)                 |
-| `201`  | Created             | Recurso criado com sucesso (POST)                            |
-| `400`  | Bad Request         | Body malformado ou faltando campos obrigatórios              |
-| `401`  | Unauthorized        | Token ausente, inválido ou expirado                          |
-| `403`  | Forbidden           | Token válido, mas role sem permissão para a operação         |
-| `404`  | Not Found           | Recurso não encontrado pelo ID informado                     |
-| `409`  | Conflict            | Operação bloqueada por regra de negócio (ex: nó com filhos)  |
-| `422`  | Unprocessable Entity| Dados válidos no formato mas inválidos semanticamente (Zod)  |
-| `500`  | Internal Server Error | Erro não tratado no servidor — verificar logs do backend   |
+| Código | Significado            | Quando ocorre                                                |
+|:------:|------------------------|--------------------------------------------------------------|
+| `200`  | OK                     | Requisição bem-sucedida (GET, PATCH, DELETE)                 |
+| `201`  | Created                | Recurso criado com sucesso (POST)                            |
+| `400`  | Bad Request            | Body malformado ou faltando campos obrigatórios              |
+| `401`  | Unauthorized           | Token ausente, inválido ou expirado                          |
+| `403`  | Forbidden              | Token válido, mas role sem permissão para a operação         |
+| `404`  | Not Found              | Recurso não encontrado pelo ID informado                     |
+| `409`  | Conflict               | Operação bloqueada por regra de negócio (ex: nó com filhos)  |
+| `422`  | Unprocessable Entity   | Dados válidos no formato mas inválidos semanticamente (Zod)  |
+| `500`  | Internal Server Error  | Erro não tratado no servidor — verificar logs do backend     |
 
----
+***
 
 > _Próximo documento: [`testing.md`](./testing.md)_

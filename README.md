@@ -80,19 +80,19 @@ Essa abordagem garante rastreabilidade, confiabilidade da informação e reduç�
 
 ### 🧩 Funcionais
 
-| Código   | Descrição                                                                                    |
-| -------- | -------------------------------------------------------------------------------------------- |
-| **RF01** | **Navegação conversacional** — menus e submenus hierárquicos em modelo chatbot               |
-| **RF02** | **Repositório de conhecimento** — nós de navegação, Q&A, documentos, chunks e metadados      |
-| **RF03** | **Perfis de usuário** — Aluno (público), Secretária Acadêmica e Administrador (autenticados) |
-| **RF04** | **Gestão de conteúdo (Admin)** — CRUD de nós, documentos, usuários e logs                    |
-| **RF05** | **Encaminhamento de pergunta** — envio de dúvida com e-mail institucional para resposta      |
-| **RF06** | **Gestão de perguntas (Secretária)** — listagem e atualização de status das perguntas        |
-| **RF07** | **Avaliação de satisfação** — registro de "Gostei" / "Não gostei" ao fim do atendimento      |
-| **RF08** | **Registro de logs** — fluxo de navegação, perguntas enviadas, satisfação, data e hora       |
-| **RF09** | **Autenticação** — login/senha para Secretária e Administrador; Aluno permanece público      |
-| **RF10** | **Autorização por papel (RBAC)** — controle de acesso granular por role no backend           |
-| **RF11** | **Proteção de rotas** — middleware de autenticação com validação de JWT obrigatória          |
+| Código   | Descrição                                                                                       |
+| -------- | ----------------------------------------------------------------------------------------------- |
+| **RF01** | **Navegação conversacional** — menus e submenus hierárquicos em modelo chatbot                  |
+| **RF02** | **Repositório de conhecimento** — nós de navegação com respostas, evidências inline e metadados |
+| **RF03** | **Perfis de usuário** — Aluno (público), Secretária Acadêmica e Administrador (autenticados)    |
+| **RF04** | **Gestão de conteúdo (Admin)** — CRUD de nós de navegação, usuários e logs                      |
+| **RF05** | **Encaminhamento de pergunta** — envio de dúvida com e-mail institucional e anexo opcional      |
+| **RF06** | **Gestão de perguntas (Secretária)** — listagem e atualização de status das perguntas           |
+| **RF07** | **Avaliação de satisfação** — registro de "Atendeu" / "Não atendeu" ao fim do atendimento       |
+| **RF08** | **Registro de logs** — fluxo de navegação, perguntas enviadas, satisfação, data e hora          |
+| **RF09** | **Autenticação** — login/senha para Secretária e Administrador; Aluno permanece público         |
+| **RF10** | **Autorização por papel (RBAC)** — controle de acesso granular por role no backend              |
+| **RF11** | **Proteção de rotas** — middleware de autenticação com validação de JWT obrigatória             |
 
 ### ⚙️ Não Funcionais
 
@@ -112,30 +112,178 @@ Essa abordagem garante rastreabilidade, confiabilidade da informação e reduç�
 
 ## 📖 User Stories <a id="user-stories"></a>
 
-| Requisito | User Story                                                                                                                                                     |
-| --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **RF01**  | Como **aluno**, quero navegar por menus e submenus do chatbot, para encontrar a informação que preciso sem contato direto com a secretaria.                    |
-| **RF02**  | Como **administrador**, quero manter um repositório de conhecimento estruturado, para que as respostas do bot sejam rastreáveis até documentos oficiais.       |
-| **RF03**  | Como **visitante**, quero usar o chatbot sem me cadastrar, para tirar dúvidas de forma ágil e sem fricção.                                                     |
-| **RF04**  | Como **administrador**, quero criar, editar e excluir nós de navegação e documentos, para manter o conteúdo do bot sempre atualizado.                          |
-| **RF05**  | Como **aluno**, quero poder enviar uma dúvida diretamente à secretaria ao final do atendimento, para receber suporte em casos não cobertos pelo bot.           |
-| **RF06**  | Como **secretária acadêmica**, quero visualizar e atualizar o status das perguntas recebidas, para gerenciar os atendimentos pendentes com eficiência.         |
-| **RF07**  | Como **aluno**, quero avaliar se o atendimento foi satisfatório, para contribuir com a melhoria contínua do sistema.                                           |
-| **RF08**  | Como **administrador**, quero visualizar logs completos de atendimento com data e hora, para auditoria e análise de uso.                                       |
-| **RF09**  | Como **secretária acadêmica**, quero fazer login com e-mail e senha, para acessar o painel de gestão de perguntas com segurança.                               |
-| **RF10**  | Como **sistema**, devo garantir que cada role acesse apenas as funcionalidades permitidas, para evitar acessos não autorizados.                                |
-| **RF11**  | Como **desenvolvedor**, quero que todas as rotas administrativas estejam protegidas por middleware JWT, para garantir que nenhuma rota sensível fique exposta. |
+> Cada User Story segue o formato: **Como** [tipo de usuário] / **Quero** [ação] / **Para que** [benefício].
+> Os critérios de aceitação definem as condições que a funcionalidade deve atender para ser considerada concluída.
+
+---
+
+### RF01 — Navegação Conversacional
+
+> Como **aluno**, quero navegar por menus e submenus do chatbot, para encontrar a informação que preciso sem contato direto com a secretaria.
+
+**Critérios de Aceitação:**
+
+- O menu raiz é exibido automaticamente ao abrir o chatbot, sem necessidade de qualquer interação prévia
+- Cada opção clicável exibe o submenu correspondente como nova mensagem do bot
+- O histórico de navegação é mantido visível durante toda a sessão (trilha de mensagens)
+- Nós folha (sem filhos) exibem o conteúdo da resposta (`answer_summary`) e não apresentam novos botões de opção
+- O usuário consegue identificar visualmente a diferença entre uma mensagem do bot e uma ação do usuário
+
+---
+
+### RF02 — Repositório de Conhecimento
+
+> Como **administrador**, quero manter um repositório de conhecimento estruturado, para que as respostas do bot sejam rastreáveis até documentos oficiais.
+
+**Critérios de Aceitação:**
+
+- Cada nó de resposta pode conter um trecho de evidência (`evidence_excerpt`) e a fonte de origem (`evidence_source`)
+- Quando um nó possui evidência, ela é exibida ao usuário com o trecho do texto e a fonte correspondente
+- Nós sem evidência exibem apenas a resposta resumida (`answer_summary`)
+
+---
+
+### RF03 — Perfis de Usuário
+
+> Como **visitante**, quero usar o chatbot sem me cadastrar, para tirar dúvidas de forma ágil e sem fricção.
+
+**Critérios de Aceitação:**
+
+- O chatbot público é acessível sem autenticação em qualquer dispositivo
+- Usuários com role `ADMIN` e `SECRETARIA` só acessam seus painéis após login válido
+- Tentativa de acesso a rotas protegidas sem token válido resulta em redirecionamento para `/login`
+- O papel (role) do usuário autenticado é refletido nas opções de menu exibidas na interface
+
+---
+
+### RF04 — Gestão de Conteúdo (Admin)
+
+> Como **administrador**, quero criar, editar e excluir nós de navegação, para manter o conteúdo do bot sempre atualizado.
+
+**Critérios de Aceitação:**
+
+- O administrador consegue criar um novo nó informando: título, slug, prompt, resposta resumida (`answer_summary`), evidência (`evidence_excerpt` e `evidence_source`), nó pai e ordem de exibição (`display_order`)
+- O administrador consegue editar qualquer campo de um nó existente; as alterações refletem imediatamente no chatbot público
+- A exclusão de um nó pai só é permitida após a remoção ou realocação de seus filhos
+- Todas as ações de CRUD geram registro em log com timestamp e identificação do usuário responsável
+
+---
+
+### RF05 — Encaminhamento de Pergunta
+
+> Como **aluno**, quero poder enviar uma dúvida diretamente à secretaria ao final do atendimento, para receber suporte em casos não cobertos pelo bot.
+
+**Critérios de Aceitação:**
+
+- O formulário de envio exige: nome do solicitante (obrigatório), texto da dúvida (obrigatório) e e-mail institucional do aluno (obrigatório, formato válido)
+- O formulário permite anexar um arquivo de forma opcional; formatos aceitos: PDF, JPG e PNG; tamanho máximo: 5 MB
+- Quando presente, o anexo é persistido junto com a pergunta (`attachment_name`, `attachment_mime_type`, `attachment_data`)
+- Após o envio bem-sucedido, o usuário recebe confirmação visual na interface
+- A pergunta é persistida no banco com status `ABERTA`
+- Campos inválidos exibem mensagem de erro específica inline (ex.: "E-mail inválido")
+- O envio é possível sem autenticação (rota pública)
+
+---
+
+### RF06 — Gestão de Perguntas (Secretária)
+
+> Como **secretária acadêmica**, quero visualizar e atualizar o status das perguntas recebidas, para gerenciar os atendimentos pendentes com eficiência.
+
+**Critérios de Aceitação:**
+
+- O painel exibe a lista de perguntas com: nome do solicitante, texto, e-mail do aluno, status atual e data de criação
+- A secretária consegue filtrar perguntas por status (`ABERTA` / `RESPONDIDA`)
+- A secretária consegue atualizar o status de uma pergunta para `RESPONDIDA`; a alteração é refletida imediatamente na listagem
+- Perguntas abertas são destacadas visualmente em relação às respondidas
+- A listagem é paginada e exibe no máximo 20 itens por página
+
+---
+
+### RF07 — Avaliação de Satisfação
+
+> Como **aluno**, quero avaliar se o atendimento foi satisfatório, para contribuir com a melhoria contínua do sistema.
+
+**Critérios de Aceitação:**
+
+- O componente de avaliação ("Atendeu" / "Não atendeu") é exibido ao final de um atendimento concluído (nó folha sem filhos)
+- Após selecionar uma opção, o usuário recebe confirmação visual e os botões ficam desabilitados
+- A avaliação é enviada junto com o log de sessão (`flag: ATENDEU | NAO_ATENDEU`)
+- Não é possível enviar mais de uma avaliação por sessão
+- A avaliação é opcional; o aluno pode encerrar o chat sem avaliar
+
+---
+
+### RF08 — Registro de Logs
+
+> Como **administrador**, quero visualizar logs completos de atendimento com data e hora, para auditoria e análise de uso.
+
+**Critérios de Aceitação:**
+
+- Cada sessão gera um `interaction_log` com: fluxo de navegação (`navigation_flow` como array de slugs visitados), satisfação (se registrada) e `created_at`
+- Os logs são visíveis no painel administrativo com filtro por período e por satisfação
+- Perguntas enviadas durante uma sessão são registradas em `inquiry_ids` no log da sessão correspondente
+- Os dados de log nunca expõem informações pessoais além do e-mail informado voluntariamente pelo aluno
+
+---
+
+### RF09 — Autenticação
+
+> Como **secretária acadêmica**, quero fazer login com e-mail e senha, para acessar o painel de gestão de perguntas com segurança.
+
+**Critérios de Aceitação:**
+
+- O formulário de login exige e-mail e senha; campos em branco exibem mensagem de erro inline
+- Credenciais inválidas retornam mensagem de erro genérica sem indicar qual campo está errado (segurança)
+- Login bem-sucedido redireciona o usuário para o painel correspondente ao seu papel: `ADMIN → /admin`, `SECRETARIA → /secretary`
+- O token JWT retornado contém os campos `sub`, `role` e `exp`
+- O token expira em 8 horas; após expiração, o usuário é redirecionado para `/login`
+
+---
+
+### RF10 — Autorização por Papel (RBAC)
+
+> Como **sistema**, devo garantir que cada role acesse apenas as funcionalidades permitidas, para evitar acessos não autorizados.
+
+**Critérios de Aceitação:**
+
+- Um usuário com role `SECRETARIA` não consegue acessar endpoints de CRUD de nós (retorno `403 Forbidden`)
+- Um usuário com role `ADMIN` consegue acessar todos os recursos protegidos
+- Tentativas de acesso a rotas fora do papel do usuário são registradas e retornam `403` com mensagem descritiva
+- O controle de acesso é aplicado no backend via middleware, independentemente do que o frontend exibe
+
+---
+
+### RF11 — Proteção de Rotas
+
+> Como **desenvolvedor**, quero que todas as rotas administrativas estejam protegidas por middleware JWT, para garantir que nenhuma rota sensível fique exposta.
+
+**Critérios de Aceitação:**
+
+- Qualquer requisição a rotas sob `/api/v1/admin/*` e `/api/v1/secretary/*` sem header `Authorization: Bearer <token>` retorna `401 Unauthorized`
+- Token malformado ou com assinatura inválida retorna `401` com mensagem "Token inválido"
+- Token expirado retorna `401` com mensagem "Token expirado"
+- O endpoint público do chatbot (`GET /api/v1/nodes/*`) e o de envio de perguntas (`POST /api/v1/questions`) não exigem autenticação
+- O middleware de autenticação é aplicado globalmente nas rotas sensíveis, sem necessidade de anotação por handler
 
 ---
 
 ## 📋 Backlog do Produto <a id="backlog"></a>
 
+### Processo de Estimativa
+
+As estimativas de esforço foram definidas pela equipe em sessão de **Planning Poker**, utilizando a escala Fibonacci (1 · 2 · 3 · 5 · 8 · 13). Itens considerados grandes ou pouco claros foram refinados e subdivididos pelo Product Owner antes de entrarem na sprint. O processo segue o fluxo definido pela disciplina:
+
+1. Mapeamento de necessidades pelo PO → definição das Backlogs
+2. Apresentação para o time → reunião de estimativa (Planning Poker)
+3. Subdivisão de itens grandes → definição e hierarquização das Sprints
+4. Refinamento contínuo a cada ciclo
+
 ### Sprints
 
-| Sprint | Objetivos                                           | Documentação                              | Período   | Status       |
-| ------ | --------------------------------------------------- | ----------------------------------------- | --------- | ------------ |
+| Sprint | Objetivos                                           | Documentação                              | Período    | Status       |
+| ------ | --------------------------------------------------- | ----------------------------------------- | ---------- | ------------ |
 | 1      | Estrutura base, autenticação, navegação do chatbot  | [Sprint 1 Docs](./docs/sprint1/README.md) | Iteração 1 | 🔵 Planejado |
-| 2      | Painel Admin (CRUD nós + documentos), RBAC          | [Sprint 2 Docs](./docs/sprint2/README.md) | Iteração 2 | 🔵 Planejado |
+| 2      | Painel Admin (CRUD nós), RBAC, perguntas            | [Sprint 2 Docs](./docs/sprint2/README.md) | Iteração 2 | 🔵 Planejado |
 | 3      | Painel Secretária, logs, satisfação, ajustes finais | [Sprint 3 Docs](./docs/sprint3/README.md) | Iteração 3 | 🔵 Planejado |
 
 > 📝 Tasks detalhadas por sprint:
@@ -190,30 +338,33 @@ Um item está **concluído** quando:
   <a href="https://www.figma.com/"><img src="https://img.shields.io/badge/Figma-F24E1E?style=for-the-badge&logo=figma&logoColor=white" /></a>
 </p>
 
-| Camada             | Tecnologia                        | Justificativa                                                                                                  |
-| ------------------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| **Frontend**       | React 18 + TypeScript             | Aderente ao escopo funcional da interface (RF01, RF05, RF07)                                                  |
-| **Build Tool**     | Vite                              | HMR rápido e integração nativa com React + TypeScript                                                         |
-| **Estilização**    | Tailwind CSS + shadcn/ui          | Componentização acessível e responsiva (RNF01)                                                                 |
-| **Backend**        | Node.js 20 + TypeScript + Express | API REST modular para requisitos de autenticação, autorização e regras de negócio (RF09, RF10, RF11)         |
-| **ORM**            | Prisma                            | DDL/DML explícitos com type-safety e rastreabilidade do modelo de dados (RF02)                               |
-| **Banco de Dados** | PostgreSQL                        | Persistência relacional para nós, documentos, sessões e perguntas (RF02, RF08)                                |
+| Camada             | Tecnologia                        | Justificativa                                                                                                   |
+| ------------------ | --------------------------------- | --------------------------------------------------------------------------------------------------------------- |
+| **Frontend**       | React 18 + TypeScript             | Aderente ao escopo funcional da interface (RF01, RF05, RF07)                                                    |
+| **Build Tool**     | Vite                              | HMR rápido e integração nativa com React + TypeScript                                                           |
+| **Estilização**    | Tailwind CSS + shadcn/ui          | Componentização acessível e responsiva (RNF01)                                                                  |
+| **Backend**        | Node.js 20 + TypeScript + Express | API REST modular para requisitos de autenticação, autorização e regras de negócio (RF09, RF10, RF11)            |
+| **ORM**            | Prisma                            | DDL/DML explícitos com type-safety e rastreabilidade do modelo de dados (RF02)                                  |
+| **Banco de Dados** | PostgreSQL                        | Persistência relacional para nós, sessões e perguntas (RF02, RF08)                                              |
 | **Autenticação**   | JWT + Argon2id                    | Obrigatório por segurança (RNF08, RNF09); Argon2id é memory-hard (64 MiB/hash), com alta resistência a GPU/ASIC |
-| **Containers**     | Docker + Docker Compose           | Requisito de containerização e orquestração em comando único (RNF05, RNF06)                                   |
-| **Testes**         | Vitest + Testing Library          | Cobertura unitária e de componentes para sustentação do MVP                                                    |
-| **Linting**        | ESLint + Prettier                 | Padronização e qualidade contínua do código                                                                    |
+| **Containers**     | Docker + Docker Compose           | Requisito de containerização e orquestração em comando único (RNF05, RNF06)                                     |
+| **Testes**         | Vitest + Testing Library          | Cobertura unitária e de componentes para sustentação do MVP                                                     |
+| **Linting**        | ESLint + Prettier                 | Padronização e qualidade contínua do código                                                                     |
 
-
+---
 
 ## ⚡ Primeiros Passos <a id="primeiros-passos"></a>
 
+O setup operacional canônico do projeto está em [`docs/first-steps.md`](./docs/first-steps.md).
+Use a seção abaixo apenas como visão rápida.
+
 ### Pré-requisitos
 
-| Software       | Versão mínima | Link                             |
-| -------------- | :-----------: | -------------------------------- |
-| Docker         |     24.x      | https://www.docker.com/          |
-| Docker Compose |      2.x      | https://docs.docker.com/compose/ |
-| Git            |   qualquer    | https://git-scm.com/             |
+| Software       | Versão mínima | Link                                                                 |
+| -------------- | :-----------: | -------------------------------------------------------------------- |
+| Docker         |     24.x      | [https://www.docker.com/](https://www.docker.com/)                   |
+| Docker Compose |      2.x      | [https://docs.docker.com/compose/](https://docs.docker.com/compose/) |
+| Git            |   qualquer    | [https://git-scm.com/](https://git-scm.com/)                         |
 
 ### Instalação e execução
 
@@ -240,25 +391,7 @@ A aplicação estará disponível em:
 
 ### Execução sem Docker (desenvolvimento local)
 
-> Requer Node.js >= 20.x e pnpm >= 9.x instalados.
-
-```bash
-pnpm install                         # instala dependências do monorepo
-
-# Frontend
-pnpm --filter frontend dev
-
-# Backend
-pnpm --filter backend dev
-
-# Banco de dados
-pnpm --filter backend db:migrate     # executa migrations Prisma
-pnpm --filter backend db:seed        # popula dados iniciais do chatbot
-
-# Testes
-pnpm test
-pnpm test:watch
-```
+> Fluxo detalhado e atualizado: [`docs/first-steps.md`](./docs/first-steps.md).
 
 ---
 
@@ -305,9 +438,6 @@ fatecbot/
 │   ├── state-management.md
 │   ├── testing.md
 │   ├── troubleshooting.md
-│   ├── mvp-scope.md
-│   ├── seed-data.md
-│   ├── env-matrix.md
 │   ├── sprint1/
 │   ├── sprint2/
 │   ├── sprint3/
@@ -323,20 +453,17 @@ fatecbot/
 
 ## 📚 Documentação Técnica <a id="docs"></a>
 
-| Documento                                                        | Conteúdo                                     |
-| ---------------------------------------------------------------- | -------------------------------------------- |
+| Documento                                                        | Conteúdo                                                 |
+| ---------------------------------------------------------------- | -------------------------------------------------------- |
 | [`docs/first-steps.md`](./docs/first-steps.md)                   | Setup inicial, trilhas de leitura e mapa da documentação |
-| [`docs/application-overview.md`](./docs/application-overview.md) | Modelo de dados, fluxos, perfis e data model |
-| [`docs/project-structure.md`](./docs/project-structure.md)       | Estrutura de pastas comentada                |
-| [`docs/project-standards.md`](./docs/project-standards.md)       | Convenções de commit, nomenclatura e linting |
-| [`docs/api-layer.md`](./docs/api-layer.md)                       | Endpoints, exemplos de request/response      |
-| [`docs/state-management.md`](./docs/state-management.md)         | Estratégia de estado com TanStack Query e Zustand |
-| [`docs/testing.md`](./docs/testing.md)                           | Estratégia de testes e exemplos por camada   |
-| [`docs/mvp-scope.md`](./docs/mvp-scope.md)                       | Escopo do MVP, prioridades e critério de corte |
-| [`docs/seed-data.md`](./docs/seed-data.md)                       | Usuários, árvore inicial e dependências do seed |
-| [`docs/env-matrix.md`](./docs/env-matrix.md)                     | Matriz de variáveis de ambiente por camada |
-| [`apps/frontend/README.md`](./apps/frontend/README.md)           | README específico do frontend                |
-| [`apps/backend/README.md`](./apps/backend/README.md)             | README específico do backend                 |
+| [`docs/application-overview.md`](./docs/application-overview.md) | Modelo de dados, fluxos, perfis e data model             |
+| [`docs/project-structure.md`](./docs/project-structure.md)       | Estrutura de pastas comentada                            |
+| [`docs/project-standards.md`](./docs/project-standards.md)       | Convenções de commit, nomenclatura e linting             |
+| [`docs/api-layer.md`](./docs/api-layer.md)                       | Endpoints, exemplos de request/response                  |
+| [`docs/state-management.md`](./docs/state-management.md)         | Estratégia de estado com TanStack Query e Zustand        |
+| [`docs/testing.md`](./docs/testing.md)                           | Estratégia de testes e exemplos por camada               |
+| [`apps/frontend/README.md`](./apps/frontend/README.md)           | README específico do frontend                            |
+| [`apps/backend/README.md`](./apps/backend/README.md)             | README específico do backend                             |
 
 ---
 

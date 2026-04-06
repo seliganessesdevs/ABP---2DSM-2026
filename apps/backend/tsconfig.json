@@ -5,6 +5,11 @@
     "moduleResolution": "Bundler",
     "outDir": "./dist",
     "rootDir": "./src",
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"],
+      "@modules/*": ["modules/*"],
+    },
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,

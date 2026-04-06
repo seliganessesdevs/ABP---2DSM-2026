@@ -1,8 +1,8 @@
 # ⚙️ features/admin — Gestão de Conteúdo
 
 > Feature responsável por toda a interface e lógica do painel administrativo.
-> Cobre o CRUD de nós de navegação, documentos oficiais, usuários da secretaria
-> e a visualização de logs de atendimento (RF04, RF02, RF08).
+> Cobre o CRUD de nós de navegação, usuários da secretaria
+> e a visualização de logs de atendimento (RF04, RF08).
 
 ***
 
@@ -33,22 +33,18 @@ Nenhuma lógica desta feature vaza para fora — os componentes de página em
 features/admin/
 ├── api/                        # Funções de acesso à API REST
 │   ├── nodes.api.ts            # GET, POST, PATCH, DELETE /nodes
-│   ├── documents.api.ts        # GET, POST /documents
 │   ├── users.api.ts            # GET, POST, DELETE /users
 │   └── logs.api.ts             # GET /logs
 │
 ├── components/                 # Componentes visuais exclusivos do admin
 │   ├── NodeTree/               # Árvore de navegação do chatbot (MENU/ANSWER)
 │   ├── NodeForm/               # Formulário de criação e edição de nó
-│   ├── DocumentList/           # Listagem de documentos com chunks
-│   ├── DocumentForm/           # Formulário de cadastro de documento
 │   ├── UserList/               # Tabela de usuários da secretaria
 │   ├── UserForm/               # Formulário de criação de usuário
 │   └── LogTable/               # Tabela de logs de atendimento (somente leitura)
 │
 └── hooks/                      # Hooks de dados com TanStack Query
     ├── useNodes.ts             # useQuery + useMutation para nós
-    ├── useDocuments.ts         # useQuery + useMutation para documentos
     ├── useUsers.ts             # useQuery + useMutation para usuários
     └── useLogs.ts              # useQuery para logs (somente leitura)
 ```
@@ -115,12 +111,11 @@ export function NodeForm({ onSuccess }: NodeFormProps) {
 
 ## 📋 Mapeamento por Requisito <a id="requisitos"></a>
 
-| Requisito | Funcionalidade                              | Hook            | Componente       |
-| --------- | ------------------------------------------- | --------------- | ---------------- |
-| **RF02**  | Cadastrar documentos e chunks               | `useDocuments`  | `DocumentForm`   |
-| **RF04**  | CRUD de nós de navegação                    | `useNodes`      | `NodeTree`, `NodeForm` |
-| **RF04**  | Criar e remover usuários da secretaria      | `useUsers`      | `UserList`, `UserForm` |
-| **RF08**  | Visualizar logs de atendimento              | `useLogs`       | `LogTable`       |
+| Requisito | Funcionalidade                         | Hook       | Componente              |
+| --------- | -------------------------------------- | ---------- | ----------------------- |
+| **RF04**  | CRUD de nós de navegação               | `useNodes` | `NodeTree`, `NodeForm`  |
+| **RF04**  | Criar e remover usuários da secretaria | `useUsers` | `UserList`, `UserForm`  |
+| **RF08**  | Visualizar logs de atendimento         | `useLogs`  | `LogTable`              |
 
 ***
 

@@ -80,7 +80,6 @@ modules/
 ├── chatbot/     # Navegação na árvore de nós e sessões
 ├── questions/   # Perguntas enviadas pelos alunos
 ├── nodes/       # CRUD dos nós do chatbot (ADMIN)
-├── documents/   # Documentos e chunks indexados (ADMIN)
 ├── users/       # Usuários da secretaria (ADMIN)
 └── logs/        # Visualização de sessões (ADMIN)
 ```

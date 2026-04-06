@@ -12,7 +12,6 @@ modules/
 ├── chatbot/
 ├── questions/
 ├── nodes/
-├── documents/
 ├── users/
 └── logs/
 ```
@@ -94,20 +93,20 @@ Navega na árvore de `ChatNode` e registra sessões. É o módulo mais acessado 
 **Endpoints:**
 
 - `GET /nodes/root` — retorna o nó raiz para iniciar a navegação
-- `GET /nodes/:id` — retorna um nó com filhos e chunks
-- `POST /sessions/rating` — registra log de sessão e satisfação
+- `GET /nodes/:id` — retorna um nó com filhos e evidência
+- `POST /sessions/log` — registra log de sessão e satisfação
 
 ---
 
 ### `questions/`
 
-Gerencia as perguntas enviadas pelos alunos à secretaria. Criação é pública — qualquer aluno pode enviar. Listagem e atualização exigem autenticação.
+Gerencia as perguntas enviadas pelos alunos à secretaria. Criação é pública — qualquer aluno pode enviar nome, texto, e-mail institucional e anexo opcional (PDF/JPG/PNG · máx. 5 MB). Listagem e atualização exigem autenticação.
 
 **Endpoints:**
 
 - `POST /questions` — público — aluno envia pergunta
-- `GET /questions` — ADMIN ou SECRETARY
-- `PATCH /questions/:id` — ADMIN ou SECRETARY
+- `GET /questions` — ADMIN ou SECRETARIA
+- `PATCH /questions/:id` — ADMIN ou SECRETARIA
 
 ---
 
@@ -119,17 +118,9 @@ CRUD completo dos nós de navegação do chatbot. Exclusivo para administradores
 
 ---
 
-### `documents/`
-
-Gerencia os documentos oficiais (regulamentos, manuais) e seus chunks indexados. Os chunks são os trechos que o chatbot usa para responder perguntas específicas.
-
-**Endpoints:** `GET`, `POST` em `/documents` — todos ADMIN.
-
----
-
 ### `users/`
 
-Gerencia os usuários da secretaria (ADMIN e SECRETARY). O admin cria, lista e remove usuários. Senhas são sempre armazenadas com hash — nunca em texto puro.
+Gerencia os usuários da secretaria (ADMIN e SECRETARIA). O admin cria, lista e remove usuários. Senhas são sempre armazenadas com hash — nunca em texto puro.
 
 **Endpoints:** `GET`, `POST`, `DELETE` em `/users` — todos ADMIN.
 
@@ -151,6 +142,6 @@ Somente leitura. Expõe os registros de sessão gerados pelo módulo `chatbot` p
 - Schemas Zod ficam no `routes.ts` ou em arquivo separado `<modulo>.schema.ts` se forem grandes
 - Erros de negócio sempre lançam `AppError` — nunca `res.status()` direto no service
 
-***
+---
 
 > _Próximo documento: [`./auth/README.md`](./auth/README.md)_

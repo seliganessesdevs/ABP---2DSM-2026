@@ -134,13 +134,19 @@ erros de ambiente que deveriam falhar cedo.
 
 ## 📜 Scripts Disponíveis <a id="scripts-disponíveis"></a>
 
-| Script          | Comando      | Descrição                             |
-| --------------- | ------------ | ------------------------------------- |
-| Desenvolvimento | `pnpm dev`   | Inicia em modo watch com `tsx`        |
-| Build           | `pnpm build` | Gera bundle ESM com `tsup` em `dist/` |
-| Produção        | `pnpm start` | Executa o build compilado             |
+| Script          | Comando           | Descrição                                                    |
+| --------------- | ----------------- | ------------------------------------------------------------ |
+| Desenvolvimento | `pnpm dev`        | Inicia em modo watch com `tsx`                               |
+| Migrar banco    | `pnpm db:migrate` | Aplica migrations pendentes no banco atual                   |
+| Seed de dados   | `pnpm db:seed`    | Executa seed oficial em `prisma/seed.ts` (Prisma + Argon2id) |
+| Prisma Studio   | `pnpm db:studio`  | Abre o Prisma Studio em `http://localhost:5555`              |
+| Build           | `pnpm build`      | Gera bundle ESM com `tsup` em `dist/`                        |
+| Produção        | `pnpm start`      | Executa o build compilado                                    |
 
 > Scripts de lint/test no monorepo são executados pela raiz (`pnpm lint`, `pnpm test`).
+
+> O arquivo `prisma/migrations/20260404001330_init/02_seed.sql` foi mantido como referência histórica de conteúdo.
+> O caminho operacional de seed é exclusivamente `prisma/seed.ts`.
 
 ---
 

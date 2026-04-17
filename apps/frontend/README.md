@@ -38,14 +38,14 @@ interface do usuário. Toda lógica de negócio, segurança e persistência vive
 
 | Responsabilidade                    | Tecnologia                   |
 | ----------------------------------- | ---------------------------- |
-| Interface do chatbot conversacional | React 19 + TypeScript        |
+| Interface do chatbot conversacional | React 18 + TypeScript        |
 | Painel administrativo (Admin)       | React + shadcn/ui            |
 | Painel da secretaria                | React + shadcn/ui            |
 | Gerenciamento de estado do servidor | TanStack Query (React Query) |
 | Estado global do cliente (auth)     | Zustand                      |
 | Estilização responsiva              | Tailwind CSS                 |
 | Requisições HTTP à API              | Axios com interceptors       |
-| Proteção de rotas por autenticação  | React Router v7 + Guards     |
+| Proteção de rotas por autenticação  | React Router v6 + Guards     |
 | Build e desenvolvimento             | Vite                         |
 
 ---

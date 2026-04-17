@@ -4,7 +4,7 @@
 > o modelo de dados, o fluxo de navegação do chatbot e a topologia de containers.
 > É o ponto de partida para qualquer novo membro da equipe entender o sistema como um todo.
 
----
+***
 
 ## 📑 Índice
 
@@ -15,23 +15,23 @@
 - [Fluxo de Autenticação](#fluxo-de-autenticação)
 - [Fluxo de Encaminhamento de Pergunta](#fluxo-de-encaminhamento-de-pergunta)
 
----
+***
 
 ## 👤 Perfis e Permissões <a id="perfis-e-permissões"></a>
 
 O sistema implementa controle de acesso baseado em papéis (**RBAC — RF10**).
 Existem três perfis com escopos distintos:
 
-| Perfil                   | Autenticação |  Papel JWT   | O que pode fazer                                                     |
-| ------------------------ | :----------: | :----------: | -------------------------------------------------------------------- |
-| **Aluno / Visitante**    |  ❌ Pública  |      —       | Navegar no chatbot, enviar pergunta à secretaria, avaliar satisfação |
-| **Secretária Acadêmica** |    ✅ JWT    | `SECRETARIA` | Listar perguntas recebidas, atualizar status (aberta / respondida)   |
-| **Administrador**        |    ✅ JWT    |   `ADMIN`    | CRUD de nós e usuários da secretaria; visualizar logs de atendimento |
+| Perfil                   | Autenticação |   Papel JWT   | O que pode fazer                                                                 |
+| ------------------------ | :----------: | :-----------: | -------------------------------------------------------------------------------- |
+| **Aluno / Visitante**    |  ❌ Pública  |       —       | Navegar no chatbot, enviar pergunta à secretaria, avaliar satisfação             |
+| **Secretária Acadêmica** |    ✅ JWT    | `SECRETARIA`  | Listar perguntas recebidas, atualizar status (aberta / respondida)               |
+| **Administrador**        |    ✅ JWT    |    `ADMIN`    | CRUD de nós e usuários da secretaria; visualizar logs de atendimento             |
 
 > ⚠️ O controle de acesso **deve ser aplicado no backend** via middleware.
 > Proteção apenas no frontend (esconder botões) **não é suficiente** e viola o RF10/RF11.
 
----
+***
 
 ## 🐳 Arquitetura dos Containers <a id="arquitetura-dos-containers"></a>
 
@@ -73,7 +73,7 @@ orquestrados via `docker-compose.yml` com inicialização em comando único.
 - **Backend → Postgres:** conexão via Prisma Client usando `DATABASE_URL` (definida em `.env`)
 - **Frontend → Postgres:** **nunca direta** — toda operação de dados passa pelo backend
 
----
+***
 
 ## 🗄️ Modelo de Dados <a id="modelo-de-dados"></a>
 
@@ -98,7 +98,7 @@ orquestrados via `docker-compose.yml` com inicialização em comando único.
                                   └───────────────────────────┘
 
 ┌──────────────────────┐          ┌───────────────────────────┐
-│       Question       │          │      InteractionLog        │
+│       Inquiry        │          │      InteractionLog        │
 ├──────────────────────┤          ├───────────────────────────┤
 │ id (Int) PK          │          │ id (Int) PK                │
 │ requester_name       │          │ navigation_flow (JSON —    │
@@ -106,7 +106,7 @@ orquestrados via `docker-compose.yml` com inicialização em comando único.
 │ requester_email      │          │ flag (ENUM, nullable)      │
 │ status (ENUM)        │          │   ATENDEU | NAO_ATENDEU    │
 │ attachment_name      │          │ inquiry_ids (JSON —        │
-│   (nullable)         │          │   array de Question.id)    │
+│   (nullable)         │          │   array de Inquiry.id)     │
 │ attachment_mime_type │          │ created_at                 │
 │   (nullable)         │          └───────────────────────────┘
 │ attachment_data      │
@@ -136,29 +136,29 @@ O perfil Aluno não possui registro — acesso é público.
 Representa cada nó da árvore de navegação do chatbot (menus e respostas).
 Nós com filhos funcionam como menus; nós sem filhos são folhas e exibem `answer_summary`.
 
-| Campo              | Tipo    | Descrição                                                        |
-| ------------------ | ------- | ---------------------------------------------------------------- |
-| `id`               | Int     | Identificador único auto-incrementado                            |
-| `title`            | String  | Texto do botão/opção exibido na lista de opções do nó pai        |
-| `slug`             | String  | Identificador amigável único (ex: `aacc`, `datas-importantes`)   |
-| `prompt`           | String  | Pergunta ou instrução exibida pelo bot ao entrar neste nó        |
-| `answer_summary`   | String? | Resposta objetiva exibida em nós folha (sem filhos)              |
-| `evidence_excerpt` | String? | Trecho de evidência extraído de documento oficial                |
-| `evidence_source`  | String? | Fonte da evidência (ex: "Regulamento Geral das Fatecs, Art. 38") |
-| `parent_id`        | Int?    | Referência ao nó pai. `null` indica nó raiz                      |
-| `display_order`    | Int     | Ordenação dos filhos dentro do mesmo pai                         |
+| Campo              | Tipo    | Descrição                                                                 |
+| ------------------ | ------- | ------------------------------------------------------------------------- |
+| `id`               | Int     | Identificador único auto-incrementado                                     |
+| `title`            | String  | Texto do botão/opção exibido na lista de opções do nó pai                 |
+| `slug`             | String  | Identificador amigável único (ex: `aacc`, `datas-importantes`)            |
+| `prompt`           | String  | Pergunta ou instrução exibida pelo bot ao entrar neste nó                 |
+| `answer_summary`   | String? | Resposta objetiva exibida em nós folha (sem filhos)                       |
+| `evidence_excerpt` | String? | Trecho de evidência extraído de documento oficial                         |
+| `evidence_source`  | String? | Fonte da evidência (ex: "Regulamento Geral das Fatecs, Art. 38")          |
+| `parent_id`        | Int?    | Referência ao nó pai. `null` indica nó raiz                               |
+| `display_order`    | Int     | Ordenação dos filhos dentro do mesmo pai                                  |
 
 #### `InteractionLog`
 
 Registra cada sessão de atendimento completa (RF08).
 
-| Campo             | Tipo  | Descrição                                                          |
-| ----------------- | ----- | ------------------------------------------------------------------ |
-| `navigation_flow` | JSON  | Array de slugs visitados em ordem cronológica                      |
-| `flag`            | Enum? | `ATENDEU`, `NAO_ATENDEU` ou `null` (não avaliado)                  |
-| `inquiry_ids`     | JSON  | Array de IDs de `Question` originados nesta sessão (pode ser `[]`) |
+| Campo              | Tipo   | Descrição                                                         |
+| ------------------ | ------ | ----------------------------------------------------------------- |
+| `navigation_flow`  | JSON   | Array de slugs visitados em ordem cronológica                     |
+| `flag`             | Enum?  | `ATENDEU`, `NAO_ATENDEU` ou `null` (não avaliado)                 |
+| `inquiry_ids`      | JSON   | Array de IDs de `Inquiry` originados nesta sessão (pode ser `[]`) |
 
-#### `Question`
+#### `Inquiry`
 
 Pergunta enviada pelo aluno à Secretaria Acadêmica (RF05/RF06).
 
@@ -172,7 +172,7 @@ Pergunta enviada pelo aluno à Secretaria Acadêmica (RF05/RF06).
 | `attachment_mime_type` | String? | MIME type do anexo (ex: `application/pdf`)          |
 | `attachment_data`      | Bytes?  | Conteúdo binário do arquivo (PDF, JPG ou PNG, ≤5MB) |
 
----
+***
 
 ## 🤖 Fluxo do Chatbot <a id="fluxo-do-chatbot"></a>
 
@@ -224,7 +224,7 @@ Salva InteractionLog com:
 [Sessão encerrada]
 ```
 
----
+***
 
 ## 🔐 Fluxo de Autenticação <a id="fluxo-de-autenticação"></a>
 
@@ -265,7 +265,7 @@ Aplicável aos perfis **Secretária Acadêmica** e **Administrador** (RF09, RNF0
   → Se expirado ou inválido: 401 → frontend redireciona para /login
 ```
 
----
+***
 
 ## ❓ Fluxo de Encaminhamento de Pergunta <a id="fluxo-de-encaminhamento-de-pergunta"></a>
 
@@ -281,7 +281,7 @@ Disponível ao fim de qualquer atendimento no chatbot (RF05/RF06).
 [POST /api/v1/questions]
   Body: { requester_name, question, requester_email, attachment? }
   → Valida e-mail e campos obrigatórios
-  → Persiste Question com status: ABERTA
+  → Persiste Inquiry com status: ABERTA
   → Se anexo presente: persiste attachment_name, attachment_mime_type, attachment_data
   → Resposta: 201 Created
          │
@@ -301,6 +301,6 @@ Disponível ao fim de qualquer atendimento no chatbot (RF05/RF06).
   → Aluno recebe retorno por e-mail (fora do escopo do MVP)
 ```
 
----
+***
 
 > _Próximo documento: [`api-layer.md`](./api-layer.md)_

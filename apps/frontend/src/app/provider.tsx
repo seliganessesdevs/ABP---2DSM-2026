@@ -1,10 +1,11 @@
-import {Button} from "@/components/ui/button";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "@/lib/queryClient";
+import { AppRouterProvider } from "./router";
 
-export const AppProvider = () => {
+export function AppProvider() {
   return (
-    <div>
-        <h1 className="text-9xl text-amber-300">Hello world!</h1>
-        <Button className="p-5 rounded-full">Clique aqui!</Button>
-    </div>
-  )
+    <QueryClientProvider client={queryClient}>
+      <AppRouterProvider />
+    </QueryClientProvider>
+  );
 }

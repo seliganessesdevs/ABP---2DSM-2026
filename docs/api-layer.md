@@ -9,7 +9,7 @@
 > Authorization: Bearer <token_jwt>
 > ```
 
----
+***
 
 ## 📑 Índice
 
@@ -19,12 +19,11 @@
 - [Chatbot](#chatbot)
 - [Perguntas](#perguntas)
 - [Nós de Navegação (Admin)](#nós-de-navegação-admin)
-- [Documentos (Admin)](#documentos-admin)
 - [Usuários (Admin)](#usuários-admin)
 - [Logs (Admin)](#logs-admin)
 - [Códigos de Status](#códigos-de-status)
 
----
+***
 
 ## 📐 Convenções <a id="convenções"></a>
 
@@ -88,10 +87,10 @@ E retornam metadados em `meta`:
 Os query params previstos neste documento são:
 
 - `GET /questions`: `status`, `page`, `limit`
-- `GET /logs`: `satisfaction`, `from`, `to`, `page`, `limit`
+- `GET /logs`: `flag`, `from`, `to`, `page`, `limit`
 - Endpoints sem query params documentados aqui não devem aceitar filtros implícitos sem atualização deste contrato
 
----
+***
 
 ## ❤️ Health Check <a id="health-check"></a>
 
@@ -117,7 +116,7 @@ GET /api/v1/health
 }
 ```
 
----
+***
 
 ## 🔐 Autenticação <a id="autenticação"></a>
 
@@ -150,10 +149,10 @@ Content-Type: application/json
   "data": {
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
     "user": {
-      "id": "a3f1c2d4-...",
+      "id": 1,
       "name": "Carolina Silva",
       "email": "secretaria@fatec.sp.gov.br",
-      "role": "SECRETARY"
+      "role": "SECRETARIA"
     }
   }
 }
@@ -168,13 +167,13 @@ Content-Type: application/json
 }
 ```
 
----
+***
 
 ## 🤖 Chatbot <a id="chatbot"></a>
 
 ### `GET /nodes/root`
 
-Retorna o nó raiz da árvore de navegação (pergunta inicial do chatbot).
+Retorna o nó raiz da árvore de navegação (prompt inicial do chatbot).
 
 - **Acesso:** Público
 - **Role exigida:** —
@@ -185,10 +184,10 @@ Retorna o nó raiz da árvore de navegação (pergunta inicial do chatbot).
 {
   "success": true,
   "data": {
-    "id": "node-root-uuid",
-    "title": "Bem-vindo ao autoatendimento da Secretaria Acadêmica da Fatec Jacareí.",
-    "content": "Para qual curso você deseja atendimento?",
-    "nodeType": "MENU",
+    "id": 1,
+    "title": "Início",
+    "slug": "root",
+    "prompt": "Para qual curso você deseja atendimento?",
     "children": [
       {
         "id": 2,
@@ -219,11 +218,11 @@ Retorna o nó raiz da árvore de navegação (pergunta inicial do chatbot).
 }
 ```
 
----
+***
 
 ### `GET /nodes/:id`
 
-Retorna um nó específico com seus filhos diretos (próximas opções) e chunks de evidência vinculados.
+Retorna um nó específico com seus filhos diretos. Nós folha (sem filhos) retornam `answer_summary` e evidência inline.
 
 - **Acesso:** Público
 - **Role exigida:** —
@@ -234,17 +233,20 @@ Retorna um nó específico com seus filhos diretos (próximas opções) e chunks
 | --------- | ---- | --------------------- |
 | `id`      | Int  | ID do nó de navegação |
 
-**Response `200 OK` — nó do tipo `MENU`**
+**Response `200 OK` — nó de menu (com filhos)**
 
 ```json
 {
   "success": true,
   "data": {
-    "id": "node-dsm-uuid",
+    "id": 2,
     "title": "Desenvolvimento de Software Multiplataforma",
-    "content": "Escolha o assunto:",
-    "nodeType": "MENU",
-    "parentId": "node-root-uuid",
+    "slug": "dsm",
+    "prompt": "Escolha o assunto:",
+    "answer_summary": null,
+    "evidence_excerpt": null,
+    "evidence_source": null,
+    "parent_id": 1,
     "children": [
       {
         "id": 6,
@@ -270,49 +272,40 @@ Retorna um nó específico com seus filhos diretos (próximas opções) e chunks
 }
 ```
 
-**Response `200 OK` — nó do tipo `ANSWER`**
+**Response `200 OK` — nó folha sem evidência**
 
 ```json
 {
   "success": true,
   "data": {
-    "id": "node-dsm-aacc-uuid",
+    "id": 6,
     "title": "Atividades Complementares (AACC)",
-    "content": "O curso de Desenvolvimento de Software Multiplataforma não possui Atividades Acadêmico-Científico-Culturais (AACC) previstas em sua matriz curricular.",
-    "nodeType": "ANSWER",
-    "parentId": "node-dsm-uuid",
-    "children": [],
-    "chunks": []
+    "slug": "dsm-aacc",
+    "prompt": null,
+    "answer_summary": "O curso de Desenvolvimento de Software Multiplataforma não possui Atividades Acadêmico-Científico-Culturais (AACC) previstas em sua matriz curricular.",
+    "evidence_excerpt": null,
+    "evidence_source": null,
+    "parent_id": 2,
+    "children": []
   }
 }
 ```
 
-**Response `200 OK` — nó com evidência documental**
+**Response `200 OK` — nó folha com evidência**
 
 ```json
 {
   "success": true,
-  "message": "OK",
   "data": {
-    "id": "node-dsm-aproveita-uuid",
+    "id": 14,
     "title": "Aproveitamento de estudos",
-    "content": "A solicitação deve ser realizada pelo SIGA, anexando histórico escolar e ementas. Similaridade ≥ 70%: aprovação direta. Entre 50–70%: exame de proficiência.",
-    "nodeType": "ANSWER",
-    "parentId": "node-dsm-dispensa-uuid",
-    "children": [],
-    "chunks": [
-      {
-        "id": "chunk-uuid-1",
-        "content": "Art. 76 – O aproveitamento de estudos [...] similaridade mínima de 70% para aprovação direta.",
-        "page": 25,
-        "section": "Seção I",
-        "document": {
-          "id": "doc-uuid-1",
-          "name": "Regulamento Geral dos Cursos Superiores das Fatecs",
-          "type": "REGULAMENTO"
-        }
-      }
-    ]
+    "slug": "dsm-aproveitamento",
+    "prompt": null,
+    "answer_summary": "A solicitação deve ser realizada pelo SIGA, anexando histórico escolar e ementas. Similaridade ≥ 70%: aprovação direta. Entre 50–70%: exame de proficiência.",
+    "evidence_excerpt": "Art. 76 – O aproveitamento de estudos [...] similaridade mínima de 70% para aprovação direta.",
+    "evidence_source": "Regulamento Geral dos Cursos Superiores das Fatecs, Seção I, p. 25",
+    "parent_id": 13,
+    "children": []
   }
 }
 ```
@@ -326,9 +319,9 @@ Retorna um nó específico com seus filhos diretos (próximas opções) e chunks
 }
 ```
 
----
+***
 
-### `POST /sessions/rating`
+### `POST /sessions/log`
 
 Registra o log de atendimento e a avaliação de satisfação ao encerrar uma sessão.
 
@@ -350,12 +343,12 @@ Registra o log de atendimento e a avaliação de satisfação ao encerrar uma se
 {
   "success": true,
   "data": {
-    "sessionLogId": "session-uuid-1"
+    "interactionLogId": 1
   }
 }
 ```
 
----
+***
 
 ## ❓ Perguntas <a id="perguntas"></a>
 
@@ -366,14 +359,23 @@ Envia uma pergunta do aluno à Secretaria Acadêmica.
 - **Acesso:** Público
 - **Role exigida:** —
 
-**Request**
+**Request** — sem anexo
 
 ```json
 {
-  "text": "Posso solicitar aproveitamento de uma disciplina cursada em 2015?",
-  "email": "aluno@fatec.sp.gov.br",
-  "sessionLogId": "session-uuid-1"
+  "requester_name": "João Silva",
+  "question": "Posso solicitar aproveitamento de uma disciplina cursada em 2015?",
+  "requester_email": "joao.silva@fatec.sp.gov.br"
 }
+```
+
+**Request** — com anexo (multipart/form-data)
+
+```
+requester_name: João Silva
+question: Posso solicitar aproveitamento de uma disciplina cursada em 2015?
+requester_email: joao.silva@fatec.sp.gov.br
+attachment: [arquivo PDF/JPG/PNG — máx. 5MB]
 ```
 
 **Response `201 Created`**
@@ -382,9 +384,9 @@ Envia uma pergunta do aluno à Secretaria Acadêmica.
 {
   "success": true,
   "data": {
-    "id": "question-uuid-1",
-    "status": "OPEN",
-    "createdAt": "2026-03-27T20:18:00.000Z"
+    "id": 1,
+    "status": "ABERTA",
+    "created_at": "2026-03-27T20:18:00.000Z"
   }
 }
 ```
@@ -399,14 +401,14 @@ Envia uma pergunta do aluno à Secretaria Acadêmica.
 }
 ```
 
----
+***
 
 ### `GET /questions`
 
 Lista todas as perguntas recebidas.
 
 - **Acesso:** 🔒 Protegido
-- **Role exigida:** `SECRETARY` ou `ADMIN`
+- **Role exigida:** `SECRETARIA` ou `ADMIN`
 
 **Query Params**
 
@@ -419,7 +421,7 @@ Lista todas as perguntas recebidas.
 **Request**
 
 ```http
-GET /api/v1/questions?status=OPEN&page=1&limit=20
+GET /api/v1/questions?status=ABERTA&page=1&limit=20
 Authorization: Bearer <token>
 ```
 
@@ -430,12 +432,13 @@ Authorization: Bearer <token>
   "success": true,
   "data": [
     {
-      "id": "question-uuid-1",
-      "text": "Posso solicitar aproveitamento de uma disciplina cursada em 2015?",
-      "email": "aluno@fatec.sp.gov.br",
-      "status": "OPEN",
-      "createdAt": "2026-03-27T20:18:00.000Z",
-      "updatedAt": "2026-03-27T20:18:00.000Z"
+      "id": 1,
+      "requester_name": "João Silva",
+      "question": "Posso solicitar aproveitamento de uma disciplina cursada em 2015?",
+      "requester_email": "joao.silva@fatec.sp.gov.br",
+      "status": "ABERTA",
+      "created_at": "2026-03-27T20:18:00.000Z",
+      "updated_at": "2026-03-27T20:18:00.000Z"
     }
   ],
   "meta": {
@@ -446,29 +449,29 @@ Authorization: Bearer <token>
 }
 ```
 
----
+***
 
 ### `PATCH /questions/:id`
 
 Atualiza o status de uma pergunta.
 
 - **Acesso:** 🔒 Protegido
-- **Role exigida:** `SECRETARY` ou `ADMIN`
+- **Role exigida:** `SECRETARIA` ou `ADMIN`
 
-> A única transição válida para `Question` é `OPEN → ANSWERED`.
-> O endpoint não deve aceitar retorno para `OPEN` nem novos status sem atualização do contrato.
+> A única transição válida é `ABERTA → RESPONDIDA`.
+> O endpoint não deve aceitar retorno para `ABERTA` nem novos status sem atualização deste contrato.
 
 **Request**
 
 ```http
-PATCH /api/v1/questions/question-uuid-1
+PATCH /api/v1/questions/1
 Authorization: Bearer <token>
 Content-Type: application/json
 ```
 
 ```json
 {
-  "status": "ANSWERED"
+  "status": "RESPONDIDA"
 }
 ```
 
@@ -478,14 +481,14 @@ Content-Type: application/json
 {
   "success": true,
   "data": {
-    "id": "question-uuid-1",
-    "status": "ANSWERED",
-    "updatedAt": "2026-03-27T21:00:00.000Z"
+    "id": 1,
+    "status": "RESPONDIDA",
+    "updated_at": "2026-03-27T21:00:00.000Z"
   }
 }
 ```
 
----
+***
 
 ## 🌿 Nós de Navegação (Admin) <a id="nós-de-navegação-admin"></a>
 
@@ -500,11 +503,14 @@ Cria um novo nó na árvore de navegação.
 ```json
 {
   "title": "Novo tópico",
-  "content": "Resposta ou pergunta do bot.",
-  "nodeType": "ANSWER",
-  "parentId": "node-dsm-uuid",
-  "order": 5,
-  "isActive": true
+  "slug": "dsm-novo-topico",
+  "prompt": "Qual é sua dúvida sobre este tópico?",
+  "answer_summary": "Resposta objetiva do bot para este nó.",
+  "evidence_excerpt": null,
+  "evidence_source": null,
+  "parent_id": 2,
+  "display_order": 5,
+  "is_active": true
 }
 ```
 
@@ -514,18 +520,18 @@ Cria um novo nó na árvore de navegação.
 {
   "success": true,
   "data": {
-    "id": "node-novo-uuid",
+    "id": 20,
     "title": "Novo tópico",
-    "nodeType": "ANSWER",
-    "parentId": "node-dsm-uuid",
-    "order": 5,
-    "isActive": true,
-    "createdAt": "2026-03-28T10:00:00.000Z"
+    "slug": "dsm-novo-topico",
+    "parent_id": 2,
+    "display_order": 5,
+    "is_active": true,
+    "created_at": "2026-03-28T10:00:00.000Z"
   }
 }
 ```
 
----
+***
 
 ### `PATCH /nodes/:id`
 
@@ -535,8 +541,8 @@ Atualiza parcialmente um nó existente.
 
 ```json
 {
-  "content": "Conteúdo atualizado com novas informações do calendário.",
-  "isActive": true
+  "answer_summary": "Conteúdo atualizado com novas informações do calendário.",
+  "is_active": true
 }
 ```
 
@@ -545,11 +551,14 @@ Atualiza parcialmente um nó existente.
 ```json
 {
   "success": true,
-  "data": { "id": "node-novo-uuid", "content": "Conteúdo atualizado..." }
+  "data": {
+    "id": 20,
+    "answer_summary": "Conteúdo atualizado com novas informações do calendário."
+  }
 }
 ```
 
----
+***
 
 ### `DELETE /nodes/:id`
 
@@ -581,7 +590,7 @@ Remove um nó. Se o nó possuir filhos, a operação é bloqueada.
 
 ### `GET /users`
 
-Lista os usuários com perfil `SECRETARY`.
+Lista os usuários com perfil `SECRETARIA`.
 
 **Response `200 OK`**
 
@@ -590,11 +599,11 @@ Lista os usuários com perfil `SECRETARY`.
   "success": true,
   "data": [
     {
-      "id": "user-uuid-1",
+      "id": 1,
       "name": "Carolina Silva",
       "email": "secretaria@fatec.sp.gov.br",
-      "role": "SECRETARY",
-      "createdAt": "2026-02-01T00:00:00.000Z"
+      "role": "SECRETARIA",
+      "created_at": "2026-02-01T00:00:00.000Z"
     }
   ],
   "meta": {
@@ -616,7 +625,7 @@ Cria um novo usuário da secretaria.
   "name": "Ana Paula",
   "email": "ana.paula@fatec.sp.gov.br",
   "password": "senhaTemporaria123",
-  "role": "SECRETARY"
+  "role": "SECRETARIA"
 }
 ```
 
@@ -626,10 +635,10 @@ Cria um novo usuário da secretaria.
 {
   "success": true,
   "data": {
-    "id": "user-uuid-2",
+    "id": 2,
     "name": "Ana Paula",
     "email": "ana.paula@fatec.sp.gov.br",
-    "role": "SECRETARY"
+    "role": "SECRETARIA"
   }
 }
 ```
@@ -647,7 +656,7 @@ Remove um usuário. Um administrador não pode remover a si próprio.
 }
 ```
 
----
+***
 
 ## 📊 Logs (Admin) <a id="logs-admin"></a>
 
@@ -670,7 +679,7 @@ Lista os logs de atendimento com filtros opcionais.
 **Request**
 
 ```http
-GET /api/v1/logs?from=2026-03-01&to=2026-03-31&satisfaction=DISLIKED
+GET /api/v1/logs?from=2026-03-01&to=2026-03-31&flag=NAO_ATENDEU
 Authorization: Bearer <token>
 ```
 
@@ -702,7 +711,7 @@ Authorization: Bearer <token>
 }
 ```
 
----
+***
 
 ## 📋 Códigos de Status <a id="códigos-de-status"></a>
 

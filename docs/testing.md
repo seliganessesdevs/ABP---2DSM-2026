@@ -52,7 +52,7 @@
 | **@testing-library/user-event** | Unit (Frontend)      | Simula eventos do usuário (click, type, etc.)   |
 | **msw** (Mock Service Worker)   | Unit (Frontend)      | Intercepta requisições HTTP no teste            |
 | **supertest**                   | Integração (Backend) | Dispara requisições HTTP reais contra o Express |
-| **prisma/**mocks****            | Integração (Backend) | Mock do PrismaClient para isolamento do banco   |
+| **Prisma mocks**                | Integração (Backend) | Mock do PrismaClient para isolamento do banco   |
 
 ---
 

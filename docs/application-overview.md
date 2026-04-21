@@ -4,7 +4,7 @@
 > o modelo de dados, o fluxo de navegação do chatbot e a topologia de containers.
 > É o ponto de partida para qualquer novo membro da equipe entender o sistema como um todo.
 
----
+***
 
 ## 📑 Índice
 
@@ -15,7 +15,7 @@
 - [Fluxo de Autenticação](#fluxo-de-autenticação)
 - [Fluxo de Encaminhamento de Pergunta](#fluxo-de-encaminhamento-de-pergunta)
 
----
+***
 
 ## 👤 Perfis e Permissões <a id="perfis-e-permissões"></a>
 
@@ -31,7 +31,7 @@ Existem três perfis com escopos distintos:
 > ⚠️ O controle de acesso **deve ser aplicado no backend** via middleware.
 > Proteção apenas no frontend (esconder botões) **não é suficiente** e viola o RF10/RF11.
 
----
+***
 
 ## 🐳 Arquitetura dos Containers <a id="arquitetura-dos-containers"></a>
 
@@ -73,7 +73,7 @@ orquestrados via `docker-compose.yml` com inicialização em comando único.
 - **Backend → Postgres:** conexão via Prisma Client usando `DATABASE_URL` (definida em `.env`)
 - **Frontend → Postgres:** **nunca direta** — toda operação de dados passa pelo backend
 
----
+***
 
 ## 🗄️ Modelo de Dados <a id="modelo-de-dados"></a>
 
@@ -123,17 +123,18 @@ orquestrados via `docker-compose.yml` com inicialização em comando único.
 Representa os usuários autenticados do sistema (Secretária e Administrador).
 O perfil Aluno não possui registro — acesso é público.
 
-| Campo          | Tipo   | Descrição                                                                          |
-| -------------- | ------ | ---------------------------------------------------------------------------------- |
-| `id`           | UUID   | Identificador único gerado automaticamente                                         |
-| `name`         | String | Nome completo do usuário                                                           |
-| `email`        | String | E-mail institucional (único no sistema)                                            |
-| `passwordHash` | String | Senha com hash Argon2id (memory-hard com 64 MiB por hash) — **nunca em plaintext** |
-| `role`         | Enum   | `ADMIN` ou `SECRETARY`                                                             |
+| Campo           | Tipo   | Descrição                                                                          |
+| --------------- | ------ | ---------------------------------------------------------------------------------- |
+| `id`            | Int    | Identificador único auto-incrementado                                              |
+| `name`          | String | Nome completo do usuário                                                           |
+| `email`         | String | E-mail institucional (único no sistema)                                            |
+| `password_hash` | String | Senha com hash Argon2id (memory-hard com 64 MiB por hash) — **nunca em plaintext** |
+| `role`          | Enum   | `ADMIN` ou `SECRETARIA`                                                            |
 
 #### `ChatNode`
 
-Representa cada nó da árvore de navegação do chatbot (menus, submenus e respostas).
+Representa cada nó da árvore de navegação do chatbot (menus e respostas).
+Nós com filhos funcionam como menus; nós sem filhos são folhas e exibem `answer_summary`.
 
 | Campo              | Tipo    | Descrição                                                        |
 | ------------------ | ------- | ---------------------------------------------------------------- |
@@ -157,7 +158,7 @@ Registra cada sessão de atendimento completa (RF08).
 | `flag`            | Enum? | `ATENDEU`, `NAO_ATENDEU` ou `null` (não avaliado)                  |
 | `inquiry_ids`     | JSON  | Array de IDs de `Question` originados nesta sessão (pode ser `[]`) |
 
-#### `Question`
+#### `Inquiry`
 
 Pergunta enviada pelo aluno à Secretaria Acadêmica (RF05/RF06).
 
@@ -171,7 +172,7 @@ Pergunta enviada pelo aluno à Secretaria Acadêmica (RF05/RF06).
 | `attachment_mime_type` | String? | MIME type do anexo (ex: `application/pdf`)          |
 | `attachment_data`      | Bytes?  | Conteúdo binário do arquivo (PDF, JPG ou PNG, ≤5MB) |
 
----
+***
 
 ## 🤖 Fluxo do Chatbot <a id="fluxo-do-chatbot"></a>
 
@@ -183,7 +184,7 @@ Cada interação do usuário representa um passo na árvore.
          │
          ▼
 [GET /api/v1/nodes/root]
-Carrega o nó raiz (pergunta inicial):
+Carrega o nó raiz (prompt inicial):
 "Para qual curso você deseja atendimento?"
          │
          ▼
@@ -195,35 +196,35 @@ ex: "1. Desenvolvimento de Software Multiplataforma"
 Carrega o nó filho com suas opções:
 "1.1 AACC  1.2 Datas importantes  1.3 Disciplinas..."
          │
-    (repete até atingir um nó ANSWER)
+    (repete até atingir um nó folha — sem filhos)
          │
          ▼
-[Nó do tipo ANSWER alcançado]
+[Nó folha alcançado]
 Exibe:
-  ✅ Resposta objetiva do bot
-  📄 Trecho de evidência documental (se houver chunks vinculados)
+  ✅ answer_summary — resposta objetiva do bot
+  📄 evidence_excerpt + evidence_source (se preenchidos)
          │
          ▼
 [Avaliação de satisfação — RF07]
-"Gostei 👍" / "Não gostei 👎"
+"Atendeu ✅" / "Não atendeu ❌"
          │
          ▼
-[POST /api/v1/sessions/rating]
-Salva SessionLog com:
-  - navigationPath (array de IDs visitados)
-  - satisfaction (LIKED | DISLIKED)
-  - timestamps
+[POST /api/v1/sessions/log]
+Salva InteractionLog com:
+  - navigation_flow (array de slugs visitados)
+  - flag (ATENDEU | NAO_ATENDEU | null)
+  - created_at
          │
          ▼
 [Opção: Enviar pergunta à secretaria — RF05]
-  → Formulário: texto da dúvida + e-mail
+  → Formulário: nome, texto da dúvida, e-mail, anexo (opcional)
   → POST /api/v1/questions
          │
          ▼
 [Sessão encerrada]
 ```
 
----
+***
 
 ## 🔐 Fluxo de Autenticação <a id="fluxo-de-autenticação"></a>
 
@@ -243,7 +244,7 @@ Aplicável aos perfis **Secretária Acadêmica** e **Administrador** (RF09, RNF0
          │
          ▼
 [Se válido: gera JWT]
-  Payload: { sub: userId, role: 'ADMIN'|'SECRETARY', exp: ... }
+  Payload: { sub: userId, role: 'ADMIN'|'SECRETARIA', exp: ... }
   Assina com JWT_SECRET
   Retorna: { token, user: { id, name, role } }
          │
@@ -255,7 +256,7 @@ Aplicável aos perfis **Secretária Acadêmica** e **Administrador** (RF09, RNF0
          ▼
 [Redirecionamento por role]
   ADMIN      → /admin/dashboard
-  SECRETARY  → /secretary/dashboard
+  SECRETARIA → /secretary/dashboard
          │
          ▼
 [A cada requisição a rota protegida]
@@ -264,7 +265,7 @@ Aplicável aos perfis **Secretária Acadêmica** e **Administrador** (RF09, RNF0
   → Se expirado ou inválido: 401 → frontend redireciona para /login
 ```
 
----
+***
 
 ## ❓ Fluxo de Encaminhamento de Pergunta <a id="fluxo-de-encaminhamento-de-pergunta"></a>
 
@@ -274,7 +275,7 @@ Disponível ao fim de qualquer atendimento no chatbot (RF05/RF06).
 [Aluno clica em "Enviar pergunta à secretaria"]
          │
          ▼
-[Formulário: texto da dúvida + e-mail institucional]
+[Formulário: nome, texto da dúvida, e-mail institucional, anexo (opcional)]
          │
          ▼
 [POST /api/v1/questions]
@@ -286,20 +287,20 @@ Disponível ao fim de qualquer atendimento no chatbot (RF05/RF06).
          │
          ▼
 [Secretária acessa /secretary/questions]
-  → GET /api/v1/questions  (requer role: SECRETARY)
-  → Lista perguntas com status OPEN em destaque
+  → GET /api/v1/questions  (requer role: SECRETARIA)
+  → Lista perguntas com status ABERTA em destaque
          │
          ▼
 [Secretária atualiza o status]
   → PATCH /api/v1/questions/:id
-  Body: { status: 'ANSWERED' }
-  → Requer role: SECRETARY
+  Body: { status: 'RESPONDIDA' }
+  → Requer role: SECRETARIA
          │
          ▼
 [Pergunta marcada como respondida]
   → Aluno recebe retorno por e-mail (fora do escopo do MVP)
 ```
 
----
+***
 
 > _Próximo documento: [`api-layer.md`](./api-layer.md)_

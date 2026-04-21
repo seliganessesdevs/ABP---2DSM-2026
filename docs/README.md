@@ -166,4 +166,20 @@ seguindo o formato de contexto, decisão e consequências.
 
 ---
 
+## 📐 Diagrama de Casos de Uso
+
+- [Arquivo editável (.asta)](uml/casos-de-uso.asta)
+
+![Diagrama de Casos de Uso](uml/casos-de-uso.png)
+
+---
+
+## 🗄️ Modelo Relacional — Banco de Dados
+
+![Modelo Relacional](db/Modelagem-Banco-Dados.jpeg)
+
+- [PDF do modelo](db/Modelagem-Banco-Dados.pdf)
+
+---
+
 > _Próximo documento: [`first-steps.md`](./first-steps.md)_

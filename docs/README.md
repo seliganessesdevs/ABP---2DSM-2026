@@ -16,6 +16,8 @@
 - [Sprints](#sprints)
 - [ADRs](#adrs)
 - [Regras de contribuição](#regras-de-contribuicao)
+- [Diagramas de caso de uso](#-diagrama-de-casos-de-uso)
+- [Modelo Relacional - Banco de dados](#️-modelo-relacional--banco-de-dados)
 
 ---
 

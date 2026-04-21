@@ -4,6 +4,7 @@
 > Base URL: `http://localhost:3333/api/v1`
 >
 > Todas as rotas protegidas exigem o header:
+>
 > ```
 > Authorization: Bearer <token_jwt>
 > ```
@@ -189,10 +190,30 @@ Retorna o nó raiz da árvore de navegação (pergunta inicial do chatbot).
     "content": "Para qual curso você deseja atendimento?",
     "nodeType": "MENU",
     "children": [
-      { "id": "node-dsm-uuid",  "title": "Desenvolvimento de Software Multiplataforma", "order": 1 },
-      { "id": "node-geo-uuid",  "title": "Geoprocessamento", "order": 2 },
-      { "id": "node-marh-uuid", "title": "Meio Ambiente e Recursos Hídricos", "order": 3 },
-      { "id": "node-ext-uuid",  "title": "Não sou aluno", "order": 4 }
+      {
+        "id": 2,
+        "title": "Desenvolvimento de Software Multiplataforma",
+        "slug": "dsm",
+        "display_order": 1
+      },
+      {
+        "id": 3,
+        "title": "Geoprocessamento",
+        "slug": "geo",
+        "display_order": 2
+      },
+      {
+        "id": 4,
+        "title": "Meio Ambiente e Recursos Hídricos",
+        "slug": "marh",
+        "display_order": 3
+      },
+      {
+        "id": 5,
+        "title": "Não sou aluno",
+        "slug": "externo",
+        "display_order": 4
+      }
     ]
   }
 }
@@ -209,9 +230,9 @@ Retorna um nó específico com seus filhos diretos (próximas opções) e chunks
 
 **Parâmetros**
 
-| Parâmetro | Tipo   | Descrição             |
-|-----------|--------|-----------------------|
-| `id`      | UUID   | ID do nó de navegação |
+| Parâmetro | Tipo | Descrição             |
+| --------- | ---- | --------------------- |
+| `id`      | Int  | ID do nó de navegação |
 
 **Response `200 OK` — nó do tipo `MENU`**
 
@@ -225,12 +246,26 @@ Retorna um nó específico com seus filhos diretos (próximas opções) e chunks
     "nodeType": "MENU",
     "parentId": "node-root-uuid",
     "children": [
-      { "id": "node-dsm-aacc-uuid",  "title": "Atividades Complementares (AACC)", "order": 1 },
-      { "id": "node-dsm-dates-uuid", "title": "Datas importantes do semestre", "order": 2 },
-      { "id": "node-dsm-ext-uuid",   "title": "Disciplinas com atividades de extensão", "order": 3 },
-      { "id": "node-dsm-estag-uuid", "title": "Estágio", "order": 4 }
-    ],
-    "chunks": []
+      {
+        "id": 6,
+        "title": "Atividades Complementares (AACC)",
+        "slug": "dsm-aacc",
+        "display_order": 1
+      },
+      {
+        "id": 7,
+        "title": "Datas importantes do semestre",
+        "slug": "dsm-datas",
+        "display_order": 2
+      },
+      {
+        "id": 8,
+        "title": "Disciplinas com atividades de extensão",
+        "slug": "dsm-extensao",
+        "display_order": 3
+      },
+      { "id": 9, "title": "Estágio", "slug": "dsm-estagio", "display_order": 4 }
+    ]
   }
 }
 ```
@@ -304,15 +339,8 @@ Registra o log de atendimento e a avaliação de satisfação ao encerrar uma se
 
 ```json
 {
-  "navigationPath": [
-    "node-root-uuid",
-    "node-dsm-uuid",
-    "node-dsm-estag-uuid",
-    "node-dsm-estag-duracao-uuid"
-  ],
-  "satisfaction": "LIKED",
-  "startedAt": "2026-03-27T20:15:00.000Z",
-  "endedAt": "2026-03-27T20:17:43.000Z"
+  "navigation_flow": ["root", "dsm", "dsm-estagio", "dsm-estagio-duracao"],
+  "flag": "ATENDEU"
 }
 ```
 
@@ -367,9 +395,7 @@ Envia uma pergunta do aluno à Secretaria Acadêmica.
 {
   "success": false,
   "message": "Dados inválidos",
-  "errors": [
-    { "field": "email", "message": "E-mail inválido" }
-  ]
+  "errors": [{ "field": "requester_email", "message": "E-mail inválido" }]
 }
 ```
 
@@ -384,11 +410,11 @@ Lista todas as perguntas recebidas.
 
 **Query Params**
 
-| Param    | Tipo                      | Padrão | Descrição                 |
-|----------|---------------------------|--------|---------------------------|
-| `status` | `OPEN` \| `ANSWERED`      | —      | Filtrar por status        |
-| `page`   | number                    | `1`    | Página atual              |
-| `limit`  | number                    | `20`   | Itens por página          |
+| Param    | Tipo                     | Padrão | Descrição          |
+| -------- | ------------------------ | ------ | ------------------ |
+| `status` | `ABERTA` \| `RESPONDIDA` | —      | Filtrar por status |
+| `page`   | number                   | `1`    | Página atual       |
+| `limit`  | number                   | `20`   | Itens por página   |
 
 **Request**
 
@@ -549,73 +575,6 @@ Remove um nó. Se o nó possuir filhos, a operação é bloqueada.
 
 ---
 
-## 📄 Documentos (Admin) <a id="documentos-admin"></a>
-
-> Todas as rotas abaixo exigem `role: ADMIN`.
-
-### `GET /documents`
-
-Lista todos os documentos oficiais cadastrados.
-
-**Response `200 OK`**
-
-```json
-{
-  "success": true,
-  "data": [
-    {
-      "id": "doc-uuid-1",
-      "name": "Regulamento Geral dos Cursos Superiores das Fatecs",
-      "type": "REGULAMENTO",
-      "fileUrl": "https://storage.../regulamento.pdf",
-      "createdAt": "2026-03-01T00:00:00.000Z",
-      "_count": { "chunks": 42 }
-    }
-  ],
-  "meta": {
-    "total": 4,
-    "page": 1,
-    "limit": 20
-  }
-}
-```
-
-### `POST /documents`
-
-Cadastra um novo documento e seus chunks indexados.
-
-**Request**
-
-```json
-{
-  "name": "Manual de Estágio",
-  "type": "MANUAL",
-  "fileUrl": "https://storage.../manual-estagio.pdf",
-  "chunks": [
-    {
-      "content": "Art. 12 – O estágio supervisionado tem duração mínima de 240 horas...",
-      "page": 8,
-      "section": "Capítulo II"
-    }
-  ]
-}
-```
-
-**Response `201 Created`**
-
-```json
-{
-  "success": true,
-  "data": {
-    "id": "doc-uuid-2",
-    "name": "Manual de Estágio",
-    "chunksCreated": 1
-  }
-}
-```
-
----
-
 ## 👤 Usuários (Admin) <a id="usuários-admin"></a>
 
 > Todas as rotas abaixo exigem `role: ADMIN`.
@@ -700,13 +659,13 @@ Lista os logs de atendimento com filtros opcionais.
 
 **Query Params**
 
-| Param          | Tipo                        | Descrição                             |
-|----------------|-----------------------------|---------------------------------------|
-| `satisfaction` | `LIKED` \| `DISLIKED`       | Filtrar por avaliação                 |
-| `from`         | ISO 8601 date               | Data de início do intervalo           |
-| `to`           | ISO 8601 date               | Data de fim do intervalo              |
-| `page`         | number                      | Página atual (padrão: 1)              |
-| `limit`        | number                      | Itens por página (padrão: 20)         |
+| Param   | Tipo                       | Descrição                     |
+| ------- | -------------------------- | ----------------------------- |
+| `flag`  | `ATENDEU` \| `NAO_ATENDEU` | Filtrar por avaliação         |
+| `from`  | ISO 8601 date              | Data de início do intervalo   |
+| `to`    | ISO 8601 date              | Data de fim do intervalo      |
+| `page`  | number                     | Página atual (padrão: 1)      |
+| `limit` | number                     | Itens por página (padrão: 20) |
 
 **Request**
 
@@ -722,20 +681,17 @@ Authorization: Bearer <token>
   "success": true,
   "data": [
     {
-      "id": "session-uuid-1",
-      "navigationPath": [
-        "node-root-uuid",
-        "node-dsm-uuid",
-        "node-dsm-estag-uuid"
-      ],
-      "satisfaction": "DISLIKED",
-      "startedAt": "2026-03-27T20:15:00.000Z",
-      "endedAt": "2026-03-27T20:17:43.000Z",
-      "question": {
-        "id": "question-uuid-1",
-        "text": "Posso solicitar aproveitamento de uma disciplina cursada em 2015?",
-        "status": "OPEN"
-      }
+      "id": 1,
+      "navigation_flow": ["root", "dsm", "dsm-estagio"],
+      "flag": "NAO_ATENDEU",
+      "created_at": "2026-03-27T20:17:43.000Z",
+      "questions": [
+        {
+          "id": 1,
+          "question": "Posso solicitar aproveitamento de uma disciplina cursada em 2015?",
+          "status": "ABERTA"
+        }
+      ]
     }
   ],
   "meta": {
@@ -750,17 +706,17 @@ Authorization: Bearer <token>
 
 ## 📋 Códigos de Status <a id="códigos-de-status"></a>
 
-| Código | Significado         | Quando ocorre                                                |
-|:------:|---------------------|--------------------------------------------------------------|
-| `200`  | OK                  | Requisição bem-sucedida (GET, PATCH, DELETE)                 |
-| `201`  | Created             | Recurso criado com sucesso (POST)                            |
-| `400`  | Bad Request         | Body malformado ou faltando campos obrigatórios              |
-| `401`  | Unauthorized        | Token ausente, inválido ou expirado                          |
-| `403`  | Forbidden           | Token válido, mas role sem permissão para a operação         |
-| `404`  | Not Found           | Recurso não encontrado pelo ID informado                     |
-| `409`  | Conflict            | Operação bloqueada por regra de negócio (ex: nó com filhos)  |
-| `422`  | Unprocessable Entity| Dados válidos no formato mas inválidos semanticamente (Zod)  |
-| `500`  | Internal Server Error | Erro não tratado no servidor — verificar logs do backend   |
+| Código | Significado           | Quando ocorre                                               |
+| :----: | --------------------- | ----------------------------------------------------------- |
+| `200`  | OK                    | Requisição bem-sucedida (GET, PATCH, DELETE)                |
+| `201`  | Created               | Recurso criado com sucesso (POST)                           |
+| `400`  | Bad Request           | Body malformado ou faltando campos obrigatórios             |
+| `401`  | Unauthorized          | Token ausente, inválido ou expirado                         |
+| `403`  | Forbidden             | Token válido, mas role sem permissão para a operação        |
+| `404`  | Not Found             | Recurso não encontrado pelo ID informado                    |
+| `409`  | Conflict              | Operação bloqueada por regra de negócio (ex: nó com filhos) |
+| `422`  | Unprocessable Entity  | Dados válidos no formato mas inválidos semanticamente (Zod) |
+| `500`  | Internal Server Error | Erro não tratado no servidor — verificar logs do backend    |
 
 ---
 

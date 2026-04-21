@@ -22,11 +22,11 @@
 O sistema implementa controle de acesso baseado em papéis (**RBAC — RF10**).
 Existem três perfis com escopos distintos:
 
-| Perfil                   | Autenticação |  Papel JWT  | O que pode fazer                                                                 |
-| ------------------------ | :----------: | :---------: | -------------------------------------------------------------------------------- |
-| **Aluno / Visitante**    |  ❌ Pública  |      —      | Navegar no chatbot, enviar pergunta à secretaria, avaliar satisfação             |
-| **Secretária Acadêmica** |    ✅ JWT    | `SECRETARY` | Listar perguntas recebidas, atualizar status (aberta / respondida)               |
-| **Administrador**        |    ✅ JWT    |   `ADMIN`   | CRUD de nós, documentos e usuários da secretaria; visualizar logs de atendimento |
+| Perfil                   | Autenticação |  Papel JWT   | O que pode fazer                                                     |
+| ------------------------ | :----------: | :----------: | -------------------------------------------------------------------- |
+| **Aluno / Visitante**    |  ❌ Pública  |      —       | Navegar no chatbot, enviar pergunta à secretaria, avaliar satisfação |
+| **Secretária Acadêmica** |    ✅ JWT    | `SECRETARIA` | Listar perguntas recebidas, atualizar status (aberta / respondida)   |
+| **Administrador**        |    ✅ JWT    |   `ADMIN`    | CRUD de nós e usuários da secretaria; visualizar logs de atendimento |
 
 > ⚠️ O controle de acesso **deve ser aplicado no backend** via middleware.
 > Proteção apenas no frontend (esconder botões) **não é suficiente** e viola o RF10/RF11.
@@ -80,47 +80,40 @@ orquestrados via `docker-compose.yml` com inicialização em comando único.
 ### Diagrama Entidade-Relacionamento
 
 ```
-┌──────────────────┐        ┌───────────────────────┐
-│      User        │        │       ChatNode         │
-├──────────────────┤        ├───────────────────────┤
-│ id (UUID) PK     │        │ id (UUID) PK           │
-│ name             │        │ title                  │
-│ email (unique)   │        │ content (resposta)     │
-│ passwordHash     │        │ nodeType (MENU|ANSWER) │
-│ role (ENUM)      │        │ parentId (FK → self)   │
-│ createdAt        │        │ order (int)            │
-│ updatedAt        │        │ isActive               │
-└──────────────────┘        │ createdAt              │
-         │                  └──────────┬────────────┘
-         │                             │ 1
-         │ 1                           │
-         │                    ┌────────▼────────────┐
-┌────────▼─────────┐          │    NodeDocument     │  (tabela pivô)
-│    Question      │          ├─────────────────────┤
-├──────────────────┤          │ nodeId (FK)         │
-│ id (UUID) PK     │          │ documentChunkId (FK)│
-│ text             │          └──────────┬──────────┘
-│ email            │                     │ N
-│ status (ENUM)    │          ┌──────────▼──────────┐
-│ sessionLogId(FK) │          │   DocumentChunk     │
-│ createdAt        │          ├─────────────────────┤
-│ updatedAt        │          │ id (UUID) PK        │
-└──────────────────┘          │ content (texto)     │
-         │                    │ page                │
-         │ N                  │ section             │
-         │                    │ documentId (FK)     │
-┌────────▼─────────┐          └──────────┬──────────┘
-│   SessionLog     │                     │ N
-├──────────────────┤          ┌──────────▼──────────┐
-│ id (UUID) PK     │          │      Document       │
-│ navigationPath   │          ├─────────────────────┤
-│ (JSON — array    │          │ id (UUID) PK        │
-│  de nodeIds)     │          │ name                │
-│ satisfaction     │          │ type (ENUM)         │
-│ (ENUM|null)      │          │ fileUrl             │
-│ startedAt        │          │ createdAt           │
-│ endedAt          │          └─────────────────────┘
-└──────────────────┘
+┌──────────────────────┐          ┌───────────────────────────┐
+│         User         │          │         ChatNode           │
+├──────────────────────┤          ├───────────────────────────┤
+│ id (Int) PK          │          │ id (Int) PK                │
+│ name                 │          │ title                      │
+│ email (unique)       │          │ slug (unique)              │
+│ password_hash        │          │ prompt                     │
+│ role (ENUM)          │          │ answer_summary (nullable)  │
+│ created_at           │          │ evidence_excerpt (nullable)│
+│ updated_at           │          │ evidence_source (nullable) │
+└──────────────────────┘          │ parent_id (FK → self)      │
+                                  │ display_order (Int)        │
+                                  │ is_active (Boolean)        │
+                                  │ created_at                 │
+                                  │ updated_at                 │
+                                  └───────────────────────────┘
+
+┌──────────────────────┐          ┌───────────────────────────┐
+│       Question       │          │      InteractionLog        │
+├──────────────────────┤          ├───────────────────────────┤
+│ id (Int) PK          │          │ id (Int) PK                │
+│ requester_name       │          │ navigation_flow (JSON —    │
+│ question             │          │   array de slugs visitados)│
+│ requester_email      │          │ flag (ENUM, nullable)      │
+│ status (ENUM)        │          │   ATENDEU | NAO_ATENDEU    │
+│ attachment_name      │          │ inquiry_ids (JSON —        │
+│   (nullable)         │          │   array de Question.id)    │
+│ attachment_mime_type │          │ created_at                 │
+│   (nullable)         │          └───────────────────────────┘
+│ attachment_data      │
+│   (nullable, bytes)  │
+│ created_at           │
+│ updated_at           │
+└──────────────────────┘
 ```
 
 ### Descrição das entidades
@@ -142,42 +135,41 @@ O perfil Aluno não possui registro — acesso é público.
 
 Representa cada nó da árvore de navegação do chatbot (menus, submenus e respostas).
 
-| Campo      | Tipo   | Descrição                                                  |
-| ---------- | ------ | ---------------------------------------------------------- |
-| `nodeType` | Enum   | `MENU` (tem filhos/opções) ou `ANSWER` (é folha da árvore) |
-| `parentId` | UUID?  | Referência ao nó pai. `null` indica nó raiz                |
-| `order`    | Int    | Ordenação dos filhos dentro do mesmo pai                   |
-| `content`  | String | Texto exibido ao usuário. Em nós `MENU`: pergunta/título   |
-
-#### `DocumentChunk`
-
-Fragmentos indexados de documentos oficiais, exibidos como evidência ao final do atendimento.
-
-| Campo     | Tipo    | Descrição                                                  |
-| --------- | ------- | ---------------------------------------------------------- |
-| `content` | String  | Trecho do documento (máx. ~500 tokens)                     |
-| `page`    | Int?    | Página do documento original de onde o trecho foi extraído |
-| `section` | String? | Seção ou âncora do documento (ex: "Seção I, p. 25")        |
+| Campo              | Tipo    | Descrição                                                        |
+| ------------------ | ------- | ---------------------------------------------------------------- |
+| `id`               | Int     | Identificador único auto-incrementado                            |
+| `title`            | String  | Texto do botão/opção exibido na lista de opções do nó pai        |
+| `slug`             | String  | Identificador amigável único (ex: `aacc`, `datas-importantes`)   |
+| `prompt`           | String  | Pergunta ou instrução exibida pelo bot ao entrar neste nó        |
+| `answer_summary`   | String? | Resposta objetiva exibida em nós folha (sem filhos)              |
+| `evidence_excerpt` | String? | Trecho de evidência extraído de documento oficial                |
+| `evidence_source`  | String? | Fonte da evidência (ex: "Regulamento Geral das Fatecs, Art. 38") |
+| `parent_id`        | Int?    | Referência ao nó pai. `null` indica nó raiz                      |
+| `display_order`    | Int     | Ordenação dos filhos dentro do mesmo pai                         |
 
 #### `SessionLog`
 
 Registra cada sessão de atendimento completa (RF08).
 
-| Campo            | Tipo  | Descrição                                          |
-| ---------------- | ----- | -------------------------------------------------- |
-| `navigationPath` | JSON  | Array de IDs de nós visitados em ordem cronológica |
-| `satisfaction`   | Enum? | `LIKED`, `DISLIKED` ou `null` (não avaliado)       |
+| Campo             | Tipo  | Descrição                                                          |
+| ----------------- | ----- | ------------------------------------------------------------------ |
+| `navigation_flow` | JSON  | Array de slugs visitados em ordem cronológica                      |
+| `flag`            | Enum? | `ATENDEU`, `NAO_ATENDEU` ou `null` (não avaliado)                  |
+| `inquiry_ids`     | JSON  | Array de IDs de `Question` originados nesta sessão (pode ser `[]`) |
 
 #### `Question`
 
 Pergunta enviada pelo aluno à Secretaria Acadêmica (RF05/RF06).
 
-| Campo          | Tipo   | Descrição                                     |
-| -------------- | ------ | --------------------------------------------- |
-| `text`         | String | Texto da dúvida enviada pelo aluno            |
-| `email`        | String | E-mail institucional informado para resposta  |
-| `status`       | Enum   | `OPEN` (em aberto) ou `ANSWERED` (respondida) |
-| `sessionLogId` | UUID?  | Log da sessão em que a pergunta foi originada |
+| Campo                  | Tipo    | Descrição                                           |
+| ---------------------- | ------- | --------------------------------------------------- |
+| `requester_name`       | String  | Nome do solicitante                                 |
+| `question`             | String  | Texto da dúvida enviada pelo aluno                  |
+| `requester_email`      | String  | E-mail institucional informado para resposta        |
+| `status`               | Enum    | `ABERTA` (em aberto) ou `RESPONDIDA`                |
+| `attachment_name`      | String? | Nome original do arquivo anexado                    |
+| `attachment_mime_type` | String? | MIME type do anexo (ex: `application/pdf`)          |
+| `attachment_data`      | Bytes?  | Conteúdo binário do arquivo (PDF, JPG ou PNG, ≤5MB) |
 
 ---
 
@@ -286,8 +278,10 @@ Disponível ao fim de qualquer atendimento no chatbot (RF05/RF06).
          │
          ▼
 [POST /api/v1/questions]
-  Body: { text, email, sessionLogId? }
-  → Salva Question com status: OPEN
+  Body: { requester_name, question, requester_email, attachment? }
+  → Valida e-mail e campos obrigatórios
+  → Persiste Question com status: ABERTA
+  → Se anexo presente: persiste attachment_name, attachment_mime_type, attachment_data
   → Resposta: 201 Created
          │
          ▼

@@ -91,4 +91,56 @@ _Botão "Entrar" desabilitado e campos bloqueados durante o carregamento._
 
 ---
 
+## 🗂️ Wireframes do Chatbot — Task-009
+
+Esta seção apresenta todos os wireframes exigidos pela Task-009, ilustrando os principais estados e componentes da interface do chatbot.
+
+### 1. ChatWindow
+
+![ChatWindow](designer/interface-chatbot.PNG)
+
+_Tela principal do chatbot, exibindo o fluxo de navegação e histórico de perguntas._
+
+### 2. MessageBubble
+
+![MessageBubble](designer/interface-chatbot-message-bubble.PNG)
+
+_As bolhas de mensagem representam as interações do bot (à esquerda, com avatar) e do usuário (à direita, destacada em vermelho)._
+
+### 3. OptionButton
+
+![OptionButton](designer/interface-chatbot-option-button.PNG)
+
+_Exemplo dos três estados do botão de opção: Default, Hover e Disabled._
+
+### 4. EvidenceCard
+
+![EvidenceCard](designer/interface-chatbot-evidence-card.PNG)
+
+_Card exibindo um trecho de evidência e a fonte oficial da resposta._
+
+### 5. SatisfactionRating
+
+![SatisfactionRating](designer/interface-chatbot-satisfaction-rating.PNG)
+
+_Componente de avaliação de satisfação, mostrando os estados: neutro, gostei e não gostei._
+
+### 6. QuestionForm
+
+#### Estado vazio
+
+![QuestionForm Default](designer/interface-chatbot-question-form-default.PNG)
+
+#### Estado preenchido
+
+![QuestionForm Writer](designer/interface-chatbot-question-form-writer.PNG)
+
+#### Estado enviado
+
+![QuestionForm Sucesso](designer/interface-chatbot-question-form-sucesso.PNG)
+
+_Formulário para envio de dúvida à secretária, com campos para nome, e-mail, dúvida e anexo. Inclui feedback visual de sucesso após o envio._
+
+---
+
 Dúvidas ou sugestões? Consulte o Figma ou entre em contato com o responsável pelo Design System.

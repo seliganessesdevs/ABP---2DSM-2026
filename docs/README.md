@@ -184,4 +184,12 @@ seguindo o formato de contexto, decisão e consequências.
 
 ---
 
+## 🎨 Design System
+
+A documentação completa dos tokens visuais e componentes reutilizáveis está disponível em [design-system.md](./design-system.md).
+
+- Tokens de cor, tipografia, espaçamento e radius definidos e anotados para facilitar o mapeamento com Tailwind CSS.
+- Componentes Figma: Button (primary/secondary/ghost/destructive), Input, Badge, Card, Modal/Dialog, Sidebar, Table.
+- Exemplos de mapeamento e orientações de handoff também estão detalhados no arquivo.
+
 > _Próximo documento: [`first-steps.md`](./first-steps.md)_

@@ -69,4 +69,26 @@ Para detalhes completos, consulte o arquivo `tailwind.config.ts` no frontend.
 
 ---
 
+## 🖼️ Wireframes — Login e Fluxo de Autenticação
+
+As três variantes exigidas pela Task-008 estão disponíveis abaixo:
+
+### 1. Tela de Login (Normal)
+
+![Tela de Login](designer/login-normal.png)
+
+### 2. Variante de Erro
+
+![Variante de Erro](designer/login-erro.png)
+
+_Exibe mensagem de erro para e-mail ou senha inválidos._
+
+### 3. Variante de Loading
+
+![Variante de Loading](designer/login-loading.png)
+
+_Botão "Entrar" desabilitado e campos bloqueados durante o carregamento._
+
+---
+
 Dúvidas ou sugestões? Consulte o Figma ou entre em contato com o responsável pelo Design System.

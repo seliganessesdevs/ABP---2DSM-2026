@@ -16,6 +16,8 @@
 - [Sprints](#sprints)
 - [ADRs](#adrs)
 - [Regras de contribuição](#regras-de-contribuicao)
+- [Diagramas de caso de uso](#-diagrama-de-casos-de-uso)
+- [Modelo Relacional - Banco de dados](#️-modelo-relacional--banco-de-dados)
 
 ---
 
@@ -165,5 +167,29 @@ seguindo o formato de contexto, decisão e consequências.
 - Ao criar um documento novo, atualize este índice e o rodapé de navegação relacionado
 
 ---
+
+## 📐 Diagrama de Casos de Uso
+
+- [Arquivo editável (.asta)](uml/casos-de-uso.asta)
+
+![Diagrama de Casos de Uso](uml/casos-de-uso.PNG)
+
+---
+
+## 🗄️ Modelo Relacional — Banco de Dados
+
+![Modelo Relacional](bd/Modelagem-Banco-Dados.jpeg)
+
+- [PDF do modelo](bd/Modelagem-Banco-Dados.pdf)
+
+---
+
+## 🎨 Design System
+
+A documentação completa dos tokens visuais e componentes reutilizáveis está disponível em [design-system.md](./design-system.md).
+
+- Tokens de cor, tipografia, espaçamento e radius definidos e anotados para facilitar o mapeamento com Tailwind CSS.
+- Componentes Figma: Button (primary/secondary/ghost/destructive), Input, Badge, Card, Modal/Dialog, Sidebar, Table.
+- Exemplos de mapeamento e orientações de handoff também estão detalhados no arquivo.
 
 > _Próximo documento: [`first-steps.md`](./first-steps.md)_

@@ -22,11 +22,11 @@
 O sistema implementa controle de acesso baseado em papéis (**RBAC — RF10**).
 Existem três perfis com escopos distintos:
 
-| Perfil                   | Autenticação |   Papel JWT   | O que pode fazer                                                                 |
-| ------------------------ | :----------: | :-----------: | -------------------------------------------------------------------------------- |
-| **Aluno / Visitante**    |  ❌ Pública  |       —       | Navegar no chatbot, enviar pergunta à secretaria, avaliar satisfação             |
-| **Secretária Acadêmica** |    ✅ JWT    | `SECRETARIA`  | Listar perguntas recebidas, atualizar status (aberta / respondida)               |
-| **Administrador**        |    ✅ JWT    |    `ADMIN`    | CRUD de nós e usuários da secretaria; visualizar logs de atendimento             |
+| Perfil                   | Autenticação |  Papel JWT   | O que pode fazer                                                     |
+| ------------------------ | :----------: | :----------: | -------------------------------------------------------------------- |
+| **Aluno / Visitante**    |  ❌ Pública  |      —       | Navegar no chatbot, enviar pergunta à secretaria, avaliar satisfação |
+| **Secretária Acadêmica** |    ✅ JWT    | `SECRETARIA` | Listar perguntas recebidas, atualizar status (aberta / respondida)   |
+| **Administrador**        |    ✅ JWT    |   `ADMIN`    | CRUD de nós e usuários da secretaria; visualizar logs de atendimento |
 
 > ⚠️ O controle de acesso **deve ser aplicado no backend** via middleware.
 > Proteção apenas no frontend (esconder botões) **não é suficiente** e viola o RF10/RF11.
@@ -98,7 +98,7 @@ orquestrados via `docker-compose.yml` com inicialização em comando único.
                                   └───────────────────────────┘
 
 ┌──────────────────────┐          ┌───────────────────────────┐
-│       Inquiry        │          │      InteractionLog        │
+│       Question       │          │      InteractionLog        │
 ├──────────────────────┤          ├───────────────────────────┤
 │ id (Int) PK          │          │ id (Int) PK                │
 │ requester_name       │          │ navigation_flow (JSON —    │
@@ -106,7 +106,7 @@ orquestrados via `docker-compose.yml` com inicialização em comando único.
 │ requester_email      │          │ flag (ENUM, nullable)      │
 │ status (ENUM)        │          │   ATENDEU | NAO_ATENDEU    │
 │ attachment_name      │          │ inquiry_ids (JSON —        │
-│   (nullable)         │          │   array de Inquiry.id)     │
+│   (nullable)         │          │   array de Question.id)    │
 │ attachment_mime_type │          │ created_at                 │
 │   (nullable)         │          └───────────────────────────┘
 │ attachment_data      │
@@ -136,27 +136,27 @@ O perfil Aluno não possui registro — acesso é público.
 Representa cada nó da árvore de navegação do chatbot (menus e respostas).
 Nós com filhos funcionam como menus; nós sem filhos são folhas e exibem `answer_summary`.
 
-| Campo              | Tipo    | Descrição                                                                 |
-| ------------------ | ------- | ------------------------------------------------------------------------- |
-| `id`               | Int     | Identificador único auto-incrementado                                     |
-| `title`            | String  | Texto do botão/opção exibido na lista de opções do nó pai                 |
-| `slug`             | String  | Identificador amigável único (ex: `aacc`, `datas-importantes`)            |
-| `prompt`           | String  | Pergunta ou instrução exibida pelo bot ao entrar neste nó                 |
-| `answer_summary`   | String? | Resposta objetiva exibida em nós folha (sem filhos)                       |
-| `evidence_excerpt` | String? | Trecho de evidência extraído de documento oficial                         |
-| `evidence_source`  | String? | Fonte da evidência (ex: "Regulamento Geral das Fatecs, Art. 38")          |
-| `parent_id`        | Int?    | Referência ao nó pai. `null` indica nó raiz                               |
-| `display_order`    | Int     | Ordenação dos filhos dentro do mesmo pai                                  |
+| Campo              | Tipo    | Descrição                                                        |
+| ------------------ | ------- | ---------------------------------------------------------------- |
+| `id`               | Int     | Identificador único auto-incrementado                            |
+| `title`            | String  | Texto do botão/opção exibido na lista de opções do nó pai        |
+| `slug`             | String  | Identificador amigável único (ex: `aacc`, `datas-importantes`)   |
+| `prompt`           | String  | Pergunta ou instrução exibida pelo bot ao entrar neste nó        |
+| `answer_summary`   | String? | Resposta objetiva exibida em nós folha (sem filhos)              |
+| `evidence_excerpt` | String? | Trecho de evidência extraído de documento oficial                |
+| `evidence_source`  | String? | Fonte da evidência (ex: "Regulamento Geral das Fatecs, Art. 38") |
+| `parent_id`        | Int?    | Referência ao nó pai. `null` indica nó raiz                      |
+| `display_order`    | Int     | Ordenação dos filhos dentro do mesmo pai                         |
 
-#### `InteractionLog`
+#### `SessionLog`
 
 Registra cada sessão de atendimento completa (RF08).
 
-| Campo              | Tipo   | Descrição                                                         |
-| ------------------ | ------ | ----------------------------------------------------------------- |
-| `navigation_flow`  | JSON   | Array de slugs visitados em ordem cronológica                     |
-| `flag`             | Enum?  | `ATENDEU`, `NAO_ATENDEU` ou `null` (não avaliado)                 |
-| `inquiry_ids`      | JSON   | Array de IDs de `Inquiry` originados nesta sessão (pode ser `[]`) |
+| Campo             | Tipo  | Descrição                                                          |
+| ----------------- | ----- | ------------------------------------------------------------------ |
+| `navigation_flow` | JSON  | Array de slugs visitados em ordem cronológica                      |
+| `flag`            | Enum? | `ATENDEU`, `NAO_ATENDEU` ou `null` (não avaliado)                  |
+| `inquiry_ids`     | JSON  | Array de IDs de `Question` originados nesta sessão (pode ser `[]`) |
 
 #### `Inquiry`
 
@@ -281,7 +281,7 @@ Disponível ao fim de qualquer atendimento no chatbot (RF05/RF06).
 [POST /api/v1/questions]
   Body: { requester_name, question, requester_email, attachment? }
   → Valida e-mail e campos obrigatórios
-  → Persiste Inquiry com status: ABERTA
+  → Persiste Question com status: ABERTA
   → Se anexo presente: persiste attachment_name, attachment_mime_type, attachment_data
   → Resposta: 201 Created
          │

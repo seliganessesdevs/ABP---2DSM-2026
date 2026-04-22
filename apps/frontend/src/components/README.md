@@ -71,6 +71,39 @@ Exemplos esperados:
 - `LoadingSpinner.tsx`
 - `ErrorBoundary.tsx`
 
+### Componentes base de estado (TASK-017)
+
+#### `LoadingSpinner.tsx`
+
+Indicador de carregamento reutilizável para estados de espera.
+
+- Props principais:
+  - `size`: `sm` | `md` | `lg`
+  - `message`: texto exibido ao lado do spinner
+  - `fullScreen`: renderiza overlay de tela cheia
+- Acessibilidade:
+  - Usa `role="status"` e `aria-live="polite"`
+
+#### `ErrorAlert.tsx`
+
+Componente visual para feedback de erro/aviso/informacao com acoes opcionais.
+
+- Props principais:
+  - `variant`: `error` | `warning` | `info`
+  - `title` e `message`
+  - `onRetry` + `retryLabel`
+  - `dismissible` + `onDismiss`
+- Acessibilidade:
+  - Usa `role="alert"`
+
+#### `ErrorBoundary.tsx`
+
+Boundary global para capturar erros de renderizacao e evitar quebra total da aplicacao.
+
+- Captura erros em componentes filhos
+- Exibe fallback padrao com `ErrorAlert`
+- Aceita fallback customizado por prop e fornece `resetErrorBoundary`
+
 Esses componentes podem evoluir com o projeto, ao contrário de `ui/`.
 
 ---

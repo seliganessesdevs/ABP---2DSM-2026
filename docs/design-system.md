@@ -75,17 +75,17 @@ As três variantes exigidas pela Task-008 estão disponíveis abaixo:
 
 ### 1. Tela de Login (Normal)
 
-![Tela de Login](designer/login-normal.png)
+![Tela de Login](designer/tela-login.PNG)
 
 ### 2. Variante de Erro
 
-![Variante de Erro](designer/login-erro.png)
+![Variante de Erro](designer/variante-tela-login-erro.PNG)
 
 _Exibe mensagem de erro para e-mail ou senha inválidos._
 
 ### 3. Variante de Loading
 
-![Variante de Loading](designer/login-loading.png)
+![Variante de Loading](designer/variante-tela-login-loading.PNG)
 
 _Botão "Entrar" desabilitado e campos bloqueados durante o carregamento._
 

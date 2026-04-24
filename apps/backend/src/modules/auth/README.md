@@ -91,26 +91,27 @@ async login(req: Request, res: Response) {
 
 ```ts
 // Body esperado na requisição
-interface LoginDto {
-  email: string
-  password: string
+export interface LoginDTO {
+      email: string;
+      password: string;
 }
 
-// Resposta retornada ao frontend
-interface LoginResponse {
-  token: string
-  user: {
-    id: string
-    email: string
-    role: 'ADMIN' | 'SECRETARY'
-  }
+export interface AuthPayload {
+      sub: string;
+      role: "ADMIN" | "SECRETARIA";
+      exp: number;
 }
 
-// Payload decodificado do JWT
-interface AuthPayload {
-  id: string
-  role: 'ADMIN' | 'SECRETARY'
-  exp: number
+export interface AuthUserResponse {
+      id: number;
+      name: string;
+      email: string;
+      role: "ADMIN" | "SECRETARIA";
+}
+
+export interface LoginResponse {
+      token: string;
+      user: AuthUserResponse;
 }
 ```
 

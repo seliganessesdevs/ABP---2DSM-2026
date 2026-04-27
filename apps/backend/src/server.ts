@@ -1,9 +1,20 @@
-import express, { type Express } from 'express';
+import express, { type Express } from 'express'
 
-const app: Express = express();
+import routes from './routes'
+import { loggerMiddleware } from './middlewares/logger.middleware'
+import { errorMiddleware } from './middlewares/error.middleware'
 
-app.get('/api/v1/health', (req, res) => {
-  res.json({ success: true });
-});
+const app: Express = express()
 
-export default app;
+app.use(loggerMiddleware)
+app.use(express.json())
+
+app.get('/api/v1/health', (_req, res) => {
+  res.json({ success: true, data: {} })
+})
+
+app.use('/api/v1', routes)
+
+app.use(errorMiddleware)
+
+export default app

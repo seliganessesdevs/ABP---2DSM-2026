@@ -15,6 +15,15 @@ export const errorMiddleware: ErrorRequestHandler = (err, _req, res, _next) => {
             })
       }
 
+      // Body com JSON inválido (parse falhou no express.json)
+      if (err?.type === 'entity.parse.failed' || err?.statusCode === 400) {
+            console.error(err)
+            return res.status(400).json({
+                  success: false,
+                  message: 'JSON inválido no corpo da requisição',
+            })
+      }
+
       if (err instanceof ZodError) {
             const errors: FieldError[] = err.issues.map((issue) => ({
                   field: issue.path.join('.') || 'body',
@@ -27,6 +36,9 @@ export const errorMiddleware: ErrorRequestHandler = (err, _req, res, _next) => {
                   errors,
             })
       }
+
+      // Erro inesperado: loga para diagnóstico (não expõe detalhes ao cliente)
+      console.error(err)
 
       return res.status(500).json({
             success: false,

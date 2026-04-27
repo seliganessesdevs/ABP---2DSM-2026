@@ -7,12 +7,16 @@ import { comparePassword } from "../../utils/hash.util";
 export async function login(dto: LoginDTO): Promise<LoginResponse> {
       const user = await db.user.findUnique({
             where: { email: dto.email },
+            
       });
+      if (!user) {
+  throw new AppError("E-mail ou senha inválidos", 401);
+}
 
       const isPasswordValid = await comparePassword(dto.password, user.password_hash);
 
       if (!isPasswordValid) {
-            throw new AppError("Credenciais inválidas", 401);
+            throw new AppError("E-mail ou senha inválidos", 401);
       }
 
       const token = generateToken({ sub: user.id.toString(), role: user.role });

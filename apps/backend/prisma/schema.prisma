@@ -1,0 +1,76 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// Enums
+enum Role {
+  ADMIN
+  SECRETARIA
+}
+
+enum Satisfaction {
+  ATENDEU
+  NAO_ATENDEU
+}
+
+enum InquiryStatus {
+  ABERTA
+  RESPONDIDA
+}
+
+// Models
+model User {
+  id            Int      @id @default(autoincrement())
+  name          String
+  email         String   @unique
+  password_hash String
+  role          Role
+  created_at    DateTime @default(now())
+  updated_at    DateTime @updatedAt
+}
+
+model ChatNode {
+  id               Int        @id @default(autoincrement())
+  title            String
+  slug             String     @unique
+  prompt           String?
+  answer_summary   String?
+  evidence_excerpt String?
+  evidence_source  String?
+  parent_id        Int?
+  display_order    Int
+  is_active        Boolean    @default(true)
+  created_at       DateTime   @default(now())
+  updated_at       DateTime   @updatedAt
+  parent           ChatNode?  @relation("ChatNodeTree", fields: [parent_id], references: [id], onDelete: SetNull)
+  children         ChatNode[] @relation("ChatNodeTree")
+
+  @@index([parent_id, display_order])
+}
+
+model SessionLog {
+  id              Int           @id @default(autoincrement())
+  navigation_flow Json
+  flag            Satisfaction?
+  inquiry_ids     Json?
+  created_at      DateTime      @default(now())
+}
+
+model Question {
+  id                   Int           @id @default(autoincrement())
+  requester_name       String
+  question             String
+  requester_email      String
+  attachment_name      String?
+  attachment_mime_type String?
+  attachment_data      Bytes?
+  status               InquiryStatus @default(ABERTA)
+  created_at           DateTime      @default(now())
+  updated_at           DateTime      @updatedAt
+
+  @@index([status, created_at])
+}

@@ -21,6 +21,7 @@
 
 - [Responsabilidades](#responsabilidades)
 - [Estrutura de Pastas](#estrutura-de-pastas)
+- [Protótipo] (#prototipo-figma)
 - [Primeiros Passos](#primeiros-passos)
 - [Checklist de Implementação Inicial](#checklist-de-implementacao-inicial)
 - [Scripts Disponíveis](#scripts-disponíveis)
@@ -63,6 +64,13 @@ Resumo da estrutura do frontend:
 
 Documentação canônica da árvore completa e responsabilidades por pasta:
 [`docs/project-structure.md`](../../docs/project-structure.md).
+
+---
+
+## Protótipo (Figma) <a id="prototipo-figma"></a>
+
+- Link: [Protótipo no Figma](https://www.figma.com/proto/IE53nU5qlIVoaotNnZ448m/FATECBOT?node-id=4-2&starting-point-node-id=4%3A2&t=36TEScaZgAHTZuKT-1)  
+- Versão/obs: v1.0 — 2026-04-27.
 
 ---
 

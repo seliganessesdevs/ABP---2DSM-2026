@@ -1,4 +1,4 @@
-import { SatisfactionRating } from "@/features/chatbot/components/SatisfactionRating";
+
 
 export default function HomePage() {
   return (

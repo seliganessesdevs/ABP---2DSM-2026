@@ -1,14 +1,13 @@
-import { Outlet, Navigate } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuthStore } from "@/features/auth/stores/auth.store";
 
 export function ProtectedRoute() {
-  const { token } = useAuthStore();
+  const token = useAuthStore((state) => state.token);
+  const location = useLocation();
 
-  // Se não estiver autenticado, redireciona para /login
   if (!token) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" replace state={{ from: location }} />;
   }
 
-  // Se autenticado, renderiza as rotas filhas
   return <Outlet />;
 }

@@ -1,5 +1,5 @@
 import { api } from "@/lib/axios";
-import type {ChatNode, SessionRatingPayload} from "../types/chatbot.types";
+import type {ChatNode, SessionRatingPayload, QuestionPayload} from "../types/chatbot.types";
 import type { ApiResponse } from "@/types/api.types";
 
 
@@ -18,8 +18,18 @@ export async function submitRating(payload: SessionRatingPayload){
     return res.data.data
 }
 
+export async function submitQuestion(formData: FormData){
+    const res = await api.post<ApiResponse<QuestionPayload>>("/questions", formData, {
+        headers: {
+            "Content-Type": "multipart/form-data"
+        }
+    });
+    return res.data.data;
+}
+
 export const chatbotApi = {
     getRootNode,
     getNodeById,
-    submitRating
+    submitRating,
+    submitQuestion
 };

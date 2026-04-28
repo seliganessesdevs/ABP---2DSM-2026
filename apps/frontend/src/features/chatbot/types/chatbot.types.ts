@@ -32,3 +32,21 @@ export interface SessionRatingPayload {
   navigation_flow: string[];
   flag: Satisfaction;
 }
+
+export interface QuestionFormData {
+  requester_name: string;
+  requester_email: string;
+  question: string;
+  attachment?: File;
+}
+
+export interface QuestionPayload {
+  id: number;
+  requester_name: string;
+  requester_email: string;
+  question: string;
+  attachment_name?: string;
+  attachment_mime_type?: string;
+  created_at: string;
+  status: "pending" | "answered" | "archived";
+}

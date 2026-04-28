@@ -1,4 +1,4 @@
-import { QuestionsController } from "./question.controller";
+import { QuestionsController } from "./questions.controller";
 import { Router } from "express";
 import {z } from "zod";
 

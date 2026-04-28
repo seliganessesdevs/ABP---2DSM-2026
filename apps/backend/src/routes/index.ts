@@ -2,7 +2,8 @@ import { Router } from 'express'
 
 import authRoutes from '../modules/auth/auth.routes'
 import chatbotRoutes from '../modules/chatbot/chatbot.routes'
-import questionsRoutes from '../modules/questions/question.routes'
+import questionsRoutes from '../modules/questions/questions.routes'
+
 
 const router = Router()
 

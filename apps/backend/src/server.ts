@@ -1,5 +1,4 @@
 import express, { type Express } from 'express'
-
 import routes from './routes'
 import { loggerMiddleware } from './middlewares/logger.middleware'
 import { errorMiddleware } from './middlewares/error.middleware'

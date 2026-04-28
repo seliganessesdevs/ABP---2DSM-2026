@@ -21,7 +21,7 @@
 
 - [Responsabilidades](#responsabilidades)
 - [Estrutura de Pastas](#estrutura-de-pastas)
-- [Protótipo] (#prototipo-figma)
+- [Protótipo](#prototipo-figma)
 - [Primeiros Passos](#primeiros-passos)
 - [Checklist de Implementação Inicial](#checklist-de-implementacao-inicial)
 - [Scripts Disponíveis](#scripts-disponíveis)

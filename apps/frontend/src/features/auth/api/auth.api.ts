@@ -1,10 +1,23 @@
 import { api } from '@/lib/axios';
-import type { LoginPayload, LoginResponse } from '../types/auth.types';
+import type { LoginPayload, AuthUser } from '../types/auth.types';
+
+type LoginResponse = {
+  success: boolean;
+  data: {
+    token: string;
+    user: AuthUser;
+  };
+};
 
 export const authApi = {
-	login: async (payload: LoginPayload): Promise<LoginResponse> => {
-		const res = await api.post('/auth/login', payload);
-		const data = res.data?.data ?? res.data;
-		return data as LoginResponse;
-	},
+  login: async (
+    payload: LoginPayload
+  ): Promise<{ token: string; user: AuthUser }> => {
+    const response = await api.post<LoginResponse>(
+      '/auth/login',
+      payload
+    );
+
+    return response.data.data;
+  },
 };

@@ -17,7 +17,7 @@ export function EvidenceCard({ excerpt, source, className,}: EvidenceCardProps) 
         </blockquote>
       )}
       {source && (
-        <div className="text-xs text-[#B20000] font-semibold">
+        <div className="text-xs text-blue font-semibold">
           Fonte: {source} 📄
         </div>
       )}

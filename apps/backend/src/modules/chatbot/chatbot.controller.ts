@@ -26,9 +26,14 @@ export class ChatbotController {
 
     async createInteractionLog(request: Request, response: Response, next: NextFunction): Promise<void> {
         try {
-            const { navigation_flow, flag } = request.body as CreateInteractionLogDTO;
+            const { navigation_flow, node_id, flag, session_log_id } = request.body as CreateInteractionLogDTO;
             const chatbotService = new ChatbotService();
-            const result = await chatbotService.createInteractionLog({ navigation_flow, flag });
+            const result = await chatbotService.createInteractionLog({
+                navigation_flow,
+                node_id,
+                flag,
+                session_log_id,
+            });
             response.status(201).json({ success: true, data: result });
         } catch (error) {
             next(error);

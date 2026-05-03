@@ -1,10 +1,10 @@
 import type { Satisfaction } from "@/types/common.types";
 
 export interface ChatNodeChild {
-    id: number
-    title: string
-    slug: string
-    display_order: number
+  id: number;
+  title: string;
+  slug: string;
+  display_order: number;
 }
 
 export interface ChatNode {
@@ -26,11 +26,27 @@ export interface ChatMessage {
   sender: "bot" | "user";
   text: string;
   nodeId?: number;
+  nodeTitle?: string;
+  availableOptions?: ChatNodeChild[];
+  selectedOptionId?: number;
+  navigationFlow?: string[];
+}
+
+export interface ChatSidebarHistoryItem {
+  id: string;
+  label: string;
+  messageId: string;
 }
 
 export interface SessionRatingPayload {
   navigation_flow: string[];
+  node_id: number;
   flag: Satisfaction;
+  session_log_id?: number;
+}
+
+export interface SessionRatingResponse {
+  interactionLogId: number;
 }
 
 export interface QuestionFormData {

@@ -1,5 +1,10 @@
 import { api } from "@/lib/axios";
-import type {ChatNode, SessionRatingPayload, QuestionPayload} from "../types/chatbot.types";
+import type {
+    ChatNode,
+    SessionRatingPayload,
+    SessionRatingResponse,
+    QuestionPayload,
+} from "../types/chatbot.types";
 import type { ApiResponse } from "@/types/api.types";
 
 
@@ -14,7 +19,7 @@ export async function getNodeById(id: number){
 }
 
 export async function submitRating(payload: SessionRatingPayload){
-    const res = await api.post<ApiResponse<{interactionLogId: number}>>("/sessions/log", payload);
+    const res = await api.post<ApiResponse<SessionRatingResponse>>("/sessions/log", payload);
     return res.data.data
 }
 

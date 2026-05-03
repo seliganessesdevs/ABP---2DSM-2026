@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useSubmitQuestion } from "../hooks/useSubmitQuestion";
 import type { QuestionFormData } from "../types/chatbot.types";
+import mascotImg from "@/assets/login_jacare.png";
+import { cn } from "@/lib/utils";
 
 // Zod schema for validation
 const questionFormSchema = z.object({
@@ -36,27 +38,30 @@ const questionFormSchema = z.object({
 
 interface QuestionFormProps {
   onSuccess?: () => void;
+  variant?: "default" | "sidebar";
+  className?: string;
 }
 
-export function QuestionForm({ onSuccess }: QuestionFormProps) {
+export function QuestionForm({
+  onSuccess,
+  variant = "default",
+  className,
+}: QuestionFormProps) {
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [attachmentName, setAttachmentName] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(variant !== "sidebar");
 
   const { mutate: submitQuestion, isPending } = useSubmitQuestion();
 
   const {
-    control,
     register,
     handleSubmit,
     formState: { errors },
-    watch,
     reset,
   } = useForm<QuestionFormData>({
     resolver: zodResolver(questionFormSchema),
     mode: "onChange",
   });
-
-  const attachmentField = watch("attachment");
 
   const onSubmit = (data: QuestionFormData) => {
     submitQuestion(data, {
@@ -65,6 +70,9 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
         setTimeout(() => {
           setIsSubmitted(false);
           setAttachmentName(null);
+          if (variant === "sidebar") {
+            setIsExpanded(false);
+          }
           reset();
           onSuccess?.();
         }, 2000);
@@ -84,11 +92,53 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
     }
   };
 
-  return (
-    <div className="w-full max-w-lg rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-      <h3 className="mb-4 text-lg font-bold text-gray-900">Enviar Pergunta</h3>
+  const isSidebar = variant === "sidebar";
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+  return (
+    <div
+      className={cn(
+        "w-full rounded-lg border border-gray-200 bg-white shadow-sm",
+        isSidebar
+          ? "overflow-hidden rounded-[26px] border-[#E7DED1] bg-[#F4EFE5] p-0 shadow-none"
+          : "max-w-lg p-6",
+        className,
+      )}
+    >
+      {isSidebar ? (
+        <div className="px-6 pb-6 pt-5">
+          <div className="rounded-[24px] bg-[#F8F5EE] px-5 py-5 text-center shadow-[inset_0_0_0_1px_rgba(150,121,92,0.08)]">
+            <img
+              src={mascotImg}
+              alt="Mascote Caré"
+              className="mx-auto h-28 w-28 object-contain"
+            />
+            <p className="mx-auto mt-3 max-w-[15rem] text-[11px] font-medium leading-relaxed text-[#847B70]">
+              Caso eu não consiga te ajudar, você pode enviar sua dúvida para a secretaria.
+            </p>
+
+            <button
+              type="button"
+              onClick={() => setIsExpanded((prev) => !prev)}
+              className="mt-4 inline-flex cursor-pointer items-center justify-center rounded-full border border-[#D8B8B5] bg-white px-5 py-2 text-sm font-bold text-[#B20000] transition-colors hover:bg-[#B20000] hover:text-white"
+            >
+              {isExpanded ? "Fechar formulário" : "Enviar dúvida"}
+            </button>
+          </div>
+        </div>
+      ) : (
+        <h3 className="mb-4 px-6 pt-6 text-lg font-bold text-gray-900">
+          Enviar Pergunta
+        </h3>
+      )}
+
+      {isExpanded && (
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className={cn(
+            "space-y-4",
+            isSidebar ? "border-t border-[#E7DED1] bg-white px-5 py-5" : "px-6 pb-6",
+          )}
+        >
         {/* Name Field */}
         <div className="space-y-1">
           <label htmlFor="requester_name" className="block text-sm font-medium text-gray-700">
@@ -187,13 +237,14 @@ export function QuestionForm({ onSuccess }: QuestionFormProps) {
             <button
               type="submit"
               disabled={isPending}
-              className="flex-1 rounded-md bg-red-700 px-4 py-2 font-medium text-white hover:bg-red-800 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="flex-1 cursor-pointer rounded-md bg-red-700 px-4 py-2 font-medium text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:bg-gray-300"
             >
               {isPending ? "Enviando..." : "Enviar"}
             </button>
           )}
         </div>
-      </form>
+        </form>
+      )}
     </div>
   );
 }

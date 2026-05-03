@@ -19,7 +19,16 @@ export interface ChatNodeResponseDTO  {
     children: ChatNodeChildDTO[];
 }
 
+export interface SessionFeedbackEntryDTO {
+    node_id: number;
+    flag: "ATENDEU" | "NAO_ATENDEU";
+    navigation_flow: string[];
+    recorded_at: string;
+}
+
 export interface CreateInteractionLogDTO {
     navigation_flow: string[];
     flag: "ATENDEU" | "NAO_ATENDEU";
+    node_id: number;
+    session_log_id?: number;
 }

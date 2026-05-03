@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import logoImg from "@/assets/login_jacare.png";
 import jacareImg from "@/assets/home_jacare.png";
@@ -7,6 +8,7 @@ import { ChatWindow } from "@/features/chatbot/components/ChatWindow";
 
 const Home: React.FC = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
+  const navigate = useNavigate();
 
   if (isChatOpen) {
     return <ChatWindow />;
@@ -26,7 +28,11 @@ const Home: React.FC = () => {
           <h1 className="text-xl font-semibold md:text-2xl">FatecBot</h1>
         </div>
 
-        <button className="flex cursor-pointer items-center gap-2 rounded-md bg-[#B20000] px-4 py-2.5 text-base text-white transition-colors hover:bg-[#7D0000] md:px-6 md:py-3 md:text-lg">
+        <button
+          type="button"
+          onClick={() => navigate("/login")}
+          className="flex cursor-pointer items-center gap-2 rounded-md bg-[#B20000] px-4 py-2.5 text-base text-white transition-colors hover:bg-[#7D0000] md:px-6 md:py-3 md:text-lg"
+        >
           Área Restrita <span>→</span>
         </button>
       </header>

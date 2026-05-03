@@ -21,7 +21,15 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    const requestUrl = String(error.config?.url ?? "");
+    const isLoginRequest = requestUrl.includes("/auth/login");
+    const isAlreadyOnLoginPage = window.location.pathname === "/login";
+
+    if (
+      error.response?.status === 401 &&
+      !isLoginRequest &&
+      !isAlreadyOnLoginPage
+    ) {
       useAuthStore.getState().clearAuth();
       window.location.href = "/login";
     }

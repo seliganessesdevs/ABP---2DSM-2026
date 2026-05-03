@@ -13,80 +13,72 @@ const Home: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#F1EDE2] flex flex-col">
-      {/* HEADER */}
-      <header className="w-full bg-[#FAFAFA] border-b-2 border-[#B20000] px-4 md:px-6 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-green-800 rounded-full flex items-center justify-center overflow-hidden">
+    <div className="flex min-h-screen flex-col bg-[#F1EDE2]">
+      <header className="flex w-full items-center justify-between border-b-2 border-[#B20000] bg-[#FAFAFA] px-5 py-5 md:px-8">
+        <div className="flex items-center gap-4">
+          <div className="flex h-12 w-12 items-center justify-center overflow-hidden rounded-full bg-green-800 md:h-14 md:w-14">
             <img
               src={logoImg}
               alt="Jacaré"
-              className="w-[50px] h-[50px] object-contain scale-x-[-1]"
+              className="h-[60px] w-[60px] object-contain scale-x-[-1] md:h-[68px] md:w-[68px]"
             />
           </div>
-          <h1 className="text-lg md:text-xl font-semibold">FatecBot</h1>
+          <h1 className="text-xl font-semibold md:text-2xl">FatecBot</h1>
         </div>
 
-        <button className="bg-[#B20000] hover:bg-[#7D0000] text-white px-3 md:px-4 py-2 rounded-md flex items-center gap-2 text-sm md:text-base">
+        <button className="flex cursor-pointer items-center gap-2 rounded-md bg-[#B20000] px-4 py-2.5 text-base text-white transition-colors hover:bg-[#7D0000] md:px-6 md:py-3 md:text-lg">
           Área Restrita <span>→</span>
         </button>
       </header>
 
-      {/* MAIN */}
-      <main className="flex flex-col md:flex-row flex-1">
-        {/* ESQUERDA */}
-        <div className="w-full md:w-1/2 flex flex-col justify-center px-6 md:px-16 py-10 md:py-0">
-          <span className="text-[#B20000] text-sm font-semibold mb-2">
+      <main className="flex flex-1 flex-col md:flex-row">
+        <div className="flex w-full flex-col justify-center px-8 py-14 md:w-1/2 md:px-20 xl:px-28">
+          <span className="mb-3 text-base font-semibold text-[#B20000] md:text-lg">
             SECRETARIA ACADÊMICA DIGITAL
           </span>
 
-          <h2 className="text-2xl md:text-4xl font-bold leading-tight mb-4">
-            Secretaria Acadêmica <br />
-            na palma da mão.
+          <h2 className="mb-6 max-w-[16ch] text-4xl font-bold leading-tight md:text-6xl xl:max-w-[18ch] xl:text-7xl">
+            Secretaria Acadêmica na palma da sua mão.
           </h2>
 
-          <p className="text-gray-600 mb-6 max-w-md">
+          <p className="mb-8 max-w-2xl text-lg leading-relaxed text-gray-600 md:text-2xl">
             Tire dúvidas sobre calendário, matrícula, estágio e regulamento sem
             sair de casa. Disponível 24h, sem cadastro.
           </p>
 
           <button
             onClick={() => setIsChatOpen(true)}
-            className="bg-[#B20000] hover:bg-[#7D0000] text-white px-5 py-3 rounded-md w-fit flex items-center gap-2"
+            className="flex w-fit cursor-pointer items-center gap-3 rounded-xl bg-[#B20000] px-7 py-4 text-lg font-semibold text-white shadow-[0_20px_40px_rgba(178,0,0,0.18)] transition-colors hover:bg-[#7D0000] md:px-9 md:py-5 md:text-2xl"
           >
-            💬 Iniciar Atendimento
+            Iniciar Atendimento
           </button>
         </div>
 
-        {/* DIREITA */}
-        <div className="w-full md:w-1/2 bg-[#E9E4D8] flex items-center justify-center py-16 md:py-0 relative">
+        <div className="relative flex w-full items-center justify-center overflow-hidden bg-[#E9E4D8] py-16 md:w-1/2 md:py-0">
           <div className="relative flex items-center justify-center">
-            {/* Cards (mais espaçados no mobile) */}
-            <div className="absolute top-2 right-2 md:top-10 md:right-10 bg-white px-2 md:px-3 py-1 rounded-md shadow text-xs md:text-sm rotate-2">
-              📅 Matrícula aberta
+            <div className="absolute right-2 top-2 rotate-2 rounded-md bg-white px-3 py-2 text-sm shadow md:right-10 md:top-10 md:px-4 md:text-base">
+              📄 Matrícula aberta
             </div>
 
-            <div className="absolute top-32 left-2 md:top-40 md:left-10 bg-white px-2 md:px-3 py-1 rounded-md shadow text-xs md:text-sm -rotate-2">
+            <div className="absolute left-2 top-32 -rotate-2 rounded-md bg-white px-3 py-2 text-sm shadow md:left-10 md:top-40 md:px-4 md:text-base">
               📆 Calendário 2026
             </div>
 
-            <div className="absolute bottom-2 right-6 md:bottom-10 md:right-20 bg-white px-2 md:px-3 py-1 rounded-md shadow text-xs md:text-sm rotate-1">
+            <div className="absolute bottom-2 right-6 rotate-1 rounded-md bg-white px-3 py-2 text-sm shadow md:bottom-10 md:right-20 md:px-4 md:text-base">
               🎓 Estágio: dúvidas
             </div>
 
-            {/* Jacaré (MAIOR no mobile) */}
             <img
               src={jacareImg}
               alt="Jacaré grande"
-              className="w-[340px] md:w-[700px] object-contain"
+              className="w-[420px] object-contain md:w-[820px] xl:w-[920px]"
             />
           </div>
 
-          {/* Logo Fatec (mais pra baixo no mobile) */}
           <img
             src={fatecImg}
             alt="Fatec"
-            className="absolute bottom-0 md:bottom-6 right-4 md:right-6 w-32 md:w-40 opacity-90"
+            className="absolute bottom-0 right-4 w-40 opacity-90 md:bottom-8 md:right-8 md:w-52"
           />
         </div>
       </main>

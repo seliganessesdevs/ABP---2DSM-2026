@@ -16,6 +16,8 @@ export function ChatWindow() {
     isLoading,
     error,
     navigateTo,
+    goBack,
+    canGoBack,
     navigationFlow,
     goToRoot,
     sessionLogId,
@@ -89,6 +91,9 @@ export function ChatWindow() {
     },
     [],
   );
+  const latestBotMessage = [...messages]
+    .reverse()
+    .find((message) => message.sender === "bot");
 
   function handleHistoryItemClick(messageId: string) {
     messageElementRefs.current[messageId]?.scrollIntoView({
@@ -134,6 +139,19 @@ export function ChatWindow() {
     ]);
 
     goToRoot();
+  }
+
+  function handleGoBack() {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: createMessageId("user"),
+        sender: "user",
+        text: "Voltar para a pergunta anterior",
+      },
+    ]);
+
+    goBack();
   }
 
   const nodeTitle = currentNode?.title || "Inicio";
@@ -223,6 +241,18 @@ export function ChatWindow() {
                           {option.title}
                         </button>
                       ))}
+
+                      {message.id === latestBotMessage?.id &&
+                        message.nodeId !== 0 &&
+                        canGoBack && (
+                          <button
+                            type="button"
+                            onClick={handleGoBack}
+                            className="mt-2 cursor-pointer rounded-xl border-2 border-[#A89A82] bg-[#F8F4EC] px-4 py-2 text-sm font-semibold text-[#6E6252] transition-colors hover:bg-[#E9E0D0]"
+                          >
+                            Voltar para a pergunta anterior
+                          </button>
+                        )}
                     </div>
                   )}
 
@@ -240,8 +270,16 @@ export function ChatWindow() {
 
                         <button
                           type="button"
+                          onClick={handleGoBack}
+                          className="cursor-pointer rounded-xl border-2 border-[#A89A82] bg-[#F8F4EC] px-4 py-2 text-sm font-semibold text-[#6E6252] transition-colors hover:bg-[#E9E0D0]"
+                        >
+                          Voltar para a pergunta anterior
+                        </button>
+
+                        <button
+                          type="button"
                           onClick={handleReturnToRoot}
-                          className="rounded-xl border-2 border-[#7D0000] bg-white px-4 py-2 text-sm font-semibold text-[#7D0000] transition-colors hover:bg-[#7D0000] hover:text-white"
+                          className="cursor-pointer rounded-xl border-2 border-[#7D0000] bg-white px-4 py-2 text-sm font-semibold text-[#7D0000] transition-colors hover:bg-[#7D0000] hover:text-white"
                         >
                           Voltar ao inicio
                         </button>

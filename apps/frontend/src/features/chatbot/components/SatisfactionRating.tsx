@@ -70,7 +70,7 @@ export function SatisfactionRating({
               disabled={loading}
               variant="outline"
               className={cn(
-                "gap-2 border-2 bg-transparent text-xs font-semibold transition-colors sm:text-sm",
+                "cursor-pointer gap-2 border-2 bg-transparent text-xs font-semibold transition-colors disabled:cursor-not-allowed sm:text-sm",
                 "border-[#5B8E73] text-[#5B8E73] hover:bg-[#5B8E73] hover:text-white",
                 "focus-visible:ring-[#5B8E73]/30",
               )}
@@ -85,7 +85,7 @@ export function SatisfactionRating({
               disabled={loading}
               variant="outline"
               className={cn(
-                "gap-2 border-2 bg-transparent text-xs font-semibold transition-colors sm:text-sm",
+                "cursor-pointer gap-2 border-2 bg-transparent text-xs font-semibold transition-colors disabled:cursor-not-allowed sm:text-sm",
                 "border-[#D4261A] text-[#D4261A] hover:bg-[#D4261A] hover:text-white",
                 "focus-visible:ring-[#D4261A]/30",
               )}

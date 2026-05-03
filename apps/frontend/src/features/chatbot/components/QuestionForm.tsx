@@ -119,7 +119,7 @@ export function QuestionForm({
             <button
               type="button"
               onClick={() => setIsExpanded((prev) => !prev)}
-              className="mt-4 inline-flex items-center justify-center rounded-full border border-[#D8B8B5] bg-white px-5 py-2 text-sm font-bold text-[#B20000] transition-colors hover:bg-[#B20000] hover:text-white"
+              className="mt-4 inline-flex cursor-pointer items-center justify-center rounded-full border border-[#D8B8B5] bg-white px-5 py-2 text-sm font-bold text-[#B20000] transition-colors hover:bg-[#B20000] hover:text-white"
             >
               {isExpanded ? "Fechar formulário" : "Enviar dúvida"}
             </button>
@@ -237,7 +237,7 @@ export function QuestionForm({
             <button
               type="submit"
               disabled={isPending}
-              className="flex-1 rounded-md bg-red-700 px-4 py-2 font-medium text-white hover:bg-red-800 disabled:bg-gray-300 disabled:cursor-not-allowed"
+              className="flex-1 cursor-pointer rounded-md bg-red-700 px-4 py-2 font-medium text-white hover:bg-red-800 disabled:cursor-not-allowed disabled:bg-gray-300"
             >
               {isPending ? "Enviando..." : "Enviar"}
             </button>

@@ -46,7 +46,7 @@ export function ChatSidebar({
                 key={item.id}
                 type="button"
                 onClick={() => onHistoryItemClick(item.messageId)}
-                className="flex items-center gap-3 rounded-xl border border-transparent px-3 py-2 text-left transition-colors hover:border-[#E0C5C1] hover:bg-[#F8F1F0]"
+                className="flex cursor-pointer items-center gap-3 rounded-xl border border-transparent px-3 py-2 text-left transition-colors hover:border-[#E0C5C1] hover:bg-[#F8F1F0]"
               >
                 <span
                   aria-hidden="true"

@@ -6,7 +6,7 @@ const ROOT_SLUG = "root";
 
 export function useChatNavigation() {
   const [currentNodeId, setCurrentNodeId] = useState<number | null>(null);
-  const [history, setHistory] = useState<number[]>([]);
+  const [history, setHistory] = useState<Array<number | null>>([]);
   const [navigationFlow, setNavigationFlow] = useState<string[]>([ROOT_SLUG]);
   const [sessionLogId, setSessionLogId] = useState<number | null>(null);
 
@@ -27,9 +27,7 @@ export function useChatNavigation() {
 
   const navigateTo = useCallback(
     (nodeId: number, nodeSlug: string) => {
-      setHistory((prev) =>
-        currentNodeId !== null ? [...prev, currentNodeId] : prev,
-      );
+      setHistory((prev) => [...prev, currentNodeId]);
       setNavigationFlow((prev) => [...prev, nodeSlug]);
       setCurrentNodeId(nodeId);
     },
@@ -59,9 +57,7 @@ export function useChatNavigation() {
   }, []);
 
   const goToRoot = useCallback(() => {
-    setHistory((prev) =>
-      currentNodeId !== null ? [...prev, currentNodeId] : prev,
-    );
+    setHistory((prev) => [...prev, currentNodeId]);
     setNavigationFlow((prev) => [...prev, ROOT_SLUG]);
     setCurrentNodeId(null);
   }, [currentNodeId]);

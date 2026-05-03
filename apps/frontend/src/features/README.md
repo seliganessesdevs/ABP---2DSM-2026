@@ -2,6 +2,8 @@
 
 Coração da aplicação. Cada subpasta representa um **domínio de negócio isolado** e contém tudo que aquele domínio precisa: chamadas de API, componentes, hooks e tipos. Nenhuma lógica de negócio deve existir fora desta pasta.
 
+> **Nota de estado da Sprint 1:** `chatbot/` e `auth/` concentram o código funcional já montado. `admin/` e `secretary/` permanecem documentadas como estrutura-alvo para as próximas sprints, com arquivos-base ainda vazios ou não integrados ao fluxo final.
+
 ---
 
 ## Estrutura

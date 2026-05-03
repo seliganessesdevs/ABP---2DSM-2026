@@ -27,8 +27,8 @@ Não exige autenticação — o acesso é **totalmente público** (RF03).
 | Responsabilidade                                | Onde vive                 |
 | ----------------------------------------------- | ------------------------- |
 | Busca do nó raiz e navegação entre nós          | `api/chatbot.api.ts`      |
-| Envio de pergunta à secretaria                  | `api/questions.api.ts`    |
-| Registro de satisfação e log de sessão          | `api/sessions.api.ts`     |
+| Envio de pergunta à secretaria                  | `api/chatbot.api.ts`      |
+| Registro de satisfação e log de sessão          | `api/chatbot.api.ts`      |
 | Orquestração do estado de navegação, histórico e sessão | `hooks/useChatNavigation` |
 | Interface visual da conversa                    | `components/ChatWindow`   |
 | Tipagem dos nós, chunks e sessão                | `types/chatbot.types.ts`  |
@@ -40,9 +40,7 @@ Não exige autenticação — o acesso é **totalmente público** (RF03).
 ```
 features/chatbot/
 ├── api/
-│   ├── chatbot.api.ts          # GET /nodes/root, GET /nodes/:id
-│   ├── questions.api.ts        # POST /questions
-│   └── sessions.api.ts         # POST /sessions/log
+│   └── chatbot.api.ts          # GET /nodes/root, GET /nodes/:id, POST /sessions/log, POST /questions
 │
 ├── components/
 │   ├── ChatWindow.tsx             # Container principal — orquestra todos os outros
@@ -60,11 +58,11 @@ features/chatbot/
 │
 ├── hooks/
 │   ├── useChatNavigation.ts    # Estado de navegação, histórico e nó atual
-│   ├── useQuestion.ts          # useMutation: POST /questions
-│   └── useSessionRating.ts     # useMutation: POST /sessions/log
+│   ├── useSubmitQuestion.ts    # useMutation: POST /questions
+│   └── useSubmitRating.ts      # useMutation: POST /sessions/log
 │
 └── types/
-    └── chatbot.types.ts        # ChatNode, DocumentChunk, SessionLog, QuestionDto
+    └── chatbot.types.ts        # ChatNode, SessionRatingPayload, QuestionFormData, SubmitQuestionPayload
 ```
 
 ---
@@ -178,4 +176,4 @@ Usuário pode enviar dúvida → POST /questions → encaminha à secretaria (RF
 > _Este README deve ser atualizado sempre que novos tipos de nó, novos endpoints
 > de sessão ou novos componentes de interação forem adicionados ao chatbot._
 
-> _Próximo documento: [`../admin/README.md`](../admin/README.md)_
+> _Próximo documento: [`../auth/README.md`](../auth/README.md)_

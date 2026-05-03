@@ -103,15 +103,10 @@ docs/
 ├── project-structure.md
 ├── project-standards.md
 ├── api-layer.md
-├── state-management.md
-├── testing.md
-├── troubleshooting.md
 ├── assets/
-├── knowledge-base/
 ├── sprint1/
 ├── sprint2/
-├── sprint3/
-└── adr/
+└── sprint3/
 ```
 
 Regras:
@@ -125,7 +120,6 @@ Regras:
 
 - `apps/backend/src/modules/`: modulos de dominio do backend
 - `apps/frontend/src/features/`: modulos de dominio do frontend
-- `docs/knowledge-base/`: guias de apoio (nao canonicos)
 - `docs/sprint*/`: planejamento operacional de sprint
 
 ***

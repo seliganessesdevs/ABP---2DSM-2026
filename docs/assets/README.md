@@ -32,4 +32,4 @@ Novos diagramas arquiteturais podem ser adicionados aqui conforme forem produzid
 
 ***
 
-> _Próximo documento: [`../knowledge-base/README.md`](../knowledge-base/README.md)_
+> _Próximo documento: [`../sprint1/README.md`](../sprint1/README.md)_

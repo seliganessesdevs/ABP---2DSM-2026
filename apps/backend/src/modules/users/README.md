@@ -3,6 +3,8 @@
 > Módulo responsável pela criação e remoção dos usuários autenticados do sistema —
 > Secretárias Acadêmicas e Administradores. Acesso restrito ao Administrador (RF04, RF03).
 
+> **Nota de estado da Sprint 1:** este módulo permanece documentado como estrutura-alvo. No repositório atual, o diretório contém apenas a documentação do que deve ser implementado nas próximas sprints.
+
 ***
 
 ## 📑 Índice
@@ -72,12 +74,12 @@ antes de retornar:
 ```ts
 // ✅ Nunca retorne o hash da senha
 const users = await prisma.user.findMany({
-  where: { role: 'SECRETARY' },
+  where: { role: 'SECRETARIA' },
   select: { id: true, email: true, role: true, createdAt: true },
 })
 ```
 
-**`create`** — cria um novo usuário com role `SECRETARY`. O `role` nunca
+**`create`** — cria um novo usuário com role `SECRETARIA`. O `role` nunca
 é aceito no body — todos os usuários criados por esta interface são
 Secretárias. A senha é hasheada com Argon2id via `hashPassword` de
 `utils/hash.utils.ts` antes de persistir:
@@ -90,7 +92,7 @@ await prisma.user.create({
   data: {
     email: dto.email,
     password: hashedPassword,
-    role: 'SECRETARY',    // sempre SECRETARY — nunca aceite role no body
+    role: 'SECRETARIA',    // sempre SECRETARIA — nunca aceite role no body
   },
 })
 ```
@@ -130,7 +132,7 @@ interface CreateUserDto {
 interface UserResponse {
   id: string
   email: string
-  role: 'SECRETARY' | 'ADMIN'
+  role: 'SECRETARIA' | 'ADMIN'
   createdAt: string
 }
 ```
@@ -144,7 +146,7 @@ User
 ├── id        String   @id
 ├── email     String   @unique
 ├── password  String   (hash Argon2id — nunca retornado pela API)
-├── role      Role     (ADMIN | SECRETARY)
+├── role      Role     (ADMIN | SECRETARIA)
 └── createdAt DateTime
 ```
 
@@ -170,7 +172,7 @@ Documentação completa com exemplos de request/response em
 ## 📐 Regras de Contribuição <a id="regras"></a>
 
 - O campo `password` **nunca** é retornado pela API — use sempre `select` explícito ou mapeie para `UserResponse`
-- O `role` **nunca** é aceito no body do `POST` — todos os usuários criados aqui são `SECRETARY`
+- O `role` **nunca** é aceito no body do `POST` — todos os usuários criados aqui são `SECRETARIA`
 - A criação de novos Administradores **não é suportada** por esta interface — o admin padrão existe apenas via seed
 - O administrador padrão **não pode ser removido** — bloqueie no service antes de chamar o Prisma
 - Senhas são sempre hasheadas com Argon2id via `utils/hash.utils.ts` — nunca use bcrypt ou salve em texto plano

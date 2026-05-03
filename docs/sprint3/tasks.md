@@ -38,4 +38,4 @@ Concluir fluxo da secretária, logs administrativos, estabilização e fechament
 
 ---
 
-> Próximo documento: [`../adr/README.md`](../adr/README.md)
+> Próximo documento: [`../README.md`](../README.md)

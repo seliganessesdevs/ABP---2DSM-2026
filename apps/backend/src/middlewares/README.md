@@ -25,7 +25,7 @@ Se o token não existir, estiver malformado ou expirado, responde `401` imediata
 ```ts
 // req.user disponível em todos os handlers após este middleware
 req.user.sub   // ID do usuário
-req.user.role  // 'ADMIN' | 'SECRETARY'
+req.user.role  // 'ADMIN' | 'SECRETARIA'
 ```
 
 **Usado em:** todas as rotas autenticadas, sempre antes do `rbac.middleware`.
@@ -38,7 +38,7 @@ Verifica se o `role` do usuário autenticado tem permissão para acessar a rota.
 
 ```ts
 // Uso nas rotas
-router.get('/', authMiddleware, authorize('ADMIN', 'SECRETARY'), controller.list)
+router.get('/', authMiddleware, authorize('ADMIN', 'SECRETARIA'), controller.list)
 router.delete('/:id', authMiddleware, authorize('ADMIN'), controller.remove)
 ```
 

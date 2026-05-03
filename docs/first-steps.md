@@ -43,7 +43,7 @@ Para testar o login, use as credenciais abaixo — elas são criadas pelo seed:
 | Admin      | `admin@fatec.sp.gov.br`      | `Admin@123`      |
 | Secretária | `secretaria@fatec.sp.gov.br` | `Secretaria@123` |
 
-> Algo não subiu? Consulte [`troubleshooting.md`](./troubleshooting.md).
+> Algo não subiu? Consulte o [README principal](../README.md), o [README do frontend](../apps/frontend/README.md) e o [README do backend](../apps/backend/README.md).
 
 ---
 
@@ -73,7 +73,7 @@ Cada task diz exatamente quais arquivos ela possui, o que ela exporta e de quais
 
 ## Precisa de ajuda com a stack?
 
-A pasta [`knowledge-base/`](./knowledge-base/) tem guias rápidos sobre cada tecnologia usada no projeto — Prisma, TanStack Query, Zod, Zustand, Docker e mais. Consulte quando travar em algo específico.
+Os READMEs de [`../apps/frontend/`](../apps/frontend/README.md) e [`../apps/backend/`](../apps/backend/README.md) concentram hoje as referências práticas mais úteis sobre stack, rotas montadas e setup da Sprint 1. Consulte esses arquivos quando travar em algo específico.
 
 ---
 

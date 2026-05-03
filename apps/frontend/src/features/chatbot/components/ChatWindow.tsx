@@ -6,33 +6,53 @@ import mascotImg from "@/assets/login_jacare.png";
 import { SatisfactionRating } from "./SatisfactionRating";
 
 export function ChatWindow() {
-  const { currentNode, isLoading, error, navigateTo } = useChatNavigation();
+  const {
+    currentNode,
+    isLoading,
+    error,
+    navigateTo,
+    navigationFlow,
+    goToRoot,
+    sessionLogId,
+    persistSessionLogId,
+  } = useChatNavigation();
 
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const lastAppendedNodeId = useRef<number | null>(null);
+  const lastAppendedFlowLength = useRef(0);
+  const messageCounter = useRef(0);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
+  const isInitialLoading = isLoading && messages.length === 0;
+
+  function createMessageId(prefix: "bot" | "user") {
+    messageCounter.current += 1;
+    return `${prefix}-${messageCounter.current}`;
+  }
 
   useEffect(() => {
-    if (!currentNode || lastAppendedNodeId.current === currentNode.id) return;
+    if (!currentNode || navigationFlow.length === 0) return;
+    if (lastAppendedFlowLength.current === navigationFlow.length) return;
 
-    lastAppendedNodeId.current = currentNode.id;
+    lastAppendedFlowLength.current = navigationFlow.length;
+
     setMessages((prev) => [
       ...prev,
       {
-        id: String(currentNode.id),
+        id: createMessageId("bot"),
         sender: "bot",
         text: currentNode.prompt || currentNode.answer_summary || "",
         nodeId: currentNode.id,
         availableOptions: currentNode.children,
-        navigationFlow:
-          currentNode.id === 0
-            ? [currentNode.slug]
-            : [
-                ...(prev[prev.length - 1]?.navigationFlow ?? []),
-                currentNode.slug,
-              ],
+        navigationFlow: [...navigationFlow],
       },
     ]);
-  }, [currentNode]);
+  }, [currentNode, navigationFlow]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
+  }, [messages, isLoading]);
 
   function handleOptionClick(child: ChatNodeChild, messageId: string) {
     setMessages((prev) => {
@@ -48,7 +68,7 @@ export function ChatWindow() {
       return [
         ...updated,
         {
-          id: `user-${messageId}-${child.id}`,
+          id: createMessageId("user"),
           sender: "user",
           text: child.title,
           nodeId: child.id,
@@ -56,14 +76,28 @@ export function ChatWindow() {
       ];
     });
 
-    navigateTo(child.id);
+    navigateTo(child.id, child.slug);
   }
 
-  const nodeTitle = currentNode?.title || "Início";
+  function handleReturnToRoot() {
+    setMessages((prev) => [
+      ...prev,
+      {
+        id: createMessageId("user"),
+        sender: "user",
+        text: "Ver outras perguntas",
+        nodeId: 0,
+      },
+    ]);
+
+    goToRoot();
+  }
+
+  const nodeTitle = currentNode?.title || "Inicio";
 
   if (error) {
     return (
-      <div className="flex min-h-screen w-full h-full items-center justify-center bg-[#F1EDE2]">
+      <div className="flex min-h-screen h-full w-full items-center justify-center bg-[#F1EDE2]">
         <span className="text-lg font-bold text-red-700">
           Erro ao carregar chatbot
         </span>
@@ -71,9 +105,9 @@ export function ChatWindow() {
     );
   }
 
-  if (isLoading || !currentNode) {
+  if (isInitialLoading || (!currentNode && messages.length === 0)) {
     return (
-      <div className="flex min-h-screen w-full h-full items-center justify-center bg-[#F1EDE2]">
+      <div className="flex min-h-screen h-full w-full items-center justify-center bg-[#F1EDE2]">
         <span className="text-lg font-bold text-[#B20000]">Carregando...</span>
       </div>
     );
@@ -99,7 +133,7 @@ export function ChatWindow() {
               {message.sender === "bot" && (
                 <img
                   src={mascotImg}
-                  alt="Mascote Caré"
+                  alt="Mascote Care"
                   className="mr-3 mt-1 h-18 w-18 shrink-0 rounded-full border bg-[#F1EDE2] p-1 object-contain"
                 />
               )}
@@ -107,58 +141,71 @@ export function ChatWindow() {
               <div className="max-w-xl rounded-2xl bg-[#FAFAFA] text-[#1f1f1f] shadow-md">
                 <MessageBubble message={message} />
 
-                {(message.availableOptions?.length ?? 0) > 0 &&
-                  (() => {
-                    const availableOptions = message.availableOptions ?? [];
+                {(message.availableOptions?.length ?? 0) > 0 && (
+                  <div className="mt-2 flex flex-col gap-2 p-4">
+                    <div className="mb-1">
+                      <span className="rounded-xl bg-[#B20000] px-4 py-1 text-xs text-[#FAFAFA]">
+                        Escolha uma opcao
+                      </span>
+                    </div>
 
-                    return (
-                      <div className="mt-2 flex flex-col gap-2 p-4">
-                        <div className="mb-1">
-                          <span className="rounded-xl bg-[#B20000] px-4 py-1 text-xs text-[#FAFAFA]">
-                            Escolha uma opção
-                          </span>
-                        </div>
-
-                        {availableOptions.map((option) => (
-                          <button
-                            key={option.id}
-                            type="button"
-                            onClick={() =>
-                              handleOptionClick(option, message.id)
-                            }
-                            disabled={message.selectedOptionId !== undefined}
-                            className={`rounded-xl border-2 px-4 py-2 text-sm font-semibold transition-colors ${
-                              message.selectedOptionId === option.id
-                                ? "border-[#7D0000] bg-[#7D0000] text-white"
-                                : "border-[#7D0000] bg-white text-[#7D0000]"
-                            } ${
-                              message.selectedOptionId !== undefined &&
-                              message.selectedOptionId !== option.id
-                                ? "cursor-default opacity-70"
-                                : "cursor-pointer hover:bg-[#7D0000] hover:text-white"
-                            }`}
-                          >
-                            {option.title}
-                          </button>
-                        ))}
-                      </div>
-                    );
-                  })()}
+                    {(message.availableOptions ?? []).map((option) => (
+                      <button
+                        key={option.id}
+                        type="button"
+                        onClick={() => handleOptionClick(option, message.id)}
+                        disabled={message.selectedOptionId !== undefined}
+                        className={`rounded-xl border-2 px-4 py-2 text-sm font-semibold transition-colors ${
+                          message.selectedOptionId === option.id
+                            ? "border-[#7D0000] bg-[#7D0000] text-white"
+                            : "border-[#7D0000] bg-white text-[#7D0000]"
+                        } ${
+                          message.selectedOptionId !== undefined &&
+                          message.selectedOptionId !== option.id
+                            ? "cursor-default opacity-70"
+                            : "cursor-pointer hover:bg-[#7D0000] hover:text-white"
+                        }`}
+                      >
+                        {option.title}
+                      </button>
+                    ))}
+                  </div>
+                )}
 
                 {message.sender === "bot" &&
                   message.nodeId !== undefined &&
                   message.nodeId !== 0 &&
                   (message.availableOptions?.length ?? 0) === 0 && (
-                    <div className="px-4 pb-4">
+                    <div className="flex flex-col gap-3 px-4 pb-4">
                       <SatisfactionRating
                         navigation_flow={message.navigationFlow ?? []}
                         nodeId={message.nodeId}
+                        sessionLogId={sessionLogId}
+                        onSessionPersisted={persistSessionLogId}
                       />
+
+                      <button
+                        type="button"
+                        onClick={handleReturnToRoot}
+                        className="rounded-xl border-2 border-[#7D0000] bg-white px-4 py-2 text-sm font-semibold text-[#7D0000] transition-colors hover:bg-[#7D0000] hover:text-white"
+                      >
+                        Voltar ao inicio
+                      </button>
                     </div>
                   )}
               </div>
             </div>
           ))}
+
+          {isLoading && messages.length > 0 && (
+            <div className="flex justify-start">
+              <div className="rounded-2xl bg-[#FAFAFA] px-4 py-3 text-sm font-medium text-[#7D0000] shadow-md">
+                Carregando proxima resposta...
+              </div>
+            </div>
+          )}
+
+          <div ref={messagesEndRef} />
         </div>
       </div>
     </div>

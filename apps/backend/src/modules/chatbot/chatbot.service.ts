@@ -1,10 +1,26 @@
 import {
+  ChatNodeChildDTO,
   ChatNodeResponseDTO,
   CreateInteractionLogDTO,
-  ChatNodeChildDTO,
+  SessionFeedbackEntryDTO,
 } from "./chatbot.types";
+import { Prisma } from "@prisma/client";
 import { AppError } from "../../errors/AppError";
 import { db } from "../../config/database";
+
+function isFeedbackHistoryUnavailableError(error: unknown): boolean {
+  if (!(error instanceof Error)) {
+    return false;
+  }
+
+  return error.message.includes("feedback_history");
+}
+
+function toJsonFeedbackHistory(
+  feedbackHistory: SessionFeedbackEntryDTO[],
+): Prisma.InputJsonValue {
+  return feedbackHistory as unknown as Prisma.InputJsonValue;
+}
 
 export class ChatbotService {
   async getRootNode(): Promise<ChatNodeResponseDTO> {
@@ -53,17 +69,13 @@ export class ChatbotService {
       throw new AppError("Nó não encontrado", 404);
     }
 
-    // Mapear filhos para ChatNodeChildDTO
-    const formattedChildren: ChatNodeChildDTO[] = node.children.map(
-      (child) => ({
-        id: child.id,
-        title: child.title,
-        slug: child.slug,
-        display_order: child.display_order,
-      }),
-    );
+    const formattedChildren: ChatNodeChildDTO[] = node.children.map((child) => ({
+      id: child.id,
+      title: child.title,
+      slug: child.slug,
+      display_order: child.display_order,
+    }));
 
-    // Retornar objeto no formato ChatNodeResponseDTO
     return {
       id: node.id,
       title: node.title,
@@ -82,13 +94,92 @@ export class ChatbotService {
   async createInteractionLog(
     data: CreateInteractionLogDTO,
   ): Promise<{ interactionLogId: number }> {
-    const log = await db.sessionLog.create({
-      data: {
-        navigation_flow: data.navigation_flow,
-        node_id: data.node_id,
-        flag: data.flag,
-      },
-    });
-    return { interactionLogId: log.id };
+    const feedbackEntry: SessionFeedbackEntryDTO = {
+      node_id: data.node_id,
+      flag: data.flag,
+      navigation_flow: data.navigation_flow,
+      recorded_at: new Date().toISOString(),
+    };
+
+    if (data.session_log_id) {
+      const existingLog = await db.sessionLog.findUnique({
+        where: { id: data.session_log_id },
+        select: { id: true },
+      });
+
+      if (!existingLog) {
+        throw new AppError("Sessão de atendimento não encontrada", 404);
+      }
+
+      try {
+        const logWithFeedbackHistory = await db.sessionLog.findUnique({
+          where: { id: data.session_log_id },
+          select: { feedback_history: true },
+        });
+
+        const existingFeedbackHistory = Array.isArray(
+          logWithFeedbackHistory?.feedback_history,
+        )
+          ? (logWithFeedbackHistory.feedback_history as unknown as SessionFeedbackEntryDTO[])
+          : [];
+
+        const updatedLog = await db.sessionLog.update({
+          where: { id: data.session_log_id },
+          data: {
+            navigation_flow: data.navigation_flow,
+            node_id: data.node_id,
+            flag: data.flag,
+            feedback_history: toJsonFeedbackHistory([
+              ...existingFeedbackHistory,
+              feedbackEntry,
+            ]),
+          },
+        });
+
+        return { interactionLogId: updatedLog.id };
+      } catch (error) {
+        if (!isFeedbackHistoryUnavailableError(error)) {
+          throw error;
+        }
+
+        const updatedLog = await db.sessionLog.update({
+          where: { id: data.session_log_id },
+          data: {
+            navigation_flow: data.navigation_flow,
+            node_id: data.node_id,
+            flag: data.flag,
+          },
+        });
+
+        return { interactionLogId: updatedLog.id };
+      }
+    }
+
+    try {
+      const log = await db.sessionLog.create({
+        data: {
+          navigation_flow: data.navigation_flow,
+          node_id: data.node_id,
+          flag: data.flag,
+          feedback_history: toJsonFeedbackHistory([feedbackEntry]),
+        },
+      });
+
+      return { interactionLogId: log.id };
+    } catch (error) {
+      if (!isFeedbackHistoryUnavailableError(error)) {
+        throw error;
+      }
+
+      const log = await db.sessionLog.create({
+        data: {
+          navigation_flow: data.navigation_flow,
+          node_id: data.node_id,
+          flag: data.flag,
+        },
+      });
+
+      return { interactionLogId: log.id };
+    }
   }
 }

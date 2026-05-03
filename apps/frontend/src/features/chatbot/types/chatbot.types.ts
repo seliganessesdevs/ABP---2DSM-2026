@@ -35,6 +35,11 @@ export interface SessionRatingPayload {
   navigation_flow: string[];
   node_id: number;
   flag: Satisfaction;
+  session_log_id?: number;
+}
+
+export interface SessionRatingResponse {
+  interactionLogId: number;
 }
 
 export interface QuestionFormData {

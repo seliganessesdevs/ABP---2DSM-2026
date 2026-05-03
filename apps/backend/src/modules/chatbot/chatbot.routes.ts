@@ -8,7 +8,8 @@ const controller = new ChatbotController();
 const interactionLogSchema = z.object({
   navigation_flow: z.array(z.string().min(1)).min(1),
   flag: z.enum(["ATENDEU", "NAO_ATENDEU"]),
-  node_id: z.number().int().positive()
+  node_id: z.number().int().positive(),
+  session_log_id: z.number().int().positive().optional(),
 });
 
 function validateInteractionLog(req: Request, res: Response, next: NextFunction) {

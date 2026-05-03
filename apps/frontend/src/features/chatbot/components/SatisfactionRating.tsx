@@ -4,13 +4,19 @@ import { chatbotApi } from "../api/chatbot.api";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
+interface SatisfactionRatingProps {
+  navigation_flow: string[];
+  nodeId: number;
+  sessionLogId: number | null;
+  onSessionPersisted: (interactionLogId: number) => void;
+}
+
 export function SatisfactionRating({
   navigation_flow,
   nodeId,
-}: {
-  navigation_flow: string[];
-  nodeId: number;
-}) {
+  sessionLogId,
+  onSessionPersisted,
+}: SatisfactionRatingProps) {
   const [hasVoted, setHasVoted] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -18,36 +24,22 @@ export function SatisfactionRating({
     null,
   );
 
-  async function handleGostei() {
-    setSelected("ATENDEU");
+  async function handleRating(flag: "ATENDEU" | "NAO_ATENDEU") {
+    setSelected(flag);
     setLoading(true);
     setError(null);
-    try {
-      await chatbotApi.submitRating({
-        navigation_flow,
-        node_id: nodeId,
-        flag: "ATENDEU",
-      });
-      setHasVoted(true);
-    } catch (e) {
-      setError("Erro ao enviar avaliação");
-    } finally {
-      setLoading(false);
-    }
-  }
 
-  async function handleNaoGostei() {
-    setSelected("NAO_ATENDEU");
-    setLoading(true);
-    setError(null);
     try {
-      await chatbotApi.submitRating({
+      const result = await chatbotApi.submitRating({
         navigation_flow,
         node_id: nodeId,
-        flag: "NAO_ATENDEU",
+        flag,
+        ...(sessionLogId ? { session_log_id: sessionLogId } : {}),
       });
+
+      onSessionPersisted(result.interactionLogId);
       setHasVoted(true);
-    } catch (e) {
+    } catch {
       setError("Erro ao enviar avaliação");
     } finally {
       setLoading(false);
@@ -74,7 +66,7 @@ export function SatisfactionRating({
           <div className="flex flex-wrap justify-end gap-2">
             <Button
               type="button"
-              onClick={handleGostei}
+              onClick={() => handleRating("ATENDEU")}
               disabled={loading}
               variant="outline"
               className={cn(
@@ -89,7 +81,7 @@ export function SatisfactionRating({
 
             <Button
               type="button"
-              onClick={handleNaoGostei}
+              onClick={() => handleRating("NAO_ATENDEU")}
               disabled={loading}
               variant="outline"
               className={cn(
@@ -99,7 +91,7 @@ export function SatisfactionRating({
               )}
             >
               <ThumbsDown className="h-4 w-4" aria-hidden="true" />
-              Não Gostei
+              Não gostei
             </Button>
           </div>
 

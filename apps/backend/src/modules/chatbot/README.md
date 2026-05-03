@@ -31,7 +31,7 @@ A **gestão** dos nós (criar, editar, excluir) **não é responsabilidade deste
 | --------------------------------------------- | ----------------------- |
 | Servir o nó raiz do chatbot                   | `chatbot.routes.ts`     |
 | Servir um nó específico com filhos e chunks   | `chatbot.routes.ts`     |
-| Registrar log de sessão e satisfação          | `chatbot.routes.ts`     |
+| Registrar e atualizar o log da sessão         | `chatbot.routes.ts`     |
 | Lógica de montagem do nó e registro de sessão | `chatbot.service.ts`    |
 | Receber requests e formatar respostas         | `chatbot.controller.ts` |
 | Tipagem dos nós, chunks e sessão              | `chatbot.types.ts`      |
@@ -77,8 +77,10 @@ filhos diretos ordenados pelo campo `order`.
 `DocumentChunk` associados. Se o nó não existir, lança
 `AppError('Nó não encontrado', 404)`.
 
-**`registerSession`** — cria um `SessionLog` no banco com o fluxo de
-navegação percorrido, a avaliação de satisfação e os timestamps da sessão.
+**`registerSession`** — cria um `SessionLog` na primeira avaliação do usuário
+e passa a atualizá-lo nas avaliações seguintes da mesma conversa. Assim o
+backend preserva o fluxo completo, mesmo quando o usuário volta ao nó raiz
+para explorar outras respostas.
 
 > O contrato HTTP canônico deste endpoint vive em [`../../../../../docs/api-layer.md`](../../../../../docs/api-layer.md).
 > Se o nome de um campo divergir deste exemplo resumido, prevalece a documentação da camada de API.
@@ -89,6 +91,13 @@ await prisma.sessionLog.create({
   data: {
     navigation_flow: dto.navigation_flow,
     flag: dto.flag, // 'ATENDEU' | 'NAO_ATENDEU'
+    feedback_history: [
+      {
+        node_id: dto.node_id,
+        flag: dto.flag,
+        navigation_flow: dto.navigation_flow,
+      },
+    ],
   },
 });
 ```
@@ -132,6 +141,7 @@ interface DocumentChunkResponse {
 interface SessionLogDto {
   navigation_flow: string[];
   flag: "ATENDEU" | "NAO_ATENDEU";
+  session_log_id?: number;
 }
 ```
 
@@ -152,7 +162,7 @@ Nó ANSWER → exibe resposta + chunks de evidência
         ↓
 Usuário avalia → POST /sessions/log
         ↓
-SessionLog registrado no banco → 201
+SessionLog criado ou atualizado no banco → 201
 ```
 
 > ⚠️ Nós do tipo `MENU` sempre têm filhos — o frontend exibe as opções
@@ -180,7 +190,8 @@ Documentação completa com exemplos de request/response em
 - O service **nunca** retorna o objeto Prisma diretamente — mapeie sempre para os tipos de `chatbot.types.ts` antes de retornar
 - A ordem dos filhos de um nó deve **sempre** respeitar o campo `order` — nunca confie na ordem de inserção do banco
 - Lógica de CRUD de nós não pertence aqui — qualquer criação, edição ou remoção vai em `modules/nodes/`
-- Um `SessionLog` deve ser criado apenas quando o usuário efetivamente concluir o atendimento e avaliar — não registre sessões parciais
+- Um `SessionLog` deve nascer apenas quando o usuário efetivamente avaliar uma resposta final
+- Depois de criado, o mesmo `SessionLog` pode ser atualizado dentro da mesma conversa para acumular o fluxo completo e o histórico de avaliações
 
 ---
 

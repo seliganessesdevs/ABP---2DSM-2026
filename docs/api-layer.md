@@ -333,9 +333,14 @@ Registra o log de atendimento e a avaliação de satisfação ao encerrar uma se
 ```json
 {
   "navigation_flow": ["root", "dsm", "dsm-estagio", "dsm-estagio-duracao"],
-  "flag": "ATENDEU"
+  "flag": "ATENDEU",
+  "session_log_id": 12
 }
 ```
+
+`session_log_id` é opcional. Quando omitido, a API cria uma nova sessão.
+Quando informado, a API atualiza a sessão existente com o fluxo acumulado
+da conversa e adiciona a nova avaliação ao histórico interno da sessão.
 
 **Response `201 Created`**
 

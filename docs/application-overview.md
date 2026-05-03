@@ -156,6 +156,7 @@ Registra cada sessão de atendimento completa (RF08).
 | ----------------- | ----- | ------------------------------------------------------------------ |
 | `navigation_flow` | JSON  | Array de slugs visitados em ordem cronológica                      |
 | `flag`            | Enum? | `ATENDEU`, `NAO_ATENDEU` ou `null` (não avaliado)                  |
+| `feedback_history`| JSON? | Histórico de respostas avaliadas na mesma sessão, em ordem         |
 | `inquiry_ids`     | JSON  | Array de IDs de `Question` originados nesta sessão (pode ser `[]`) |
 
 #### `Inquiry`

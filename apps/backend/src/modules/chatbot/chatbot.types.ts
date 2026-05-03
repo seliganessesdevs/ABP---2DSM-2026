@@ -22,4 +22,5 @@ export interface ChatNodeResponseDTO  {
 export interface CreateInteractionLogDTO {
     navigation_flow: string[];
     flag: "ATENDEU" | "NAO_ATENDEU";
+    node_id: number;
 }

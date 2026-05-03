@@ -1,10 +1,10 @@
 import type { Satisfaction } from "@/types/common.types";
 
 export interface ChatNodeChild {
-    id: number
-    title: string
-    slug: string
-    display_order: number
+  id: number;
+  title: string;
+  slug: string;
+  display_order: number;
 }
 
 export interface ChatNode {
@@ -28,10 +28,12 @@ export interface ChatMessage {
   nodeId?: number;
   availableOptions?: ChatNodeChild[];
   selectedOptionId?: number;
+  navigationFlow?: string[];
 }
 
 export interface SessionRatingPayload {
   navigation_flow: string[];
+  node_id: number;
   flag: Satisfaction;
 }
 

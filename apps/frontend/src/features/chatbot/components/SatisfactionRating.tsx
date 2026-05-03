@@ -6,8 +6,10 @@ import { cn } from "@/lib/utils";
 
 export function SatisfactionRating({
   navigation_flow,
+  nodeId,
 }: {
   navigation_flow: string[];
+  nodeId: number;
 }) {
   const [hasVoted, setHasVoted] = useState<boolean>(false);
   const [loading, setLoading] = useState(false);
@@ -21,7 +23,11 @@ export function SatisfactionRating({
     setLoading(true);
     setError(null);
     try {
-      await chatbotApi.submitRating({ navigation_flow, flag: "ATENDEU" });
+      await chatbotApi.submitRating({
+        navigation_flow,
+        node_id: nodeId,
+        flag: "ATENDEU",
+      });
       setHasVoted(true);
     } catch (e) {
       setError("Erro ao enviar avaliação");
@@ -35,7 +41,11 @@ export function SatisfactionRating({
     setLoading(true);
     setError(null);
     try {
-      await chatbotApi.submitRating({ navigation_flow, flag: "NAO_ATENDEU" });
+      await chatbotApi.submitRating({
+        navigation_flow,
+        node_id: nodeId,
+        flag: "NAO_ATENDEU",
+      });
       setHasVoted(true);
     } catch (e) {
       setError("Erro ao enviar avaliação");

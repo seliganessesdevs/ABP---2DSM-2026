@@ -85,6 +85,7 @@ export class ChatbotService {
     const log = await db.sessionLog.create({
       data: {
         navigation_flow: data.navigation_flow,
+        node_id: data.node_id,
         flag: data.flag,
       },
     });

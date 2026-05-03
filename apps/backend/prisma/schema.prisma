@@ -55,6 +55,7 @@ model ChatNode {
 model SessionLog {
   id              Int           @id @default(autoincrement())
   navigation_flow Json
+  node_id         Int?
   flag            Satisfaction?
   inquiry_ids     Json?
   created_at      DateTime      @default(now())

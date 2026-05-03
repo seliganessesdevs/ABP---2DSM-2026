@@ -1,116 +1,138 @@
-import { useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MessageBubble } from "./MessageBubble";
-import type { ChatMessage } from "../types/chatbot.types";
-import { OptionButton } from "./OptionButton";
-import type { ChatNodeChild } from "../types/chatbot.types";
-import { EvidenceCard } from "./EvidenceCard";
+import type { ChatMessage, ChatNodeChild } from "../types/chatbot.types";
 import { useChatNavigation } from "../hooks/useChatNavigation";
+import mascotImg from "@/assets/login_jacare.png";
 
 export function ChatWindow() {
-  // Usa o hook real para navegação
-  const {
-    currentNode,
-    isLoading,
-    error,
-    navigateTo,
-    canGoBack,
-    goBack,
-  } = useChatNavigation();
+  const { currentNode, isLoading, error, navigateTo } = useChatNavigation();
 
-  // Histórico de mensagens (UI)
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const lastAppendedNodeId = useRef<number | null>(null);
 
-  // Atualiza o histórico quando o nó muda
   useEffect(() => {
-    if (!currentNode) return;
+    if (!currentNode || lastAppendedNodeId.current === currentNode.id) return;
+
+    lastAppendedNodeId.current = currentNode.id;
     setMessages((prev) => [
       ...prev,
       {
         id: String(currentNode.id),
         sender: "bot",
-        text: currentNode.prompt || "",
+        text: currentNode.prompt || currentNode.answer_summary || "",
         nodeId: currentNode.id,
+        availableOptions: currentNode.children,
       },
     ]);
   }, [currentNode]);
 
-  // Handler para clique em opção
-  function handleOptionClick(child: ChatNodeChild) {
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: `user-${child.id}`,
-        sender: "user",
-        text: child.title,
-        nodeId: child.id,
-      },
-    ]);
+  function handleOptionClick(child: ChatNodeChild, messageId: string) {
+    setMessages((prev) => {
+      const updated = prev.map((message) =>
+        message.id === messageId
+          ? {
+              ...message,
+              selectedOptionId: child.id,
+            }
+          : message,
+      );
+
+      return [
+        ...updated,
+        {
+          id: `user-${messageId}-${child.id}`,
+          sender: "user",
+          text: child.title,
+          nodeId: child.id,
+        },
+      ];
+    });
+
     navigateTo(child.id);
   }
 
-  // Badge do nó atual
   const nodeTitle = currentNode?.title || "Início";
 
-  // --- Loading/Error handling ---
   if (isLoading || !currentNode) {
     return (
-      <div className="flex justify-center items-center min-h-screen bg-[#F1EDE2] w-full h-full">
-        <span className="text-[#B20000] font-bold text-lg">Carregando...</span>
-      </div>
-    );
-  }
-  if (error) {
-    return (
-      <div className="flex justify-center items-center min-h-screen bg-[#F1EDE2] w-full h-full">
-        <span className="text-red-700 font-bold text-lg">Erro ao carregar chatbot</span>
+      <div className="flex min-h-screen w-full h-full items-center justify-center bg-[#F1EDE2]">
+        <span className="text-lg font-bold text-[#B20000]">Carregando...</span>
       </div>
     );
   }
 
-  // --- Main render ---
+  if (error) {
+    return (
+      <div className="flex min-h-screen w-full h-full items-center justify-center bg-[#F1EDE2]">
+        <span className="text-lg font-bold text-red-700">
+          Erro ao carregar chatbot
+        </span>
+      </div>
+    );
+  }
+
   return (
-    // container geral do chat
-    <div className="flex justify-center items-center min-h-screen bg-[#F1EDE2] w-full h-full p-5">
-      <div className="flex flex-col gap-12 w-full h-full ">
-        {/* Mensagem do bot (card branco com avatar fora) */}
-        <div className="flex items-start">
-          {/* Avatar do jacaré */}
-          <img src="/iconchat.png" alt="Mascote Caré" className="w-24 h-24 mr-3 rounded-full border self-start" />
-          {/* Card branco */}
-          <div className="bg-[#FAFAFA] rounded-xl shadow-md p-4 w-full max-w-lg mr-auto">
-            {/* Badge do nó atual */}
-            <div className="flex items-center mb-4">
-              <span className="text-[#FAFAFA] bg-[#B20000] px-6 py-1 rounded-xl text-xs">
-                {nodeTitle}
-              </span>
-            </div>
-            {/* Mensagem do bot */}
-            <MessageBubble message={messages[0]} />
-            {/* Opções */}
-            {currentNode.children.length > 0 && (
-              <div className="flex flex-col gap-2 mt-4">
-                {currentNode.children.map((child) => (
-                  <OptionButton
-                    key={child.id}
-                    child={child}
-                    onClick={() => handleOptionClick(child)}
-                    disabled={false}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+    <div className="min-h-screen w-full bg-[#F1EDE2] p-5 md:p-8">
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6">
+        <div className="flex items-center justify-between">
+          <span className="text-sm font-semibold uppercase tracking-[0.25em] text-[#B20000]">
+            {nodeTitle}
+          </span>
         </div>
-        {/* Mensagens do usuário (fora do card, alinhadas à direita) */}
-        {messages
-          .filter((msg) => msg.sender === "user")
-          .map((msg) => (
-            <div key={msg.id} className="flex justify-end w-full ">
-              <div className="bg-[#FAFAFA] rounded-xl shadow-md p-4 text-white font-bold max-w-lg ml-auto">
-                <MessageBubble message={msg} />
+
+        <div className="flex flex-col gap-4">
+          {messages.map((message) => (
+            <div
+              key={message.id}
+              className={`flex w-full ${
+                message.sender === "user" ? "justify-end" : "justify-start"
+              }`}
+            >
+              {message.sender === "bot" && (
+                <img
+                  src={mascotImg}
+                  alt="Mascote Caré"
+                  className="mr-3 mt-1 h-18 w-18 shrink-0 rounded-full border bg-[#F1EDE2] p-1 object-contain"
+                />
+              )}
+
+              <div className="max-w-xl rounded-2xl bg-[#FAFAFA] text-[#1f1f1f] shadow-md">
+                <MessageBubble message={message} />
+
+                {message.availableOptions?.length > 0 && (
+                  <div className="mt-2 flex flex-col gap-2 p-4">
+                    <div className="mb-1">
+                      <span className="rounded-xl bg-[#B20000] px-4 py-1 text-xs text-[#FAFAFA]">
+                        Escolha uma opção
+                      </span>
+                    </div>
+
+                    {message.availableOptions.map((option) => (
+                      <button
+                        key={option.id}
+                        type="button"
+                        onClick={() => handleOptionClick(option, message.id)}
+                        disabled={message.selectedOptionId !== undefined}
+                        className={`rounded-xl border-2 px-4 py-2 text-sm font-semibold transition-colors ${
+                          message.selectedOptionId === option.id
+                            ? "border-[#B20000] bg-[#B20000] text-white"
+                            : "border-[#B20000] bg-white text-[#B20000]"
+                        } ${
+                          message.selectedOptionId !== undefined &&
+                          message.selectedOptionId !== option.id
+                            ? "cursor-default opacity-70"
+                            : "cursor-pointer hover:bg-[#B20000] hover:text-white"
+                        }`}
+                      >
+                        {option.title}
+                      </button>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           ))}
+        </div>
       </div>
     </div>
   );

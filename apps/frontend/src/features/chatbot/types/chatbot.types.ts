@@ -26,6 +26,8 @@ export interface ChatMessage {
   sender: "bot" | "user";
   text: string;
   nodeId?: number;
+  availableOptions?: ChatNodeChild[];
+  selectedOptionId?: number;
 }
 
 export interface SessionRatingPayload {

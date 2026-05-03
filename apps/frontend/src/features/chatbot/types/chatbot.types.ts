@@ -26,9 +26,16 @@ export interface ChatMessage {
   sender: "bot" | "user";
   text: string;
   nodeId?: number;
+  nodeTitle?: string;
   availableOptions?: ChatNodeChild[];
   selectedOptionId?: number;
   navigationFlow?: string[];
+}
+
+export interface ChatSidebarHistoryItem {
+  id: string;
+  label: string;
+  messageId: string;
 }
 
 export interface SessionRatingPayload {

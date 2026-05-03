@@ -6,23 +6,6 @@ datasource db {
   provider = "postgresql"
 }
 
-// Enums
-enum Role {
-  ADMIN
-  SECRETARIA
-}
-
-enum Satisfaction {
-  ATENDEU
-  NAO_ATENDEU
-}
-
-enum InquiryStatus {
-  ABERTA
-  RESPONDIDA
-}
-
-// Models
 model User {
   id            Int      @id @default(autoincrement())
   name          String
@@ -46,20 +29,20 @@ model ChatNode {
   is_active        Boolean    @default(true)
   created_at       DateTime   @default(now())
   updated_at       DateTime   @updatedAt
-  parent           ChatNode?  @relation("ChatNodeTree", fields: [parent_id], references: [id], onDelete: SetNull)
+  parent           ChatNode?  @relation("ChatNodeTree", fields: [parent_id], references: [id])
   children         ChatNode[] @relation("ChatNodeTree")
 
   @@index([parent_id, display_order])
 }
 
 model SessionLog {
-  id              Int           @id @default(autoincrement())
-  navigation_flow Json
-  node_id         Int?
-  flag            Satisfaction?
+  id               Int           @id @default(autoincrement())
+  navigation_flow  Json
+  flag             Satisfaction?
+  inquiry_ids      Json?
+  created_at       DateTime      @default(now())
+  node_id          Int?
   feedback_history Json?
-  inquiry_ids     Json?
-  created_at      DateTime      @default(now())
 }
 
 model Question {
@@ -75,4 +58,19 @@ model Question {
   updated_at           DateTime      @updatedAt
 
   @@index([status, created_at])
+}
+
+enum Role {
+  ADMIN
+  SECRETARIA
+}
+
+enum Satisfaction {
+  ATENDEU
+  NAO_ATENDEU
+}
+
+enum InquiryStatus {
+  ABERTA
+  RESPONDIDA
 }

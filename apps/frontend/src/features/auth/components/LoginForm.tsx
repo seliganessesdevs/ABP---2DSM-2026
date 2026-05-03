@@ -11,7 +11,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "@/components/shared/LoadingSpinner";
 
-import jacareImg from "@/assets/login_jacare.png";
+import jacareImg from "@/assets/admin_jacare.png";
 import fatecImg from "@/assets/login_fatec.png";
 
 const schema = z.object({
@@ -55,12 +55,11 @@ export const LoginForm: React.FC = () => {
 
       <div className="w-full max-w-[760px] rounded-[24px] bg-[#FAFAFA] px-12 py-16 shadow-[0_24px_70px_rgba(86,61,24,0.14)] md:px-20 md:py-20">
         <div className="mb-8 flex items-center justify-center gap-4 md:gap-5">
-          <div className="flex h-18 w-18 items-center justify-center overflow-hidden rounded-full bg-green-800 md:h-22 md:w-22">
+          <div className="flex h-36 w-36 items-center justify-center overflow-hidden rounded-full  border-green-800 md:h-44 md:w-44">
             <img
               src={jacareImg}
               alt="Jacaré"
-              className="h-[68px] w-[68px] object-contain scale-x-[-1] md:h-[84px] md:w-[84px]"
-            />
+              className="h-full w-full object-contain scale-x-[-1]"            />
           </div>
           <h1 className="text-[52px] font-semibold leading-none text-black md:text-[68px]">
             FatecBot

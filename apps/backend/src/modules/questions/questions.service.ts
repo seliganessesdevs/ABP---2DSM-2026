@@ -1,4 +1,4 @@
-import { CreateQuestionDTO,QuestionResponseDTO, UpdateQuestionStatusDTO } from "./question.types";
+import { CreateQuestionDTO,QuestionResponseDTO, UpdateQuestionStatusDTO } from "./questions.types";
 import { db } from "../../config/database";
 import { AppError } from "../../errors/AppError";
 

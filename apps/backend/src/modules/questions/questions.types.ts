@@ -4,7 +4,7 @@ export interface CreateQuestionDTO {
   requester_email: string;
   attachment_name?: string | null;
   attachment_mime_type?: string | null;
-  attachment_data?: Buffer | null;
+  attachment_data?: Uint8Array<ArrayBuffer> | null;
 }
 
 export interface UpdateQuestionStatusDTO {

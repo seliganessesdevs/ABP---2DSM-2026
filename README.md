@@ -282,7 +282,7 @@ As estimativas de esforço foram definidas pela equipe em sessão de **Planning 
 
 | Sprint | Objetivos                                           | Documentação                              | Período    | Status       |
 | ------ | --------------------------------------------------- | ----------------------------------------- | ---------- | ------------ |
-| 1      | Estrutura base, autenticação, navegação do chatbot  | [Sprint 1 Docs](./docs/sprint1/README.md) | Iteração 1 | 🔵 Planejado |
+| 1      | Estrutura base, autenticação, navegação do chatbot  | [Sprint 1 Docs](./docs/sprint1/README.md) | Iteração 1 | 🟢 Concluído |
 | 2      | Painel Admin (CRUD nós), RBAC, perguntas            | [Sprint 2 Docs](./docs/sprint2/README.md) | Iteração 2 | 🔵 Planejado |
 | 3      | Painel Secretária, logs, satisfação, ajustes finais | [Sprint 3 Docs](./docs/sprint3/README.md) | Iteração 3 | 🔵 Planejado |
 

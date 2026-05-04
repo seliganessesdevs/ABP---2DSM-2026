@@ -4,6 +4,8 @@
 > Cada arquivo representa uma tela do painel e é responsável apenas por compor
 > layout e features — a lógica de negócio vive em `features/secretary/`.
 
+> **Nota de estado da Sprint 1:** no `router.tsx`, apenas a rota base `/secretary` está montada hoje, usando `index.tsx`. Os demais arquivos desta pasta permanecem como placeholders documentados para as próximas sprints.
+
 ---
 
 ## 📑 Índice
@@ -34,10 +36,11 @@ Requisição → ProtectedRoute (valida autenticação) → RoleGuard('SECRETARI
 
 ## 🗺️ Rotas desta pasta <a id="rotas"></a>
 
-| Arquivo         | Rota                   | Descrição                                     | RF   |
-| --------------- | ---------------------- | --------------------------------------------- | ---- |
-| `dashboard.tsx` | `/secretary`           | Visão geral do painel da secretária           | RF06 |
-| `questions.tsx` | `/secretary/questions` | Listagem e atualização de status de perguntas | RF06 |
+| Arquivo         | Rota                   | Descrição                                                         | RF   |
+| --------------- | ---------------------- | ----------------------------------------------------------------- | ---- |
+| `index.tsx`     | `/secretary`           | Página-base protegida atualmente montada no roteador             | RF03 · RF09 · RF10 |
+| `dashboard.tsx` | `/secretary`           | Estrutura planejada para a visão geral do painel da secretária   | RF06 |
+| `questions.tsx` | `/secretary/questions` | Estrutura planejada para listagem e atualização de perguntas     | RF06 |
 
 ---
 

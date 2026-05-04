@@ -734,4 +734,4 @@ Authorization: Bearer <token>
 
 ---
 
-> _Próximo documento: [`testing.md`](./testing.md)_
+> _Próximo documento: [`project-standards.md`](./project-standards.md)_

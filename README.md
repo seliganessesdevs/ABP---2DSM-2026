@@ -435,13 +435,9 @@ fatecbot/
 │   ├── project-structure.md
 │   ├── project-standards.md
 │   ├── api-layer.md
-│   ├── state-management.md
-│   ├── testing.md
-│   ├── troubleshooting.md
 │   ├── sprint1/
 │   ├── sprint2/
 │   ├── sprint3/
-│   └── adr/               # Architecture Decision Records
 ├── docker-compose.yml
 ├── .env.example
 └── pnpm-workspace.yaml
@@ -460,8 +456,6 @@ fatecbot/
 | [`docs/project-structure.md`](./docs/project-structure.md)       | Estrutura de pastas comentada                            |
 | [`docs/project-standards.md`](./docs/project-standards.md)       | Convenções de commit, nomenclatura e linting             |
 | [`docs/api-layer.md`](./docs/api-layer.md)                       | Endpoints, exemplos de request/response                  |
-| [`docs/state-management.md`](./docs/state-management.md)         | Estratégia de estado com TanStack Query e Zustand        |
-| [`docs/testing.md`](./docs/testing.md)                           | Estratégia de testes e exemplos por camada               |
 | [`apps/frontend/README.md`](./apps/frontend/README.md)           | README específico do frontend                            |
 | [`apps/backend/README.md`](./apps/backend/README.md)             | README específico do backend                             |
 

@@ -4,6 +4,11 @@
 > o modelo de dados, o fluxo de navegação do chatbot e a topologia de containers.
 > É o ponto de partida para qualquer novo membro da equipe entender o sistema como um todo.
 
+> **Nota de estado da Sprint 1:** no código atual, o fluxo público do chatbot, o login,
+> os guards de rota, `POST /api/v1/questions` e as páginas-base `/admin` e `/secretary`
+> estão presentes. CRUD administrativo, listagem/atualização de perguntas e visualização
+> de logs continuam documentados aqui como arquitetura-alvo para as próximas sprints.
+
 ***
 
 ## 📑 Índice
@@ -98,7 +103,7 @@ orquestrados via `docker-compose.yml` com inicialização em comando único.
                                   └───────────────────────────┘
 
 ┌──────────────────────┐          ┌───────────────────────────┐
-│       Question       │          │      InteractionLog        │
+│       Question       │          │        SessionLog          │
 ├──────────────────────┤          ├───────────────────────────┤
 │ id (Int) PK          │          │ id (Int) PK                │
 │ requester_name       │          │ navigation_flow (JSON —    │
@@ -159,7 +164,7 @@ Registra cada sessão de atendimento completa (RF08).
 | `feedback_history`| JSON? | Histórico de respostas avaliadas na mesma sessão, em ordem         |
 | `inquiry_ids`     | JSON  | Array de IDs de `Question` originados nesta sessão (pode ser `[]`) |
 
-#### `Inquiry`
+#### `Question`
 
 Pergunta enviada pelo aluno à Secretaria Acadêmica (RF05/RF06).
 
@@ -211,7 +216,7 @@ Exibe:
          │
          ▼
 [POST /api/v1/sessions/log]
-Salva InteractionLog com:
+Salva SessionLog com:
   - navigation_flow (array de slugs visitados)
   - flag (ATENDEU | NAO_ATENDEU | null)
   - created_at
@@ -256,8 +261,8 @@ Aplicável aos perfis **Secretária Acadêmica** e **Administrador** (RF09, RNF0
          │
          ▼
 [Redirecionamento por role]
-  ADMIN      → /admin/dashboard
-  SECRETARIA → /secretary/dashboard
+  ADMIN      → /admin
+  SECRETARIA → /secretary
          │
          ▼
 [A cada requisição a rota protegida]
@@ -287,9 +292,8 @@ Disponível ao fim de qualquer atendimento no chatbot (RF05/RF06).
   → Resposta: 201 Created
          │
          ▼
-[Secretária acessa /secretary/questions]
-  → GET /api/v1/questions  (requer role: SECRETARIA)
-  → Lista perguntas com status ABERTA em destaque
+[Fluxo previsto para as próximas sprints]
+  → Área da secretária e gestão de perguntas permanecem documentadas como alvo de implementação
          │
          ▼
 [Secretária atualiza o status]

@@ -14,7 +14,6 @@
 - [Documentos principais](#documentos-principais)
 - [Base de conhecimento](#base-de-conhecimento)
 - [Sprints](#sprints)
-- [ADRs](#adrs)
 - [Regras de contribuição](#regras-de-contribuicao)
 - [Diagramas de caso de uso](#-diagrama-de-casos-de-uso)
 - [Modelo Relacional - Banco de dados](#️-modelo-relacional--banco-de-dados)
@@ -31,37 +30,14 @@ docs/
 ├── project-structure.md         # Organização do monorepo e princípios de estrutura
 ├── project-standards.md         # Branches, commits, PRs, linting e nomenclatura
 ├── api-layer.md                 # Contrato REST com envelopes, filtros e paginação
-├── state-management.md          # Estratégia de estado do frontend
-├── testing.md                   # Estratégia de testes e mínimos por sprint
-├── troubleshooting.md           # Problemas comuns no ambiente de desenvolvimento
 ├── assets/
 │   └── README.md                # Convenções de assets e diagramas da documentação
-├── knowledge-base/
-│   ├── README.md
-│   ├── axios.md
-│   ├── docker.md
-│   ├── express.md
-│   ├── git-flow.md
-│   ├── jwt-argon2id.md
-│   ├── pnpm.md
-│   ├── prisma.md
-│   ├── react.md
-│   ├── REST-HTTP.md
-│   ├── shadcn.md
-│   ├── tailwindcss.md
-│   ├── tanstack-query.md
-│   ├── tratamento-de-erros.md
-│   ├── typescript.md
-│   ├── zod.md
-│   └── zustand.md
 ├── sprint1/
 │   ├── README.md
 │   └── tasks.md
 ├── sprint2/
 │   └── README.md
-├── sprint3/
-│   └── README.md
-└── adr/
+└── sprint3/
     └── README.md
 ```
 
@@ -100,36 +76,23 @@ Em caso de conflito, sempre prevalece o documento canônico da linha corresponde
 | [`project-structure.md`](./project-structure.md)       | Organização do monorepo, responsabilidades por pasta e princípios de modularização | Criar ou mover arquivos com segurança   |
 | [`project-standards.md`](./project-standards.md)       | Branches, commits, PRs, lint, nomenclatura e regras de env                         | Contribuir sem quebrar o fluxo do time  |
 | [`api-layer.md`](./api-layer.md)                       | Endpoints, envelopes, filtros, paginação e códigos de status                       | Integrar frontend e backend             |
-| [`state-management.md`](./state-management.md)         | Quando usar TanStack Query e quando usar Zustand                                   | Criar hooks e stores no frontend        |
-| [`testing.md`](./testing.md)                           | Estratégia de testes, exemplos e mínimo por sprint                                 | Planejar cobertura antes de desenvolver |
-| [`troubleshooting.md`](./troubleshooting.md)           | Diagnóstico de problemas frequentes                                                | Resolver setup, Docker, env e auth      |
+| [`../apps/frontend/README.md`](../apps/frontend/README.md) | Setup do frontend, rotas montadas e uso de TanStack Query/Zustand               | Implementar a interface da Sprint 1     |
+| [`../apps/backend/README.md`](../apps/backend/README.md)   | Setup do backend, scripts, banco, autenticação e endpoints disponíveis          | Implementar e validar a API da Sprint 1 |
 
 ---
 
 ## 🧠 Base de Conhecimento <a id="base-de-conhecimento"></a>
 
-A pasta [`knowledge-base/`](./knowledge-base/) reúne guias introdutórios sobre as
-tecnologias usadas no projeto. Eles não substituem os documentos canônicos de
-arquitetura, mas ajudam quem está subindo na stack.
+A pasta `knowledge-base/` fazia parte da base de apoio do projeto. No estado atual
+da árvore de trabalho, as referências operacionais mais úteis para a Sprint 1 estão
+concentradas nos READMEs de `apps/frontend` e `apps/backend`.
 
-| Guia                                                                | O que cobre                                                    |
-| ------------------------------------------------------------------- | -------------------------------------------------------------- |
-| [`axios.md`](./knowledge-base/axios.md)                             | Instância HTTP do frontend, interceptors e tratamento de erros |
-| [`docker.md`](./knowledge-base/docker.md)                           | Containers, Compose, volumes e fluxo de execução local         |
-| [`express.md`](./knowledge-base/express.md)                         | Rotas, middlewares e separação controller/service              |
-| [`git-flow.md`](./knowledge-base/git-flow.md)                       | Rotina de branch e PR alinhada aos padrões do projeto          |
-| [`jwt-argon2id.md`](./knowledge-base/jwt-argon2id.md)               | Autenticação JWT e hash seguro com Argon2id                    |
-| [`pnpm.md`](./knowledge-base/pnpm.md)                               | Workspaces, scripts e lockfile do monorepo                     |
-| [`prisma.md`](./knowledge-base/prisma.md)                           | Schema, queries, paginação, erros e boas práticas              |
-| [`react.md`](./knowledge-base/react.md)                             | Fundamentos de React 18 e práticas adotadas no projeto         |
-| [`REST-HTTP.md`](./knowledge-base/REST-HTTP.md)                     | Convenções REST, métodos HTTP e envelopes de resposta          |
-| [`shadcn.md`](./knowledge-base/shadcn.md)                           | Regras de uso do shadcn/ui e wrappers                          |
-| [`tailwindcss.md`](./knowledge-base/tailwindcss.md)                 | Estilização utilitária, composição e padrões do projeto        |
-| [`tanstack-query.md`](./knowledge-base/tanstack-query.md)           | Fetch declarativo, cache e invalidação                         |
-| [`tratamento-de-erros.md`](./knowledge-base/tratamento-de-erros.md) | AppError, middleware global e mapeamento de falhas             |
-| [`typescript.md`](./knowledge-base/typescript.md)                   | Regras de tipos, inferência e boas práticas                    |
-| [`zod.md`](./knowledge-base/zod.md)                                 | Validação de entrada e geração de tipos                        |
-| [`zustand.md`](./knowledge-base/zustand.md)                         | Store global de auth e limites de uso                          |
+| Referência                                                          | O que cobre                                                                      |
+| ------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| [`../apps/frontend/README.md`](../apps/frontend/README.md)          | Rotas montadas, autenticação no frontend, chatbot público e setup                |
+| [`../apps/backend/README.md`](../apps/backend/README.md)            | Endpoints ativos, scripts, banco, autenticação e decisões do backend             |
+| [`application-overview.md`](./application-overview.md)              | Perfis, fluxos, modelo de dados e limites do que está implementado na Sprint 1   |
+| [`api-layer.md`](./api-layer.md)                                    | Contrato dos endpoints já disponíveis e dos fluxos previstos                     |
 
 ---
 
@@ -146,20 +109,9 @@ referência operacional daquela sprint.
 
 ---
 
-## 🏛️ ADRs <a id="adrs"></a>
-
-As decisões arquiteturais relevantes vivem em [`adr/README.md`](./adr/README.md),
-seguindo o formato de contexto, decisão e consequências.
-
-> Toda decisão que altere estrutura do monorepo, modelo de dados central,
-> autenticação ou contrato entre frontend e backend deve ser registrada como ADR.
-
----
-
 ## 📐 Regras de Contribuição <a id="regras-de-contribuicao"></a>
 
 - Documentos de arquitetura geral ficam na raiz de `docs/`
-- Guias didáticos de tecnologia ficam em `docs/knowledge-base/`
 - Arquivos de sprint ficam em `docs/sprint*/`
 - Assets, diagramas e imagens da documentação ficam em `docs/assets/`
 - Todo link entre documentos deve usar caminho relativo

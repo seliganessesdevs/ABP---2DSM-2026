@@ -7,7 +7,7 @@ import type {
   ChatSidebarHistoryItem,
 } from "../types/chatbot.types";
 import { useChatNavigation } from "../hooks/useChatNavigation";
-import mascotImg from "@/assets/login_jacare.png";
+import mascotImg from "@/assets/message_jacare.png";
 import { SatisfactionRating } from "./SatisfactionRating";
 
 export function ChatWindow() {

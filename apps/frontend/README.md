@@ -174,16 +174,19 @@ VITE_ENABLE_DEVTOOLS=true
 
 ## 🗺️ Rotas da Aplicação <a id="rotas-da-aplicação"></a>
 
+> **Estado atual da Sprint 1:** as rotas montadas no `router.tsx` são `/`, `/login`, `/admin` e `/secretary`.
+> As demais rotas abaixo permanecem documentadas como estrutura-alvo para as próximas sprints.
+
 | Rota                   |    Acesso    | Componente de página             | Descrição                        |
 | ---------------------- | :----------: | -------------------------------- | -------------------------------- |
 | `/`                    |   Público    | `routes/index.tsx`               | Chatbot conversacional           |
 | `/login`               |   Público    | `routes/login.tsx`               | Formulário de autenticação       |
-| `/admin`               |   🔒 ADMIN   | `routes/admin/dashboard.tsx`     | Dashboard do administrador       |
-| `/admin/nodes`         |   🔒 ADMIN   | `routes/admin/nodes.tsx`         | CRUD de nós de navegação         |
-| `/admin/users`         |   🔒 ADMIN   | `routes/admin/users.tsx`         | Gestão de usuários da secretaria |
-| `/admin/logs`          |   🔒 ADMIN   | `routes/admin/logs.tsx`          | Logs de atendimento              |
-| `/secretary`           | 🔒 SECRETARY | `routes/secretary/dashboard.tsx` | Dashboard da secretária          |
-| `/secretary/questions` | 🔒 SECRETARY | `routes/secretary/questions.tsx` | Gestão de perguntas recebidas    |
+| `/admin`               |   🔒 ADMIN   | `routes/admin/index.tsx`         | Página-base protegida do administrador |
+| `/admin/nodes`         |   🔒 ADMIN   | `routes/admin/nodes.tsx`         | Planejada para o CRUD de nós de navegação |
+| `/admin/users`         |   🔒 ADMIN   | `routes/admin/users.tsx`         | Planejada para a gestão de usuários da secretaria |
+| `/admin/logs`          |   🔒 ADMIN   | `routes/admin/logs.tsx`          | Planejada para a visualização de logs |
+| `/secretary`           | 🔒 SECRETARIA | `routes/secretary/index.tsx`    | Página-base protegida da secretária |
+| `/secretary/questions` | 🔒 SECRETARIA | `routes/secretary/questions.tsx` | Planejada para a gestão de perguntas recebidas |
 
 > Rotas com 🔒 redirecionam para `/login` se o usuário não estiver autenticado
 > (`ProtectedRoute`) e retornam 403 se o role não tiver permissão (`RoleGuard`).
@@ -292,15 +295,15 @@ O `auth.store.ts` (Zustand) é a fonte de verdade para o estado de autenticaçã
 
 ### `features/admin` — RF04
 
-Painel do administrador com CRUD completo de nós, usuários e visualização de logs.
+Documentado como estrutura-alvo do painel do administrador. Na Sprint 1, a rota protegida `/admin` já existe, mas os fluxos de CRUD e logs permanecem para as próximas sprints.
 
 ### `features/secretary` — RF06
 
-Painel da secretária com listagem e atualização de status das perguntas recebidas.
+Documentado como estrutura-alvo do painel da secretária. Na Sprint 1, a rota protegida `/secretary` já existe, mas a listagem e atualização de perguntas ainda não foram montadas.
 
 ---
 
 > _Este README deve ser atualizado sempre que novas rotas, scripts ou variáveis
 > de ambiente forem adicionados ao projeto._
 
-> _Próximo documento: [`../../docs/state-management.md`](../../docs/state-management.md)_
+> _Próximo documento: [`../../docs/application-overview.md`](../../docs/application-overview.md)_

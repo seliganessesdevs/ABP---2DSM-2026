@@ -4,6 +4,8 @@
 > Cada arquivo representa uma tela do painel e é responsável apenas por compor
 > layout e features — a lógica de negócio vive em `features/admin/`.
 
+> **Nota de estado da Sprint 1:** no `router.tsx`, apenas a rota base `/admin` está montada hoje, usando `index.tsx`. Os demais arquivos desta pasta permanecem como placeholders documentados para as próximas sprints.
+
 ---
 
 ## 📑 Índice
@@ -32,13 +34,14 @@ Requisição → ProtectedRoute (valida autenticação) → RoleGuard('ADMIN') �
 
 ## 🗺️ Rotas desta pasta <a id="rotas"></a>
 
-| Arquivo         | Rota               | Descrição                              | RF   |
-| --------------- | ------------------ | -------------------------------------- | ---- |
-| `dashboard.tsx` | `/admin`           | Visão geral do painel administrativo   | RF04 |
-| `nodes.tsx`     | `/admin/nodes`     | CRUD de nós de navegação do chatbot    | RF04 |
-| `documents.tsx` | `/admin/documents` | Gestão de documentos oficiais e chunks | RF02 |
-| `users.tsx`     | `/admin/users`     | Criação e remoção de usuários          | RF04 |
-| `logs.tsx`      | `/admin/logs`      | Visualização de logs de atendimento    | RF08 |
+| Arquivo         | Rota               | Descrição                                                  | RF   |
+| --------------- | ------------------ | ---------------------------------------------------------- | ---- |
+| `index.tsx`     | `/admin`           | Página-base protegida atualmente montada no roteador       | RF03 · RF09 · RF10 |
+| `dashboard.tsx` | `/admin`           | Estrutura planejada para a visão geral do painel           | RF04 |
+| `nodes.tsx`     | `/admin/nodes`     | Estrutura planejada para o CRUD de nós de navegação        | RF04 |
+| `documents.tsx` | `/admin/documents` | Estrutura planejada para gestão de documentos e chunks     | RF02 |
+| `users.tsx`     | `/admin/users`     | Estrutura planejada para criação e remoção de usuários     | RF04 |
+| `logs.tsx`      | `/admin/logs`      | Estrutura planejada para visualização de logs              | RF08 |
 
 ---
 

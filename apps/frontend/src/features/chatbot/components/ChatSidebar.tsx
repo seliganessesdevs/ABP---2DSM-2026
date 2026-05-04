@@ -12,10 +12,10 @@ export function ChatSidebar({
   onHistoryItemClick,
 }: ChatSidebarProps) {
   return (
-    <aside className="flex h-full min-h-0 flex-col overflow-hidden rounded-[28px] border border-[#D8D1C0] bg-[#FAFAFA] shadow-[0_20px_50px_rgba(92,53,12,0.08)]">
+    <aside className="flex h-full min-h-0 flex-col overflow-y-auto rounded-[28px] border border-[#D8D1C0] bg-[#FAFAFA] shadow-[0_20px_50px_rgba(92,53,12,0.08)]">
       <div className="border-b-4 border-[#B20000] px-5 py-5">
         <div className="flex items-center gap-3">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full border-4 border-[#6D9F84] bg-[#F3EEE2]">
+          <div className="flex h-16 w-16 items-center justify-center  overflow-hidden rounded-full border-4 border-[#6D9F84] bg-[#F3EEE2]">
             <img
               src={mascotImg}
               alt="Mascote Caré"
@@ -34,7 +34,7 @@ export function ChatSidebar({
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto px-5 py-4">
+      <div className="px-5 py-4">
         <p className="text-sm font-medium text-[#8A867E]">
           Histórico de perguntas
         </p>

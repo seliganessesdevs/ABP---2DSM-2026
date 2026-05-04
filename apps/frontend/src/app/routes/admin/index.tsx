@@ -1,8 +1,7 @@
 export default function AdminPage() {
   return (
     <div>
-      <h1>Admin Page</h1>
-      <p>Página de administração (placeholder)</p>
+      <p>Painel de administração Admin</p>
     </div>
   );
 }

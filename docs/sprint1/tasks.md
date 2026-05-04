@@ -221,7 +221,7 @@
 
 ## Tabela de Rastreabilidade — Sprint 1
 
-> 🎯 **Total Sprint 1: 118 pts** · 45 tasks
+> 🎯 **Total Sprint 1: 121 pts** · 45 tasks
 
 | Task     | Tipo      | Módulo    | Nome                                                         | RFs                                                                        | RNFs          | Prioridade | Pts   |
 | -------- | --------- | --------- | ------------------------------------------------------------ | -------------------------------------------------------------------------- | ------------- | ---------- | ----- |
@@ -264,7 +264,7 @@
 | TASK-037 | `[FE]`    | Chatbot   | MessageBubble.tsx + OptionButton.tsx                         | RF01                                                                       | RNF01         | 🟢 Média   | **3** |
 | TASK-038 | `[FE]`    | Chatbot   | EvidenceCard.tsx                                             | RF02                                                                       | RNF01         | ⚪ Baixa   | **2** |
 | TASK-039 | `[FE]`    | Chatbot   | SatisfactionRating.tsx                                       | RF07 · RF08                                                                | RNF01         | ⚪ Baixa   | **3** |
-| TASK-040 | `[FE]`    | Chatbot   | ChatWindow.tsx — orquestrador do chatbot                     | RF01 · RF02 · RF07                                                         | RNF01         | 🔴 Crítica | **5** |
+| TASK-040 | `[FE]`    | Chatbot   | ChatWindow.tsx — orquestrador do chatbot                     | RF01 · RF02 · RF07                                                         | RNF01         | 🔴 Crítica | **8** |
 | TASK-041 | `[BE]`    | Questions | questions.types.ts — DTOs                                    | RF05 · RF08                                                                | —             | ⚪ Baixa   | **1** |
 | TASK-042 | `[BE]`    | Questions | questions.service.ts — criação de pergunta                   | RF05 · RF08                                                                | —             | 🟢 Média   | **2** |
 | TASK-043 | `[BE]`    | Questions | questions.controller.ts + questions.routes.ts (POST público) | RF05 · RF11                                                                | —             | 🟢 Média   | **2** |
@@ -275,7 +275,7 @@
 
 ## 📉 Burndown de Referência — Sprint 1
 
-> Linha ideal: partindo de **118 pts** no dia 0, chegando a **0 pts** no último dia.
+> Linha ideal: partindo de **121 pts** no dia 0, chegando a **0 pts** no último dia.
 > Marque uma task como concluída assim que seu PR for mergeado em `develop`.
 
 | Task     | Pts | Pts Restantes (ideal) |
@@ -319,12 +319,12 @@
 | TASK-037 | 3   | 22                    |
 | TASK-038 | 2   | 19                    |
 | TASK-039 | 3   | 17                    |
-| TASK-040 | 5   | 14                    |
+| TASK-040 | 8   | 17                    |
 | TASK-041 | 1   | 9                     |
 | TASK-042 | 2   | 8                     |
 | TASK-043 | 2   | 6                     |
 | TASK-044 | 3   | 4                     |
 | TASK-045 | 1   | 1                     |
 
-> **Total Sprint 1:** 118 pts · 45 tasks
+> **Total Sprint 1:** 121 pts · 45 tasks
 > Escala Fibonacci: **1** tipo/config · **2** arquivo simples · **3** lógica média · **5** múltiplos arquivos ou lógica complexa

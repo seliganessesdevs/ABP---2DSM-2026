@@ -9,7 +9,7 @@ Types e interfaces TypeScript globais — compartilhados entre features, hooks e
 ```
 types/
 ├── api.types.ts        # Envelope padrão de resposta da API
-├── common.types.ts     # Enums e types compartilhados entre domínios
+├── common.types.ts     # Type aliases compartilhados entre domínios
 └── README.md           # Convenções dos tipos globais do frontend
 ```
 
@@ -40,7 +40,7 @@ Uso nas funções de API:
 // features/chatbot/api/chatbot.api.ts
 api.get<ApiResponse<ChatNode>>('/nodes/root').then(r => r.data.data)
 
-// features/admin/api/questions.api.ts
+// features/secretary/api/questions.api.ts
 api.get<PaginatedResponse<Question>>('/questions').then(r => r.data)
 ```
 
@@ -48,31 +48,16 @@ api.get<PaginatedResponse<Question>>('/questions').then(r => r.data)
 
 ## `common.types.ts`
 
-Enums e types usados em mais de uma feature. Devem espelhar exatamente os valores definidos no backend — qualquer alteração aqui exige atualização correspondente no `schema.prisma`.
+Type aliases usados em mais de uma feature. Devem espelhar exatamente os valores definidos no backend — qualquer alteração aqui exige atualização correspondente no `schema.prisma`.
 
 ```ts
-export enum Role {
-  ADMIN = 'ADMIN',
-  SECRETARY = 'SECRETARY',
-}
-
-export enum QuestionStatus {
-  OPEN = 'OPEN',
-  ANSWERED = 'ANSWERED',
-}
-
-export enum NodeType {
-  MENU = 'MENU',
-  ANSWER = 'ANSWER',
-}
-
-export enum Satisfaction {
-  LIKED = 'LIKED',
-  DISLIKED = 'DISLIKED',
-}
+export type Role = 'ADMIN' | 'SECRETARIA'
+export type InquiryStatus = 'ABERTA' | 'RESPONDIDA'
+export type Satisfaction = 'ATENDEU' | 'NAO_ATENDEU'
+export type UUID = string
 
 export interface AuthUser {
-  id: string
+  id: number
   name: string
   email: string
   role: Role
@@ -96,7 +81,7 @@ deve permanecer sincronizada com o schema Zod desse arquivo.
 | Type | Destino |
 |---|---|
 | Envelope de resposta HTTP | `types/api.types.ts` |
-| Enum usado em múltiplas features | `types/common.types.ts` |
+| Type alias usado em múltiplas features | `types/common.types.ts` |
 | Interface de entidade de um domínio | `features/<dominio>/types/` |
 | Tipo de payload de uma mutation específica | `features/<dominio>/types/` |
 
@@ -106,7 +91,7 @@ deve permanecer sincronizada com o schema Zod desse arquivo.
 
 - Nunca coloque types de domínio aqui — se pertence a uma feature, fica na feature
 - Nunca transforme dados nos types — interfaces descrevem formato, não comportamento
-- Qualquer enum adicionado aqui deve ter valor idêntico ao enum correspondente no backend (`schema.prisma` ou `common.types.ts` do backend)
+- Qualquer type alias adicionado aqui deve refletir exatamente os valores aceitos pelo backend (`schema.prisma` ou tipos equivalentes da API)
 
 ***
 

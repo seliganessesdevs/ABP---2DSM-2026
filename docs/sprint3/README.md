@@ -30,4 +30,4 @@ O `tasks.md` desta sprint consolida o backlog operacional de fechamento do MVP.
 
 ***
 
-> _Próximo documento: [`../adr/README.md`](../adr/README.md)_
+> _Próximo documento: [`../README.md`](../README.md)_

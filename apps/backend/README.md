@@ -180,6 +180,8 @@ NODE_ENV=development
 
 Documentação completa com exemplos de request/response em [`docs/api-layer.md`](../../docs/api-layer.md).
 
+> **Estado atual da Sprint 1:** no `src/routes/index.ts`, os endpoints montados hoje são `POST /auth/login`, `GET /nodes/root`, `GET /nodes/:id`, `POST /sessions/log`, `POST /questions` e `GET /health`. As rotas administrativas e a gestão interna de perguntas continuam documentadas abaixo como arquitetura-alvo para as próximas sprints.
+
 ### Resumo rápido
 
 | Método   | Rota             |    Acesso    | Descrição                                                                  |

@@ -8,7 +8,7 @@ export const useLogin = () => {
   const setAuth = useAuthStore((s) => s.setAuth);
   const navigate = useNavigate();
 
-  return useMutation({
+  const mutation = useMutation({
     mutationFn: (payload: LoginPayload) => authApi.login(payload),
 
     onSuccess: (data) => {
@@ -21,4 +21,10 @@ export const useLogin = () => {
       }
     },
   });
+
+  return {
+    login: mutation.mutate,
+    isLoading: mutation.isPending,
+    error: mutation.error,
+  };
 };

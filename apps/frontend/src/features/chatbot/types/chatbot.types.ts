@@ -56,6 +56,15 @@ export interface QuestionFormData {
   attachment?: File;
 }
 
+export interface SubmitQuestionPayload {
+  requester_name: string;
+  requester_email: string;
+  question: string;
+  attachment_name?: string;
+  attachment_mime_type?: string;
+  attachment_data?: string;
+}
+
 export interface QuestionPayload {
   id: number;
   requester_name: string;

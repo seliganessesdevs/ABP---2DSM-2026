@@ -2,6 +2,8 @@
 
 O coração da aplicação. Cada módulo representa um **domínio de negócio** — um conjunto de funcionalidades relacionadas. Toda lógica de negócio, validação de entrada e acesso ao banco vive aqui.
 
+> **Nota de estado da Sprint 1:** os módulos com código implementado no repositório atual são `auth/`, `chatbot/` e `questions/`. As documentações de `nodes/`, `users/` e `logs/` permanecem como referência estrutural para as próximas sprints.
+
 ---
 
 ## Estrutura
@@ -39,13 +41,13 @@ router.post("/", validate(createQuestionSchema), controller.create);
 router.get(
   "/",
   authMiddleware,
-  authorize("ADMIN", "SECRETARY"),
+  authorize("ADMIN", "SECRETARIA"),
   controller.list,
 );
 router.patch(
   "/:id",
   authMiddleware,
-  authorize("ADMIN", "SECRETARY"),
+  authorize("ADMIN", "SECRETARIA"),
   controller.update,
 );
 ```

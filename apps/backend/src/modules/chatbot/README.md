@@ -30,7 +30,7 @@ A **gestão** dos nós (criar, editar, excluir) **não é responsabilidade deste
 | Responsabilidade                              | Arquivo                 |
 | --------------------------------------------- | ----------------------- |
 | Servir o nó raiz do chatbot                   | `chatbot.routes.ts`     |
-| Servir um nó específico com filhos e chunks   | `chatbot.routes.ts`     |
+| Servir um nó específico com filhos e metadados de resposta | `chatbot.routes.ts`     |
 | Registrar e atualizar o log da sessão         | `chatbot.routes.ts`     |
 | Lógica de montagem do nó e registro de sessão | `chatbot.service.ts`    |
 | Receber requests e formatar respostas         | `chatbot.controller.ts` |
@@ -45,7 +45,7 @@ modules/chatbot/
 ├── chatbot.controller.ts  # Recebe req, chama service, devolve resposta HTTP
 ├── chatbot.service.ts     # Monta árvore de nós, registra sessão e satisfação
 ├── chatbot.routes.ts      # Define rotas públicas de navegação e sessão
-└── chatbot.types.ts       # ChatNodeResponse, SessionLogDto, RatingDto
+└── chatbot.types.ts       # ChatNodeResponseDTO, CreateInteractionLogDTO, SessionFeedbackEntryDTO
 ```
 
 ---
@@ -57,9 +57,9 @@ modules/chatbot/
 Define três rotas, todas **públicas** — sem `authMiddleware`:
 
 ```ts
-router.get("/nodes/root", chatbotController.getRoot);
-router.get("/nodes/:id", chatbotController.getNode);
-router.post("/sessions/log", chatbotController.registerSession);
+router.get("/nodes/root", chatbotController.getRootNode);
+router.get("/nodes/:id", chatbotController.getNodeById);
+router.post("/sessions/log", chatbotController.createInteractionLog);
 ```
 
 O body do `POST /sessions/log` é validado com Zod antes de chegar
@@ -70,14 +70,14 @@ ao controller.
 Contém toda a lógica de montagem da resposta de navegação e de registro
 de sessão.
 
-**`getRoot`** — busca o nó raiz (nó sem `parentId`) e retorna com seus
-filhos diretos ordenados pelo campo `order`.
+**`getRootNode`** — busca os nós raiz (`parent_id: null`) e retorna um nó
+sintético `"root"` com os filhos diretos ordenados por `display_order`.
 
-**`getNode`** — busca o nó pelo `id` e retorna com filhos diretos e
-`DocumentChunk` associados. Se o nó não existir, lança
+**`getNodeById`** — busca o nó pelo `id` e retorna seus campos de resposta,
+além dos filhos diretos ordenados. Se o nó não existir, lança
 `AppError('Nó não encontrado', 404)`.
 
-**`registerSession`** — cria um `SessionLog` na primeira avaliação do usuário
+**`createInteractionLog`** — cria um `SessionLog` na primeira avaliação do usuário
 e passa a atualizá-lo nas avaliações seguintes da mesma conversa. Assim o
 backend preserva o fluxo completo, mesmo quando o usuário volta ao nó raiz
 para explorar outras respostas.
@@ -109,7 +109,7 @@ Chama o service e formata a resposta HTTP. Não contém lógica de negócio:
 ```ts
 // ✅ Controller fino — apenas orquestra
 async getNode(req: Request, res: Response) {
-  const node = await chatbotService.getNode(req.params.id)
+  const node = await chatbotService.getNodeById(req.params.id)
   res.status(200).json({ success: true, data: node })
 }
 ```
@@ -117,29 +117,32 @@ async getNode(req: Request, res: Response) {
 ### chatbot.types.ts
 
 ```ts
-// Resposta de um nó com filhos e chunks
-interface ChatNodeResponse {
-  id: string;
+// Resposta de um nó com filhos diretos
+interface ChatNodeResponseDTO {
+  id: number;
   title: string;
-  content: string | null;
-  nodeType: "MENU" | "ANSWER";
-  order: number;
-  children: ChatNodeResponse[];
-  chunks: DocumentChunkResponse[];
+  slug: string;
+  prompt: string | null;
+  answer_summary: string | null;
+  evidence_excerpt: string | null;
+  evidence_source: string | null;
+  parent_id: number | null;
+  display_order: number;
+  is_active: boolean;
+  children: ChatNodeChildDTO[];
 }
 
-// Chunk de evidência documental retornado com o nó
-interface DocumentChunkResponse {
-  id: string;
-  text: string;
-  source: string; // nome do documento
-  page: number | null;
-  anchor: string | null;
+interface ChatNodeChildDTO {
+  id: number;
+  title: string;
+  slug: string;
+  display_order: number;
 }
 
 // Body esperado no POST /sessions/log
-interface SessionLogDto {
+interface CreateInteractionLogDTO {
   navigation_flow: string[];
+  node_id: number;
   flag: "ATENDEU" | "NAO_ATENDEU";
   session_log_id?: number;
 }
@@ -156,18 +159,18 @@ Retorna nó raiz com filhos (opções do menu inicial)
         ↓
 Usuário escolhe opção → GET /nodes/:id
         ↓
-Retorna nó filho com seus filhos e chunks associados
-        ↓  (repete até nó do tipo ANSWER)
-Nó ANSWER → exibe resposta + chunks de evidência
+Retorna nó filho com seus filhos diretos
+        ↓  (repete até um nó folha)
+Nó folha → exibe `prompt` e/ou `answer_summary`, com evidência inline quando existir
         ↓
 Usuário avalia → POST /sessions/log
         ↓
 SessionLog criado ou atualizado no banco → 201
 ```
 
-> ⚠️ Nós do tipo `MENU` sempre têm filhos — o frontend exibe as opções
-> como botões navegáveis. Nós do tipo `ANSWER` nunca têm filhos — o
-> frontend exibe a resposta final com os chunks de evidência.
+> ⚠️ No código atual da Sprint 1, a diferenciação prática usada pelo frontend é
+> entre nós com filhos e nós folha. As respostas finais exibem `answer_summary`
+> e, quando disponível, `evidence_excerpt` + `evidence_source`.
 
 ---
 
@@ -179,7 +182,7 @@ Documentação completa com exemplos de request/response em
 | Método | Rota                   | Acesso  | Descrição                      |
 | ------ | ---------------------- | :-----: | ------------------------------ |
 | `GET`  | `/api/v1/nodes/root`   | Público | Retorna o nó raiz com filhos   |
-| `GET`  | `/api/v1/nodes/:id`    | Público | Retorna nó com filhos e chunks |
+| `GET`  | `/api/v1/nodes/:id`    | Público | Retorna nó com filhos e campos de resposta |
 | `POST` | `/api/v1/sessions/log` | Público | Registra sessão e satisfação   |
 
 ---

@@ -4,6 +4,8 @@
 > Cobre o CRUD de nós de navegação, usuários da secretaria
 > e a visualização de logs de atendimento (RF04, RF08).
 
+> **Nota de estado da Sprint 1:** esta feature permanece documentada como arquitetura-alvo. No código atual, os arquivos de `api/`, `hooks/` e `components/` desta pasta ainda estão como base para implementação futura.
+
 ***
 
 ## 📑 Índice

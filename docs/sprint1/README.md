@@ -6,6 +6,14 @@
 
 ***
 
+## Burndown e Demonstração
+
+![Gráfico de Burndown da Sprint 1](./burndown.png)
+
+🎥 **Vídeo de demonstração da Sprint 1:** [Assistir no YouTube/Drive](https://youtu.be/KwbX6P7E774)
+
+***
+
 ## Objetivo
 
 Comprovar que a arquitetura base do projeto funciona em fluxo completo antes da

@@ -54,19 +54,6 @@ docs/
 
 ---
 
-## 🧭 Matriz de Canonicidade <a id="matriz-de-canonicidade"></a>
-
-| Assunto                                         | Documento canônico                               | Como usar os demais documentos                                |
-| ----------------------------------------------- | ------------------------------------------------ | ------------------------------------------------------------- |
-| Setup e execução local                          | [`first-steps.md`](./first-steps.md)             | READMEs locais devem resumir e apontar para este guia         |
-| Contrato HTTP (rotas, payloads e filtros)       | [`api-layer.md`](./api-layer.md)                 | READMEs de módulos devem manter apenas resumo de endpoint     |
-| Vocabulário de domínio (papéis, status e flags) | [`api-layer.md`](./api-layer.md)                 | Exemplos didáticos devem explicitar quando forem ilustrativos |
-| Padrões de contribuição e nomenclatura          | [`project-standards.md`](./project-standards.md) | Guias de tecnologia não substituem convenções do projeto      |
-
-Em caso de conflito, sempre prevalece o documento canônico da linha correspondente.
-
----
-
 ## 📄 Documentos Principais <a id="documentos-principais"></a>
 
 | Documento                                              | Conteúdo                                                                           | Leitura recomendada para                |
@@ -78,21 +65,6 @@ Em caso de conflito, sempre prevalece o documento canônico da linha corresponde
 | [`api-layer.md`](./api-layer.md)                       | Endpoints, envelopes, filtros, paginação e códigos de status                       | Integrar frontend e backend             |
 | [`../apps/frontend/README.md`](../apps/frontend/README.md) | Setup do frontend, rotas montadas e uso de TanStack Query/Zustand               | Implementar a interface da Sprint 1     |
 | [`../apps/backend/README.md`](../apps/backend/README.md)   | Setup do backend, scripts, banco, autenticação e endpoints disponíveis          | Implementar e validar a API da Sprint 1 |
-
----
-
-## 🧠 Base de Conhecimento <a id="base-de-conhecimento"></a>
-
-A pasta `knowledge-base/` fazia parte da base de apoio do projeto. No estado atual
-da árvore de trabalho, as referências operacionais mais úteis para a Sprint 1 estão
-concentradas nos READMEs de `apps/frontend` e `apps/backend`.
-
-| Referência                                                          | O que cobre                                                                      |
-| ------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
-| [`../apps/frontend/README.md`](../apps/frontend/README.md)          | Rotas montadas, autenticação no frontend, chatbot público e setup                |
-| [`../apps/backend/README.md`](../apps/backend/README.md)            | Endpoints ativos, scripts, banco, autenticação e decisões do backend             |
-| [`application-overview.md`](./application-overview.md)              | Perfis, fluxos, modelo de dados e limites do que está implementado na Sprint 1   |
-| [`api-layer.md`](./api-layer.md)                                    | Contrato dos endpoints já disponíveis e dos fluxos previstos                     |
 
 ---
 
@@ -113,9 +85,7 @@ referência operacional daquela sprint.
 
 - Documentos de arquitetura geral ficam na raiz de `docs/`
 - Arquivos de sprint ficam em `docs/sprint*/`
-- Assets, diagramas e imagens da documentação ficam em `docs/assets/`
 - Todo link entre documentos deve usar caminho relativo
-- Em caso de conflito, os documentos canônicos prevalecem sobre a base de conhecimento e READMEs locais
 - Ao criar um documento novo, atualize este índice e o rodapé de navegação relacionado
 
 ---

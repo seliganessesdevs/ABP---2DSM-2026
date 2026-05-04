@@ -84,42 +84,7 @@ orquestrados via `docker-compose.yml` com inicialização em comando único.
 
 ### Diagrama Entidade-Relacionamento
 
-```
-┌──────────────────────┐          ┌───────────────────────────┐
-│         User         │          │         ChatNode           │
-├──────────────────────┤          ├───────────────────────────┤
-│ id (Int) PK          │          │ id (Int) PK                │
-│ name                 │          │ title                      │
-│ email (unique)       │          │ slug (unique)              │
-│ password_hash        │          │ prompt                     │
-│ role (ENUM)          │          │ answer_summary (nullable)  │
-│ created_at           │          │ evidence_excerpt (nullable)│
-│ updated_at           │          │ evidence_source (nullable) │
-└──────────────────────┘          │ parent_id (FK → self)      │
-                                  │ display_order (Int)        │
-                                  │ is_active (Boolean)        │
-                                  │ created_at                 │
-                                  │ updated_at                 │
-                                  └───────────────────────────┘
 
-┌──────────────────────┐          ┌───────────────────────────┐
-│       Question       │          │        SessionLog          │
-├──────────────────────┤          ├───────────────────────────┤
-│ id (Int) PK          │          │ id (Int) PK                │
-│ requester_name       │          │ navigation_flow (JSON —    │
-│ question             │          │   array de slugs visitados)│
-│ requester_email      │          │ flag (ENUM, nullable)      │
-│ status (ENUM)        │          │   ATENDEU | NAO_ATENDEU    │
-│ attachment_name      │          │ inquiry_ids (JSON —        │
-│   (nullable)         │          │   array de Question.id)    │
-│ attachment_mime_type │          │ created_at                 │
-│   (nullable)         │          └───────────────────────────┘
-│ attachment_data      │
-│   (nullable, bytes)  │
-│ created_at           │
-│ updated_at           │
-└──────────────────────┘
-```
 
 ### Descrição das entidades
 

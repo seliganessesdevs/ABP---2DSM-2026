@@ -23,13 +23,17 @@ services:
       DATABASE_URL: ${DATABASE_URL:?DATABASE_URL is required}
       JWT_SECRET: ${JWT_SECRET:?JWT_SECRET is required}
       JWT_EXPIRES_IN: ${JWT_EXPIRES_IN:?JWT_EXPIRES_IN is required}
-      PORT: ${PORT:-3333}
+      PORT: ${PORT:-3000}
       NODE_ENV: ${NODE_ENV:-development}
     ports:
-      - "${PORT:-3333}:3333"
+      - "${PORT:-3000}:${PORT:-3000}"
     depends_on:
       db:
         condition: service_healthy
+    command: >
+      sh -c "pnpm --filter backend db:migrate
+      && pnpm --filter backend db:seed
+      && pnpm --filter backend dev"
 
   frontend:
     build:

@@ -9,10 +9,7 @@ COPY apps/backend/package.json apps/backend/package.json
 RUN pnpm install --frozen-lockfile
 
 COPY . .
-
-# Prisma Client precisa ser gerado para o runtime
 RUN pnpm --filter backend db:generate
-
-EXPOSE 3333
+EXPOSE 3000
 
 CMD ["pnpm", "--filter", "backend", "dev"]

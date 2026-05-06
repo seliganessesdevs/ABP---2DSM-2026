@@ -25,8 +25,6 @@ git clone <repositorio>
 cd fatecbot
 cp .env.example .env
 docker compose up --build
-docker compose exec backend pnpm db:migrate
-docker compose exec backend pnpm db:seed
 ```
 
 Após subir, acesse:
